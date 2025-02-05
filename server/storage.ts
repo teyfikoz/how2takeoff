@@ -1,7 +1,10 @@
 import { 
   type Aircraft, type InsertAircraft,
-  type Calculation, type InsertCalculation 
+  type Calculation, type InsertCalculation,
+  aircraftTypes, flightCalculations
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   getAllAircraft(): Promise<Aircraft[]>;
@@ -9,36 +12,26 @@ export interface IStorage {
   saveCalculation(calculation: InsertCalculation): Promise<Calculation>;
 }
 
-export class MemStorage implements IStorage {
-  private aircraft: Map<number, Aircraft>;
-  private calculations: Map<number, Calculation>;
-  private aircraftId: number;
-  private calculationId: number;
-
-  constructor() {
-    this.aircraft = new Map();
-    this.calculations = new Map();
-    this.aircraftId = 1;
-    this.calculationId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async getAllAircraft(): Promise<Aircraft[]> {
-    return Array.from(this.aircraft.values());
+    return await db.select().from(aircraftTypes);
   }
 
   async createAircraft(insertAircraft: InsertAircraft): Promise<Aircraft> {
-    const id = this.aircraftId++;
-    const aircraft = { ...insertAircraft, id };
-    this.aircraft.set(id, aircraft);
+    const [aircraft] = await db
+      .insert(aircraftTypes)
+      .values(insertAircraft)
+      .returning();
     return aircraft;
   }
 
   async saveCalculation(insertCalculation: InsertCalculation): Promise<Calculation> {
-    const id = this.calculationId++;
-    const calculation = { ...insertCalculation, id };
-    this.calculations.set(id, calculation);
+    const [calculation] = await db
+      .insert(flightCalculations)
+      .values(insertCalculation)
+      .returning();
     return calculation;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
