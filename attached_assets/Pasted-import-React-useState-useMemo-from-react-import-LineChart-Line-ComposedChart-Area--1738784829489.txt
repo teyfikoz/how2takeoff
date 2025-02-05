@@ -1,0 +1,356 @@
+import React, { useState, useMemo } from 'react';
+import {
+  LineChart, Line, ComposedChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer
+} from 'recharts';
+
+const AIRCRAFT_TYPES = [
+  { 
+    id: 1,
+    name: 'Airbus A320neo',
+    emptyWeight: 45000,
+    maxTakeoffWeight: 79000,
+    maxPayload: 20000,
+    fuelCapacity: 24000,
+    baseFuelFlow: 2400,
+    cruiseSpeed: 450,
+    maxAltitude: 39000,
+    maxRange: 3400,
+    fuelEfficiency: 0.029,
+    cgLimits: {
+      forward: 25,
+      aft: 35 
+    },
+    stations: {
+      cockpit: { arm: 250 },
+      firstClass: { arm: 300 },
+      economy: { arm: 400 },
+      cargoFwd: { arm: 200 },
+      cargoAft: { arm: 500 },
+      fuel: { arm: 350 }
+    }
+  },
+  {
+    id: 2,
+    name: 'Boeing 737 MAX 8',
+    emptyWeight: 45070,
+    maxTakeoffWeight: 82200,
+    maxPayload: 20880,
+    fuelCapacity: 25941,
+    baseFuelFlow: 2300,
+    cruiseSpeed: 453,
+    maxAltitude: 41000,
+    maxRange: 3550,
+    fuelEfficiency: 0.028,
+    cgLimits: {
+      forward: 25,
+      aft: 35
+    },
+    stations: {
+      cockpit: { arm: 250 },
+      firstClass: { arm: 300 },
+      economy: { arm: 400 },
+      cargoFwd: { arm: 200 },
+      cargoAft: { arm: 500 },
+      fuel: { arm: 350 }
+    }
+  },
+  {
+    id: 3,
+    name: 'Airbus A321XLR',
+    emptyWeight: 50100,
+    maxTakeoffWeight: 101000,
+    maxPayload: 22000,
+    fuelCapacity: 32000,
+    baseFuelFlow: 2500,
+    cruiseSpeed: 447,
+    maxAltitude: 39000,
+    maxRange: 4700,
+    fuelEfficiency: 0.027,
+    cgLimits: {
+      forward: 25,
+      aft: 35
+    },
+    stations: {
+      cockpit: { arm: 250 },
+      firstClass: { arm: 300 },
+      economy: { arm: 400 },
+      cargoFwd: { arm: 200 },
+      cargoAft: { arm: 500 },
+      fuel: { arm: 350 }
+    }
+  }
+];
+
+const CGVisualization = ({ cgPercentMAC, limits, isWithinLimits }) => {
+  const cgPosition = Math.min(Math.max(cgPercentMAC, 0), 100);
+  
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg">
+      <h3 className="font-semibold mb-3">CG Position</h3>
+      <div className="relative h-16 mb-4">
+        <div className="absolute w-full h-8 bg-gray-200 rounded-lg">
+          <div 
+            className="absolute h-full bg-green-200 rounded-lg"
+            style={{
+              left: `${limits.forward}%`,
+              width: `${limits.aft - limits.forward}%`
+            }}
+          />
+          <div 
+            className={`absolute w-4 h-12 -mt-2 ${isWithinLimits ? 'bg-green-600' : 'bg-red-600'}`}
+            style={{
+              left: `${cgPosition}%`,
+              transform: 'translateX(-50%)'
+            }}
+          />
+        </div>
+        <div className="absolute w-full flex justify-between mt-10 text-sm">
+          <span>0%</span>
+          <span>{limits.forward}%</span>
+          <span>{limits.aft}%</span>
+          <span>100%</span>
+        </div>
+      </div>
+      <div className="text-center">
+        <span className="font-medium">Current CG: {cgPercentMAC.toFixed(1)}% MAC</span>
+      </div>
+    </div>
+  );
+};
+
+function RangeAnalysis({ aircraft, distance }) {
+  // Calculate range efficiency at different scenarios
+  const getEfficiencyData = (paxLoad) => {
+    const fuelBurn = aircraft.baseFuelFlow * distance / 100;
+    const pax = Math.floor(aircraft.maxPayload * paxLoad * 0.8 / 85);
+    return {
+      fuelPerPax: Number((fuelBurn / pax).toFixed(2)),
+      range: Math.round(aircraft.maxRange * (1 + (1 - paxLoad))),
+      pax
+    };
+  };
+
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg">
+      <div className="font-semibold">{aircraft.name}</div>
+      <div className="text-sm mt-2">
+        <div>Base Range: {aircraft.maxRange} nm</div>
+        <div>Full Load Range: {getEfficiencyData(1.0).range} nm</div>
+        <div>Fuel per PAX: {getEfficiencyData(0.75).fuelPerPax} kg/pax</div>
+      </div>
+    </div>
+  );
+}
+
+export default function FlightAnalysis() {
+  const [formData, setFormData] = useState({
+    aircraftType: '1',
+    distance: '1000',
+    passengers: '150',
+    cargoWeight: '1000',
+    cruiseAltitude: '35000',
+    temperature: '15',
+    windSpeed: '0'
+  });
+
+  const [loadScenario, setLoadScenario] = useState('75');
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const selectedAircraft = AIRCRAFT_TYPES.find(a => a.id.toString() === formData.aircraftType);
+
+  const calculateLoadForScenario = (baseValue, scenario) => {
+    const percentages = {'25': 0.25, '50': 0.50, '75': 0.75, '100': 1.00};
+    return Math.round(baseValue * percentages[scenario]);
+  };
+
+  const getMaxLoads = () => {
+    if (!selectedAircraft) return null;
+    return {
+      maxPassengers: Math.floor((selectedAircraft.maxPayload * 0.8) / 85),
+      maxCargo: Math.floor(selectedAircraft.maxPayload * 0.2),
+      maxFuel: selectedAircraft.fuelCapacity
+    };
+  };
+
+  const calculateWeightBalance = () => {
+    if (!selectedAircraft) return null;
+
+    const maxLoads = getMaxLoads();
+    if (!maxLoads) return null;
+
+    const maxPassengers = calculateLoadForScenario(maxLoads.maxPassengers, loadScenario);
+    const maxCargo = calculateLoadForScenario(maxLoads.maxCargo, loadScenario);
+    
+    const passengers = Math.min(parseInt(formData.passengers), maxPassengers);
+    const passengerWeight = passengers * 85;
+    const cargoWeight = Math.min(parseInt(formData.cargoWeight), maxCargo);
+    const fuelWeight = parseFloat(formData.distance) * 2;
+
+    const totalWeight = selectedAircraft.emptyWeight + passengerWeight + cargoWeight + fuelWeight;
+    const cgLocation = 350;
+    const cgPercentMAC = ((cgLocation - 250) / 400) * 100;
+
+    return {
+      totalWeight,
+      cgLocation,
+      cgPercentMAC,
+      isWithinLimits: cgPercentMAC >= selectedAircraft.cgLimits.forward && 
+                      cgPercentMAC <= selectedAircraft.cgLimits.aft &&
+                      totalWeight <= selectedAircraft.maxTakeoffWeight
+    };
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Flight Analysis Dashboard</h1>
+        
+        <div className="flex gap-8">
+          <div className="w-1/4">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl font-bold mb-4">Flight Parameters</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2">Aircraft Type</label>
+                  <select
+                    value={formData.aircraftType}
+                    onChange={(e) => setFormData({...formData, aircraftType: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  >
+                    {AIRCRAFT_TYPES.map(aircraft => (
+                      <option key={aircraft.id} value={aircraft.id}>
+                        {aircraft.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2">Distance (nm)</label>
+                  <input
+                    type="number"
+                    value={formData.distance}
+                    onChange={(e) => setFormData({...formData, distance: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Passengers</label>
+                  <input
+                    type="number"
+                    value={formData.passengers}
+                    onChange={(e) => setFormData({...formData, passengers: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Cargo Weight (kg)</label>
+                  <input
+                    type="number"
+                    value={formData.cargoWeight}
+                    onChange={(e) => setFormData({...formData, cargoWeight: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Cruise Altitude (ft)</label>
+                  <input
+                    type="number"
+                    value={formData.cruiseAltitude}
+                    onChange={(e) => setFormData({...formData, cruiseAltitude: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <button
+                  onClick={() => setShowAnalysis(true)}
+                  className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Calculate Analysis
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {showAnalysis && selectedAircraft && (
+            <div className="flex-1 space-y-8">
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-bold mb-4">Aircraft Range Comparison</h2>
+                <div className="grid grid-cols-3 gap-4">
+                  {AIRCRAFT_TYPES.map(aircraft => (
+                    <RangeAnalysis 
+                      key={aircraft.id}
+                      aircraft={aircraft}
+                      distance={parseFloat(formData.distance)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-bold mb-4">Load Scenarios</h2>
+                <div className="grid grid-cols-4 gap-4">
+                  {['25', '50', '75', '100'].map(scenario => (
+                    <div 
+                      key={scenario}
+                      onClick={() => setLoadScenario(scenario)}
+                      className={`p-4 rounded-lg cursor-pointer ${
+                        loadScenario === scenario 
+                          ? 'bg-blue-50 border-2 border-blue-500' 
+                          : 'bg-gray-50 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="font-semibold">{scenario}% Load</div>
+                      {getMaxLoads() && (
+                        <div className="text-sm mt-2">
+                          <div>
+                            Passengers: {calculateLoadForScenario(getMaxLoads().maxPassengers, scenario)}
+                          </div>
+                          <div>
+                            Cargo: {calculateLoadForScenario(getMaxLoads().maxCargo, scenario)} kg
+                          </div>
+                          <div>
+                            Range: {Math.round(selectedAircraft.maxRange * (1 + (100 - parseInt(scenario)) / 100))} nm
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {calculateWeightBalance() && (
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                  <h2 className="text-xl font-bold mb-4">Weight and Balance</h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded">
+                      <div className="text-lg font-semibold">Total Weight</div>
+                      <div className="text-2xl">{Math.round(calculateWeightBalance().totalWeight)} kg</div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded">
+                      <div className="text-lg font-semibold">CG Location</div>
+                      <div className="text-2xl">{Math.round(calculateWeightBalance().cgPercentMAC)}% MAC</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <CGVisualization 
+                      cgPercentMAC={calculateWeightBalance().cgPercentMAC}
+                      limits={selectedAircraft.cgLimits}
+                      isWithinLimits={calculateWeightBalance().isWithinLimits}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

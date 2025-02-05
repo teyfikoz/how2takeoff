@@ -1,0 +1,124 @@
+Haklısınız, promptu daha kapsamlı hale getirelim. İşte geliştirilmiş versiyon:
+
+```plaintext
+Bir havacılık ağırlık-denge ve performans analiz dashboard'u geliştirmenizi istiyorum. 
+
+1. YÜK ANALİZLERİ:
+- Farklı yük senaryoları analizi:
+  * %25 yük (minimum operasyon)
+  * %50 yük (orta seviye operasyon)
+  * %75 yük (yüksek yoğunluklu operasyon)
+  * %100 yük (maksimum kapasite)
+- Her yük senaryosu için:
+  * Ağırlık merkezi hesaplaması
+  * Trim gereksinimleri
+  * Yakıt tüketim analizi
+  * Performans limitleri
+
+2. MENZİL ANALİZLERİ:
+- Nominal menzil (planlanan uçuş)
+- Uzatılmış menzil (+%15, +%25)
+- Kısaltılmış menzil (-%15, -%25)
+- Alternatif menzil (farklı rotalar)
+Her menzil için:
+  * Gerekli yakıt hesabı
+  * Yedek yakıt gereksinimleri
+  * Performans değişimleri
+  * Maliyet analizi
+
+3. YAKIT ANALİZLERİ:
+- Blok yakıt hesaplamaları:
+  * Taksi yakıtı
+  * Kalkış yakıtı
+  * Tırmanış yakıtı
+  * Seyir yakıtı
+  * İniş yakıtı
+- Yakıt senaryoları:
+  * Minimum yakıt
+  * Optimum yakıt
+  * Maksimum yakıt
+  * Tankering analizi
+- Yakıt verimliliği göstergeleri
+
+4. PERFORMANS ANALİZLERİ:
+- Farklı yük oranlarında:
+  * Tırmanış performansı
+  * Seyir performansı
+  * İniş performansı
+- İrtifa analizi:
+  * Optimum irtifa
+  * Maksimum irtifa
+  * Step climb analizi
+- Hız optimizasyonu:
+  * Cost index analizi
+  * Optimum hız
+  * Maksimum menzil hızı
+  * Maksimum dayanma hızı
+
+5. ÇEVRESEL FAKTÖRLER:
+- Sıcaklık etkileri:
+  * ISA -15°C
+  * ISA
+  * ISA +15°C
+- Rüzgar analizi:
+  * Karşı rüzgar
+  * Arkadan rüzgar
+  * Yan rüzgar
+- Basınç yüksekliği etkileri
+
+6. VİZUALİZASYON:
+- İnteraktif grafikler:
+  * Ağırlık-denge zarfı
+  * Performans grafikleri
+  * Yakıt tüketim eğrileri
+- Real-time göstergeler:
+  * CG pozisyonu
+  * Yakıt durumu
+  * Performans limitleri
+- Karşılaştırmalı analizler:
+  * Farklı yük senaryoları
+  * Farklı menziller
+  * Farklı yakıt politikaları
+
+7. RAPORLAMA:
+- Detaylı uçuş planı
+- Yük ve denge raporu
+- Yakıt raporu
+- Performans raporu
+- Maliyet analizi raporu
+
+Teknik Gereksinimler:
+1. Frontend:
+- React framework
+- Recharts grafik kütüphanesi
+- Tailwind CSS styling
+- Responsive tasarım
+
+2. Hesaplama Modülleri:
+- Ağırlık-denge hesaplayıcı
+- Yakıt planlayıcı
+- Performans analiz motoru
+- Optimizasyon algoritmaları
+
+3. Veri Gereksinimleri:
+- TCDS verileri
+- Uçak performans verileri
+- Yakıt tüketim tabloları
+- Atmosfer verileri
+
+4. Düzenleyici Uyum:
+- FAA gereksinimleri
+- EASA standartları 
+- ICAO prosedürleri
+
+Bu dashboard, havayolu operasyonlarında uçuş öncesi planlamayı optimize etmeli ve operasyon maliyetlerini minimize etmelidir.
+```
+
+Bu geliştirilmiş prompt:
+1. Farklı yük senaryolarını detaylandırıyor
+2. Menzil analizlerini çeşitlendiriyor
+3. Yakıt hesaplamalarını detaylandırıyor
+4. Performans analizlerini derinleştiriyor
+5. Çevresel faktörleri daha kapsamlı ele alıyor
+
+İsterseniz şimdi bu yeni gereksinimlere göre kodu güncelleyebiliriz. Hangi bölümden başlamak istersiniz?

@@ -1,0 +1,308 @@
+import React, { useState, useMemo } from 'react';
+import {
+  LineChart, Line, ComposedChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer
+} from 'recharts';
+
+const AIRCRAFT_TYPES = [
+  { 
+    id: 1,
+    name: 'Airbus A320neo',
+    emptyWeight: 45000,
+    maxTakeoffWeight: 79000,
+    maxPayload: 20000,
+    fuelCapacity: 24000,
+    baseFuelFlow: 2400,
+    cruiseSpeed: 450,
+    maxAltitude: 39000,
+    cgLimits: {
+      forward: 25,
+      aft: 35 
+    },
+    stations: {
+      cockpit: { arm: 250 },
+      firstClass: { arm: 300 },
+      economy: { arm: 400 },
+      cargoFwd: { arm: 200 },
+      cargoAft: { arm: 500 },
+      fuel: { arm: 350 }
+    }
+  }
+];
+
+const CGVisualization = ({ cgPercentMAC, limits, isWithinLimits }) => {
+  const cgPosition = Math.min(Math.max(cgPercentMAC, 0), 100);
+  
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg">
+      <h3 className="font-semibold mb-3">CG Position</h3>
+      <div className="relative h-16 mb-4">
+        <div className="absolute w-full h-8 bg-gray-200 rounded-lg">
+          <div 
+            className="absolute h-full bg-green-200 rounded-lg"
+            style={{
+              left: `${limits.forward}%`,
+              width: `${limits.aft - limits.forward}%`
+            }}
+          />
+          <div 
+            className={`absolute w-4 h-12 -mt-2 ${isWithinLimits ? 'bg-green-600' : 'bg-red-600'}`}
+            style={{
+              left: `${cgPosition}%`,
+              transform: 'translateX(-50%)'
+            }}
+          />
+        </div>
+        <div className="absolute w-full flex justify-between mt-10 text-sm">
+          <span>0%</span>
+          <span>{limits.forward}%</span>
+          <span>{limits.aft}%</span>
+          <span>100%</span>
+        </div>
+      </div>
+      <div className="text-center">
+        <span className="font-medium">Current CG: {cgPercentMAC.toFixed(1)}% MAC</span>
+      </div>
+    </div>
+  );
+};
+
+export default function FlightAnalysis() {
+  const [formData, setFormData] = useState({
+    aircraftType: '1',
+    distance: '1000',
+    passengers: '150',
+    cargoWeight: '1000',
+    cruiseAltitude: '35000',
+    temperature: '15',
+    windSpeed: '0'
+  });
+
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const selectedAircraft = AIRCRAFT_TYPES.find(a => a.id.toString() === formData.aircraftType);
+
+  const windData = useMemo(() => {
+    if (!selectedAircraft) return [];
+    
+    return Array.from({ length: 41 }, (_, i) => {
+      const wind = (i - 20) * 10;
+      const groundSpeed = Math.max(50, selectedAircraft.cruiseSpeed + wind);
+      const windEffect = wind > 0 ? 1 + (wind / 100) : 1 - (Math.abs(wind) / 150);
+      const tempEffect = 1 + ((parseFloat(formData.temperature) - 15) * 0.002);
+      const baseFuel = selectedAircraft.baseFuelFlow * parseFloat(formData.distance) / 100;
+      
+      return {
+        windSpeed: wind,
+        groundSpeed,
+        fuelRequired: Math.round(baseFuel * windEffect * tempEffect),
+        timeEffect: Math.round((parseFloat(formData.distance) / groundSpeed - 
+                              parseFloat(formData.distance) / selectedAircraft.cruiseSpeed) * 60)
+      };
+    });
+  }, [selectedAircraft, formData]);
+
+  const performanceData = useMemo(() => {
+    if (!selectedAircraft) return [];
+
+    return Array.from({ length: 14 }, (_, i) => {
+      const alt = 28000 + (i * 1000);
+      const altEffect = 1 - ((alt - 35000) / 35000) * 0.1;
+      const baseFuel = selectedAircraft.baseFuelFlow * parseFloat(formData.distance) / 100;
+      const fuelBurn = baseFuel * altEffect;
+      
+      return {
+        altitude: alt,
+        fuelBurn: Math.round(fuelBurn),
+        specificRange: Math.round((parseFloat(formData.distance) / fuelBurn) * 100) / 100,
+        efficiency: Math.round((1 - (fuelBurn / baseFuel)) * 100)
+      };
+    });
+  }, [selectedAircraft, formData]);
+
+  const calculateWeightBalance = () => {
+    if (!selectedAircraft) return null;
+
+    const passengers = parseInt(formData.passengers);
+    const passengerWeight = passengers * 85; // 85kg per passenger average
+    const cargoWeight = parseInt(formData.cargoWeight);
+    const fuelWeight = parseFloat(formData.distance) * 2; // Simple fuel estimation
+
+    const totalWeight = selectedAircraft.emptyWeight + passengerWeight + cargoWeight + fuelWeight;
+    const cgLocation = 350; // Simplified CG calculation
+    const cgPercentMAC = ((cgLocation - 250) / 400) * 100;
+
+    return {
+      totalWeight,
+      cgLocation,
+      cgPercentMAC,
+      isWithinLimits: cgPercentMAC >= selectedAircraft.cgLimits.forward && 
+                      cgPercentMAC <= selectedAircraft.cgLimits.aft &&
+                      totalWeight <= selectedAircraft.maxTakeoffWeight
+    };
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Flight Analysis Dashboard</h1>
+        
+        <div className="flex gap-8">
+          <div className="w-1/4">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl font-bold mb-4">Flight Parameters</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2">Aircraft Type</label>
+                  <select
+                    value={formData.aircraftType}
+                    onChange={(e) => setFormData({...formData, aircraftType: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  >
+                    {AIRCRAFT_TYPES.map(aircraft => (
+                      <option key={aircraft.id} value={aircraft.id}>
+                        {aircraft.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2">Distance (nm)</label>
+                  <input
+                    type="number"
+                    value={formData.distance}
+                    onChange={(e) => setFormData({...formData, distance: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Passengers</label>
+                  <input
+                    type="number"
+                    value={formData.passengers}
+                    onChange={(e) => setFormData({...formData, passengers: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Cargo Weight (kg)</label>
+                  <input
+                    type="number"
+                    value={formData.cargoWeight}
+                    onChange={(e) => setFormData({...formData, cargoWeight: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Cruise Altitude (ft)</label>
+                  <input
+                    type="number"
+                    value={formData.cruiseAltitude}
+                    onChange={(e) => setFormData({...formData, cruiseAltitude: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Temperature (°C)</label>
+                  <input
+                    type="number"
+                    value={formData.temperature}
+                    onChange={(e) => setFormData({...formData, temperature: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2">Wind Speed (kt)</label>
+                  <input
+                    type="number"
+                    value={formData.windSpeed}
+                    onChange={(e) => setFormData({...formData, windSpeed: e.target.value})}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+
+                <button
+                  onClick={() => setShowAnalysis(true)}
+                  className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Calculate Analysis
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {showAnalysis && selectedAircraft && (
+            <div className="flex-1 space-y-8">
+              {calculateWeightBalance() && (
+                <div className="bg-white p-6 rounded-lg shadow-lg">
+                  <h2 className="text-xl font-bold mb-4">Weight and Balance</h2>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded">
+                      <div className="text-lg font-semibold">Total Weight</div>
+                      <div className="text-2xl">{Math.round(calculateWeightBalance().totalWeight)} kg</div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded">
+                      <div className="text-lg font-semibold">CG Location</div>
+                      <div className="text-2xl">{Math.round(calculateWeightBalance().cgPercentMAC)}% MAC</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <CGVisualization 
+                      cgPercentMAC={calculateWeightBalance().cgPercentMAC}
+                      limits={selectedAircraft.cgLimits}
+                      isWithinLimits={calculateWeightBalance().isWithinLimits}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-bold mb-4">Wind Effect Analysis</h2>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={windData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="windSpeed" label={{ value: 'Wind Speed (knots)', position: 'bottom' }} />
+                      <YAxis yAxisId="left" label={{ value: 'Fuel Required (kg)', angle: -90, position: 'left' }} />
+                      <YAxis yAxisId="right" orientation="right" label={{ value: 'Time Effect (min)', angle: 90, position: 'right' }} />
+                      <Tooltip />
+                      <Legend />
+                      <Area yAxisId="left" dataKey="fuelRequired" name="Fuel Required" fill="#8884d8" fillOpacity={0.3} />
+                      <Line yAxisId="right" dataKey="timeEffect" name="Time Effect" stroke="#82ca9d" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-xl font-bold mb-4">Performance Analysis</h2>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={performanceData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="altitude" label={{ value: 'Altitude (ft)', position: 'bottom' }} />
+                      <YAxis yAxisId="left" label={{ value: 'Fuel Burn (kg)', angle: -90, position: 'left' }} />
+                      <YAxis yAxisId="right" orientation="right" label={{ value: 'Specific Range (nm/kg)', angle: 90, position: 'right' }} />
+                      <Tooltip />
+                      <Legend />
+                      <Area yAxisId="left" dataKey="fuelBurn" name="Fuel Burn" fill="#8884d8" fillOpacity={0.3} />
+                      <Line yAxisId="right" dataKey="specificRange" name="Specific Range" stroke="#82ca9d" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
