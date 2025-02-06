@@ -62,7 +62,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         <ResponsiveContainer width="100%" height={500}>
           <LineChart 
             data={payloadEfficiencyData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
+            margin={{ top: 20, right: 30, left: 50, bottom: 80 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
@@ -83,9 +83,10 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 value: 'Fuel Efficiency', 
                 angle: -90, 
                 position: 'insideLeft',
-                offset: 15
+                offset: -35
               }}
               domain={['auto', 'auto']}
+              padding={{ top: 20, bottom: 20 }}
             />
             <Tooltip />
             <Legend 
