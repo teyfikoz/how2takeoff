@@ -8,7 +8,8 @@ import AircraftDatabase from "@/pages/AircraftDatabase";
 import BasicAviationPassenger from "@/pages/BasicAviationPassenger";
 import BasicAviationCargo from "@/pages/BasicAviationCargo";
 import RevenueManagement from "@/pages/RevenueManagement";
-import { Database, Home, BookOpen, TrendingUp } from "lucide-react";
+import CarrierTypes from "@/pages/CarrierTypes";
+import { Database, Home, BookOpen, TrendingUp, Plane } from "lucide-react";
 
 function Navbar() {
   return (
@@ -20,21 +21,25 @@ function Navbar() {
               <Home className="h-5 w-5 mr-2" />
               Dashboard
             </Link>
-            <Link href="/database" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Database className="h-5 w-5 mr-2" />
-              Aircraft Database
+            <Link href="/basic-aviation-passenger" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Basic Aviation Passenger
             </Link>
             <Link href="/revenue-management" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <TrendingUp className="h-5 w-5 mr-2" />
               Revenue Management & Route Opt.
             </Link>
-            <Link href="/basic-aviation-passenger" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <BookOpen className="h-5 w-5 mr-2" />
-              Basic Aviation Passenger
-            </Link>
             <Link href="/basic-aviation-cargo" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <BookOpen className="h-5 w-5 mr-2" />
               Basic Aviation Cargo
+            </Link>
+            <Link href="/carrier-types" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <Plane className="h-5 w-5 mr-2" />
+              Carrier Types
+            </Link>
+            <Link href="/database" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <Database className="h-5 w-5 mr-2" />
+              Aircraft Database
             </Link>
           </div>
         </div>
@@ -49,10 +54,11 @@ function Router() {
       <Navbar />
       <Switch>
         <Route path="/" component={Dashboard} />
-        <Route path="/database" component={AircraftDatabase} />
-        <Route path="/revenue-management" component={RevenueManagement} />
         <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
+        <Route path="/revenue-management" component={RevenueManagement} />
         <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
+        <Route path="/carrier-types" component={CarrierTypes} />
+        <Route path="/database" component={AircraftDatabase} />
         <Route component={NotFound} />
       </Switch>
     </div>

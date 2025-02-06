@@ -1,0 +1,156 @@
+Carrier Types in the Airline Industry
+
+Airlines operate under different business models, each designed to target specific markets, optimize operations, and maximize profitability. The major airline types include:
+	1.	Low-Cost Carriers (LCC)
+	2.	Full-Service (Network) Carriers (FSC or Legacy Carriers)
+	3.	Regional Carriers (RAC)
+	4.	Ultra-Low-Cost Carriers (ULCC)
+	5.	Hybrid Airlines
+	6.	Charter Airlines
+	7.	Cargo Airlines
+
+Each carrier type has a distinct operating model, pricing strategy, network structure, and target customer base. Let’s explore each one in detail.
+
+1. Low-Cost Carriers (LCC)
+
+Definition:
+Low-Cost Carriers (LCCs) are airlines that focus on minimizing operating costs to offer lower ticket prices.
+
+Key Characteristics of LCCs
+
+✅ Point-to-Point Network – Operates direct flights instead of hub-and-spoke systems.
+✅ Single Aircraft Type – Uses one type of aircraft to reduce maintenance and training costs.
+✅ No-Frills Service – Charges extra for baggage, seat selection, and meals.
+✅ High Aircraft Utilization – Minimizes turnaround times to fly more frequently.
+✅ Secondary Airports – Uses less congested airports to save on landing fees.
+✅ Dynamic Pricing – Uses aggressive yield management techniques to maximize revenue.
+
+📌 Example:
+A passenger flying from City A to City B with an LCC might pay $50 for the base ticket but pay extra for:
+	•	Checked baggage
+	•	Priority boarding
+	•	Seat selection
+
+📌 Sources:
+	•	IATA Low-Cost Carrier Study: https://www.iata.org/en/publications/economics/low-cost-carriers/
+	•	ICAO Report on LCCs: https://www.icao.int/Meetings/low-cost-carriers/
+
+2. Full-Service (Network) Carriers (FSC / Legacy Carriers)
+
+Definition:
+Full-Service Carriers (also called Legacy Airlines or Network Carriers) offer premium services, multiple fare classes, and a hub-and-spoke network to connect domestic and international destinations.
+
+Key Characteristics of FSCs
+
+✅ Hub-and-Spoke Network – Operates flights through major hub airports.
+✅ Multiple Cabin Classes – Economy, Premium Economy, Business, and First Class.
+✅ Frequent Flyer Programs (FFP) – Rewards customers with loyalty points.
+✅ Global Alliances – Operates under alliances like Star Alliance, SkyTeam, and Oneworld.
+✅ Interline Agreements – Partners with other airlines for seamless connections.
+✅ Premium Services – Offers lounges, inflight entertainment, meals, and baggage allowances.
+
+📌 Example:
+A full-service airline may offer a ticket for City A → City B → City C, including:
+	•	Free checked baggage
+	•	Meals and drinks
+	•	Frequent flyer miles
+
+📌 Sources:
+	•	IATA Network Carrier Strategy: https://www.iata.org/en/publications/airline-business-models/
+	•	ICAO Air Transport Policy: https://www.icao.int/sustainability/Documents/ATB_Report.pdf
+
+3. Regional Carriers (RAC)
+
+Definition:
+Regional Airlines operate short-haul and medium-haul flights, often feeding passengers into major airline hubs.
+
+Key Characteristics of Regional Carriers
+
+✅ Short-Haul Flights – Operates routes under 1,500 km (900 miles).
+✅ Smaller Aircraft – Uses turboprops (ATR-72, Dash 8) and small regional jets (Embraer E175, CRJ900).
+✅ Codeshare Agreements – Operates under contracts with Full-Service Carriers.
+✅ Essential Air Services – Provides flights to remote or underserved cities.
+
+📌 Example:
+A passenger flying from Small City A → Hub City B → Destination C may take a regional airline for the first leg.
+
+📌 Sources:
+	•	ICAO Report on Regional Airlines: https://www.icao.int/sustainability/Documents/Regional-Airline-Policy.pdf
+
+4. Ultra-Low-Cost Carriers (ULCC)
+
+Definition:
+ULCCs take the low-cost model further by stripping services to the bare minimum and relying on ancillary revenue.
+
+Key Characteristics of ULCCs
+
+✅ Unbundled Fares – Charges for everything except the seat (baggage, boarding passes, etc.).
+✅ High-Density Seating – Uses tighter seat configurations to fit more passengers.
+✅ Extremely Low Base Fares – Attracts price-sensitive travelers with fares as low as $10-$20.
+✅ Aggressive Upselling – Makes 40%+ of revenue from extras (seat selection, food, etc.).
+
+📌 Example:
+A ticket may cost $20, but a passenger pays extra for:
+	•	Cabin baggage
+	•	Water or snacks
+	•	Printed boarding pass
+
+📌 Sources:
+	•	IATA ULCC Report: https://www.iata.org/en/publications/economics/ultra-low-cost-carriers/
+
+5. Hybrid Airlines
+
+Definition:
+Hybrid airlines combine features of Full-Service Carriers and Low-Cost Carriers, offering both budget and premium services.
+
+Key Characteristics of Hybrid Airlines
+
+✅ Multiple Fare Options – Offers both low-cost and premium ticket choices.
+✅ Hub-and-Spoke & Point-to-Point Routes – Uses flexible network planning.
+✅ Business & Economy Class – Provides basic economy and premium cabin options.
+
+📌 Example:
+A Hybrid Carrier may offer a $50 economy ticket but allow an upgrade to business class for $150.
+
+📌 Sources:
+	•	ICAO Hybrid Carrier Analysis: https://www.icao.int/hybrid-airline-policy.pdf
+
+6. Charter Airlines
+
+Definition:
+Charter airlines do not operate scheduled flights but fly based on demand, usually for tour groups, sports teams, or corporate clients.
+
+Key Characteristics of Charter Airlines
+
+✅ On-Demand Flights – Operates seasonal or event-based services.
+✅ Tour Operator Partnerships – Works with travel agencies for package vacations.
+✅ Flexible Scheduling – Routes depend on customer contracts rather than regular schedules.
+
+📌 Example:
+A tour operator may charter flights for holiday packages to tropical destinations.
+
+📌 Sources:
+	•	ICAO Charter Airline Policies: https://www.icao.int/charter-regulations.pdf
+
+7. Cargo Airlines
+
+Definition:
+Cargo airlines transport freight, mail, and logistics shipments rather than passengers.
+
+Key Characteristics of Cargo Airlines
+
+✅ Operates Dedicated Freighter Aircraft – Uses Boeing 747F, 777F, Airbus A330F, etc.
+✅ Hub-and-Spoke System – Optimizes efficiency for overnight deliveries.
+✅ Express & Bulk Shipments – Handles e-commerce, pharmaceuticals, perishables, and industrial cargo.
+
+📌 Example:
+Cargo carriers may transport medical supplies, online retail shipments, and industrial equipment.
+
+📌 Sources:
+	•	IATA Cargo Strategy: https://www.iata.org/en/programs/cargo/
+
+Conclusion
+
+Each airline type serves a unique market with distinct operational models, pricing structures, and service levels. While LCCs and ULCCs focus on affordability, FSCs and Regional Carriers prioritize connectivity and service. Charter and Cargo airlines cater to specialized transportation needs.
+
+📌 Bu konuda daha fazla analiz veya örnek ister misin? 🚀
