@@ -154,19 +154,19 @@ export default function BasicAviationCargo() {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Emirates</h3>
+                      <h3 className="text-lg font-semibold mb-4">International Hub Carrier</h3>
                       <div className="space-y-3">
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Network Coverage</p>
-                          <p className="text-sm">Serves 150+ cities in 80 countries</p>
+                          <p className="text-sm">Global network: 150+ cities in 80 countries</p>
                         </div>
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Fleet Composition</p>
-                          <p className="text-sm">Large fleet of A380s and 777s</p>
+                          <p className="text-sm">Large wide-body fleet for long-haul routes</p>
                         </div>
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Cargo Performance</p>
-                          <p className="text-sm">2.23 million metric tons (2023/24)</p>
+                          <p className="text-sm">2.2+ million metric tons annually</p>
                         </div>
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Strategic Focus</p>
@@ -175,11 +175,11 @@ export default function BasicAviationCargo() {
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold mb-4">Delta Air Lines</h3>
+                      <h3 className="text-lg font-semibold mb-4">Regional Network Carrier</h3>
                       <div className="space-y-3">
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Network Reach</p>
-                          <p className="text-sm">325 destinations in 52 countries</p>
+                          <p className="text-sm">Regional focus: 300+ destinations</p>
                         </div>
                         <div className="bg-gray-100 p-3 rounded-md">
                           <p className="font-semibold">Fleet Strategy</p>
@@ -202,7 +202,7 @@ export default function BasicAviationCargo() {
                     <div className="bg-gray-100 p-4 rounded-md mt-2">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-semibold">Emirates Advantages</h4>
+                          <h4 className="font-semibold">International Hub Advantages</h4>
                           <ul className="list-disc pl-4 mt-2 text-sm">
                             <li>Strong international presence</li>
                             <li>Dedicated freighter fleet</li>
@@ -210,7 +210,7 @@ export default function BasicAviationCargo() {
                           </ul>
                         </div>
                         <div>
-                          <h4 className="font-semibold">Delta Advantages</h4>
+                          <h4 className="font-semibold">Regional Network Advantages</h4>
                           <ul className="list-disc pl-4 mt-2 text-sm">
                             <li>Extensive domestic network</li>
                             <li>Efficient belly cargo utilization</li>

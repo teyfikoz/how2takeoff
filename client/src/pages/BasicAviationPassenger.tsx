@@ -175,7 +175,7 @@ export default function BasicAviationPassenger() {
           <TabsContent value="case-study">
             <Card>
               <CardHeader>
-                <CardTitle>Real-World Case Study: American Airlines (2023)</CardTitle>
+                <CardTitle>Industry Case Study: Global Hub Carrier (2023)</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="bg-green-50 p-4 rounded-lg">
