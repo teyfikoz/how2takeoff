@@ -143,7 +143,7 @@ export default function FilterForm({ onFilter }: Props) {
               />
             </div>
 
-            <Button type="submit" className="w-full">Find Suitable Aircraft</Button>
+            <Button type="submit" className="w-full">Find Aircraft</Button>
           </form>
         </Form>
       </CardContent>
