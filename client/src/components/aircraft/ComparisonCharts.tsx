@@ -37,6 +37,20 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     }));
   }).flat();
 
+  // Menzil ve yük kapasitesi karşılaştırması
+  const rangeComparisonData = aircraftData.map(aircraft => ({
+    name: aircraft.name,
+    maxRange: aircraft.maxRange,
+    maxPayload: aircraft.maxPayload / 1000, // Convert to tons for better visualization
+  }));
+
+  // Emisyon verileri
+  const emissionsData = aircraftData.map(aircraft => ({
+    name: aircraft.name,
+    co2: aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16, // CO2 emission factor
+    nox: aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014 // NOx emission factor
+  }));
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white p-6 rounded-lg shadow">
@@ -99,6 +113,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Range vs Payload Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>
@@ -114,6 +129,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Emissions Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>

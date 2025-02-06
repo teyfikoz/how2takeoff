@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, real } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -13,10 +13,18 @@ export const aircraftTypes = pgTable("aircraft_types", {
   cruiseSpeed: real("cruise_speed").notNull(),
   maxAltitude: integer("max_altitude").notNull(),
   maxRange: integer("max_range").notNull(),
-  fuelEfficiency: real("fuel_efficiency").notNull()
+  fuelEfficiency: real("fuel_efficiency").notNull(),
+  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull(),
+  cargoCapacity: real("cargo_capacity").notNull(),
+  speed: real("speed").notNull()
 });
 
-export const insertAircraftSchema = createInsertSchema(aircraftTypes).pick({
+export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
+  capacity: z.object({
+    min: z.number(),
+    max: z.number()
+  })
+}).pick({
   name: true,
   emptyWeight: true,
   maxTakeoffWeight: true,
@@ -26,7 +34,10 @@ export const insertAircraftSchema = createInsertSchema(aircraftTypes).pick({
   cruiseSpeed: true,
   maxAltitude: true,
   maxRange: true,
-  fuelEfficiency: true
+  fuelEfficiency: true,
+  capacity: true,
+  cargoCapacity: true,
+  speed: true
 });
 
 export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
@@ -39,7 +50,7 @@ export const flightCalculations = pgTable("flight_calculations", {
   payload: real("payload").notNull(),
   fuelRequired: real("fuel_required").notNull(),
   co2Emissions: real("co2_emissions").notNull(),
-  calculationType: text("calculation_type").notNull() // 'high-fidelity' or 'simplified'
+  calculationType: text("calculation_type").notNull()
 });
 
 export const insertCalculationSchema = createInsertSchema(flightCalculations).pick({
