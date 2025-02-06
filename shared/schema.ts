@@ -14,9 +14,9 @@ export const aircraftTypes = pgTable("aircraft_types", {
   maxAltitude: integer("max_altitude").notNull(),
   maxRange: integer("max_range").notNull(),
   fuelEfficiency: real("fuel_efficiency").notNull(),
-  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull(),
-  cargoCapacity: real("cargo_capacity").notNull(),
-  speed: real("speed").notNull()
+  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull().default({ min: 0, max: 0 }),
+  cargoCapacity: real("cargo_capacity").notNull().default(0),
+  speed: real("speed").notNull().default(0)
 });
 
 export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
