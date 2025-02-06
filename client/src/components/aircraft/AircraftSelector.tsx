@@ -29,9 +29,9 @@ export default function AircraftSelector({ aircraft, selectedAircraft, onSelect 
           <Button 
             variant="outline" 
             onClick={() => setLocation("/database")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-lg h-10 px-6"
           >
-            <PlusCircle className="h-4 w-4" />
+            <PlusCircle className="h-5 w-5" />
             Add Aircraft
           </Button>
         </div>
