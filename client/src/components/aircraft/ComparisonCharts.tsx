@@ -57,20 +57,20 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow col-span-2">
+      <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Payload Factor Impact</h3>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart 
             data={payloadEfficiencyData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+            margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="loadFactor" 
               label={{ 
                 value: 'Load Factor (%)', 
-                position: 'insideBottom',
-                offset: -10
+                position: 'bottom',
+                offset: 20
               }}
               ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
               domain={[0, 100]}
