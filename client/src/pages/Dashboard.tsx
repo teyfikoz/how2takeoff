@@ -79,49 +79,6 @@ export default function Dashboard() {
     setFilterCriteria(criteria);
   };
 
-  const renderWindAnalysis = (aircraft: Aircraft) => {
-    if (!filterCriteria) return null;
-
-    const scenarios = generateWindScenarios(filterCriteria.windSpeed, aircraft);
-
-    return (
-      <div className="mt-4">
-        <h4 className="text-lg font-semibold mb-2">Rüzgar Senaryoları Analizi</h4>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={scenarios}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="label" />
-              <YAxis
-                label={{ value: 'Efektif Menzil (km)', angle: -90, position: 'insideLeft' }}
-              />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="effectiveRange"
-                stroke="#8884d8"
-                name="Efektif Menzil"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {scenarios.map((scenario) => (
-            <div
-              key={scenario.label}
-              className="bg-gray-100 p-3 rounded-md"
-            >
-              <p className="font-semibold">{scenario.label}</p>
-              <p>Rüzgar Hızı: {Math.round(scenario.speed)} knot</p>
-              <p>Efektif Menzil: {scenario.effectiveRange} km</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">
@@ -137,44 +94,99 @@ export default function Dashboard() {
         <FilterForm onFilter={handleFilter} />
 
         {filteredAircraft.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Uygun Uçak Tipleri</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-8">
-                {filteredAircraft.map((aircraft: Aircraft) => (
-                  <div key={aircraft.id} className="border-b pb-8 last:border-b-0">
-                    <Card>
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>Rüzgar Senaryoları Karşılaştırması</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredAircraft.map((aircraft) => (
+                    <Card key={aircraft.id} className="shadow-md">
                       <CardHeader>
-                        <CardTitle>{aircraft.name}</CardTitle>
+                        <CardTitle className="text-lg">{aircraft.name}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="space-y-2">
-                          <p>Yolcu Kapasitesi: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
-                          <p>Kargo Kapasitesi: {aircraft.cargoCapacity} kg</p>
-                          <p>Menzil: {aircraft.maxRange} km</p>
-                          <p>Yakıt Verimliliği: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>Menzil: {aircraft.maxRange} km</div>
+                            <div>Seyir Hızı: {aircraft.cruiseSpeed} knot</div>
+                          </div>
+
+                          {filterCriteria && (
+                            <div className="space-y-3">
+                              <h4 className="font-semibold">Rüzgar Senaryoları:</h4>
+                              <div className="space-y-2">
+                                {generateWindScenarios(filterCriteria.windSpeed, aircraft).map((scenario) => (
+                                  <div
+                                    key={scenario.label}
+                                    className="bg-gray-100 p-2 rounded-md"
+                                  >
+                                    <div className="grid grid-cols-2 gap-1 text-sm">
+                                      <div>
+                                        <span className="font-medium">{scenario.label}</span>
+                                        <br />
+                                        <span className="text-gray-600">
+                                          {Math.round(scenario.speed)} knot
+                                        </span>
+                                      </div>
+                                      <div className="text-right">
+                                        <span className="text-gray-600">Efektif Menzil</span>
+                                        <br />
+                                        <span className="font-medium">
+                                          {scenario.effectiveRange} km
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        {renderWindAnalysis(aircraft)}
                       </CardContent>
                     </Card>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-        {filteredAircraft.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Karşılaştırmalı Analiz</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ComparisonCharts aircraftData={filteredAircraft} />
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Uygun Uçak Tipleri</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-8">
+                  {filteredAircraft.map((aircraft: Aircraft) => (
+                    <div key={aircraft.id} className="border-b pb-8 last:border-b-0">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>{aircraft.name}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <p>Yolcu Kapasitesi: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
+                            <p>Kargo Kapasitesi: {aircraft.cargoCapacity} kg</p>
+                            <p>Menzil: {aircraft.maxRange} km</p>
+                            <p>Yakıt Verimliliği: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Karşılaştırmalı Analiz</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ComparisonCharts aircraftData={filteredAircraft} />
+              </CardContent>
+            </Card>
+          </>
         )}
 
         {filterCriteria && filteredAircraft.length === 0 && (

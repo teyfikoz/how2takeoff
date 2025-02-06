@@ -18,28 +18,6 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     fuelPerNM: aircraft.baseFuelFlow / aircraft.cruiseSpeed
   }));
 
-  // Genişletilmiş rüzgar etkisi analizi
-  const windEffectData = aircraftData.map(aircraft => {
-    const baseRange = aircraft.maxRange;
-    // Rüzgar hızı varyasyonları (-40%, -20%, 0%, +20%, +40%)
-    const windSpeedVariations = [-0.4, -0.2, 0, 0.2, 0.4];
-    const baseWindSpeed = 20; // Örnek baz rüzgar hızı
-    const windDirection = 180; // Ters rüzgar senaryosu
-
-    return windSpeedVariations.map(variation => {
-      const windSpeed = baseWindSpeed * (1 + variation);
-      const windEffect = Math.cos((windDirection * Math.PI) / 180) * windSpeed;
-      const effectiveRange = baseRange * (1 - (windEffect / aircraft.cruiseSpeed));
-
-      return {
-        name: aircraft.name,
-        variation: `${variation >= 0 ? '+' : ''}${variation * 100}%`,
-        windSpeed: Math.round(windSpeed),
-        range: Math.round(effectiveRange)
-      };
-    });
-  }).flat();
-
   // Yük kapasitesi kullanım oranı analizi
   const payloadEfficiencyData = aircraftData.map(aircraft => {
     return [0.25, 0.5, 0.75, 1].map(loadFactor => ({
@@ -77,36 +55,6 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
             <Bar dataKey="efficiency" fill="#8884d8" name="Verimlilik Skoru" />
             <Bar dataKey="fuelPerNM" fill="#82ca9d" name="NM Başına Yakıt" />
           </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Rüzgar Etkisi Analizi</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey="variation" 
-              label={{ value: 'Rüzgar Hızı Değişimi', position: 'bottom' }} 
-            />
-            <YAxis 
-              label={{ value: 'Efektif Menzil (km)', angle: -90, position: 'insideLeft' }} 
-            />
-            <Tooltip />
-            <Legend />
-            {aircraftData.map((aircraft, index) => (
-              <Line
-                key={aircraft.id}
-                type="monotone"
-                data={windEffectData.filter(d => d.name === aircraft.name)}
-                dataKey="range"
-                name={`${aircraft.name} Menzili`}
-                stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
-                dot={{ r: 4 }}
-                activeDot={{ r: 8 }}
-              />
-            ))}
-          </LineChart>
         </ResponsiveContainer>
       </div>
 
