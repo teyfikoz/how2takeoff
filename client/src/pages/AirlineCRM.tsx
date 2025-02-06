@@ -11,136 +11,135 @@ export default function AirlineCRM() {
           <div className="flex items-center gap-3">
             <SiAirchina className="h-8 w-8 text-blue-600" />
             <h1 className="text-3xl font-bold text-gray-900">
-              Airline CRM Analytics - Basit Anlatım ✈️
+              Airline CRM Analytics - Simple Guide ✈️
             </h1>
           </div>
           <p className="text-gray-600 mt-2">
-            Havayollarının müşteri ilişkilerini nasıl yönettiğini basit bir şekilde anlatan rehber.
+            A beginner-friendly guide explaining how airlines manage customer relationships.
           </p>
         </header>
 
-        {/* CRM Nedir? */}
+        {/* What is CRM? */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-blue-500" />
-              CRM Nedir? 🤔
+              What is CRM? 🤔
             </CardTitle>
           </CardHeader>
           <CardContent className="prose max-w-none">
             <p>
-              CRM (Customer Relationship Management - Müşteri İlişkileri Yönetimi), 
-              havayollarının yolcularını daha iyi tanımak ve onlara daha iyi hizmet 
-              vermek için kullandığı bir sistemdir.
+              CRM (Customer Relationship Management) is a system airlines use to 
+              better understand their passengers and provide them with better service.
             </p>
             <div className="grid md:grid-cols-2 gap-6 mt-6">
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Ne İşe Yarar? 🎯</h3>
+                <h3 className="font-semibold text-lg mb-4">What Does It Do? 🎯</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    Yeni yolcular bulmaya yardımcı olur
+                    Helps find new passengers
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    Mevcut yolcuları mutlu eder
+                    Keeps existing passengers happy
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    Yolcuların başka havayollarına geçmesini önler
+                    Prevents passengers from switching to other airlines
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
-                    Her yolcudan daha fazla gelir elde etmeye yardımcı olur
+                    Helps earn more revenue from each passenger
                   </li>
                 </ul>
               </div>
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Örnek 💡</h3>
+                <h3 className="font-semibold text-lg mb-4">Example 💡</h3>
                 <p>
-                  Bir iş insanının genelde son dakika uçuş rezervasyonu yaptığını fark eden 
-                  havayolu, ona özel son dakika fırsatları sunar. Böylece hem yolcu mutlu 
-                  olur, hem de havayolu daha çok bilet satar.
+                  An airline notices that a business traveler often makes last-minute 
+                  flight reservations. They offer special last-minute deals, making 
+                  both the passenger happy and increasing ticket sales.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Önemli Hesaplamalar */}
+        {/* Important Calculations */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calculator className="h-5 w-5 text-blue-500" />
-              Önemli Hesaplamalar 🧮
+              Important Calculations 🧮
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-3 gap-6">
-              {/* Yeni Müşteri Maliyeti */}
+              {/* Customer Acquisition Cost */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
-                  Yeni Müşteri Maliyeti
+                  New Customer Cost
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Bir yeni yolcu kazanmak için harcanan para
+                  Money spent to attract one new passenger
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Formül:</p>
+                  <p className="text-sm font-medium">Formula:</p>
                   <div className="mt-2 p-2 bg-white rounded border text-sm">
-                    Yeni Müşteri Maliyeti = 
+                    Customer Acquisition Cost = 
                     <div className="border-t mt-1 pt-1">
-                      Pazarlama Giderleri ÷ Yeni Müşteri Sayısı
+                      Marketing Costs ÷ Number of New Customers
                     </div>
                   </div>
                   <p className="text-sm mt-2 text-gray-600">
-                    Örnek: 500.000₺ ÷ 10.000 yeni yolcu = 50₺/yolcu
+                    Example: $500,000 ÷ 10,000 new passengers = $50/passenger
                   </p>
                 </div>
               </div>
 
-              {/* Müşteri Tutma Maliyeti */}
+              {/* Customer Retention Cost */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <UserCheck className="h-4 w-4" />
-                  Müşteri Tutma Maliyeti
+                  Customer Retention Cost
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Mevcut yolcuları memnun etmek için harcanan para
+                  Money spent to keep existing passengers happy
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Formül:</p>
+                  <p className="text-sm font-medium">Formula:</p>
                   <div className="mt-2 p-2 bg-white rounded border text-sm">
-                    Müşteri Tutma Maliyeti =
+                    Customer Retention Cost =
                     <div className="border-t mt-1 pt-1">
-                      Sadakat Programı Giderleri ÷ Mevcut Müşteri Sayısı
+                      Loyalty Program Costs ÷ Number of Existing Customers
                     </div>
                   </div>
                   <p className="text-sm mt-2 text-gray-600">
-                    Örnek: 200.000₺ ÷ 50.000 yolcu = 4₺/yolcu
+                    Example: $200,000 ÷ 50,000 passengers = $4/passenger
                   </p>
                 </div>
               </div>
 
-              {/* Müşteri Yaşam Boyu Değeri */}
+              {/* Customer Lifetime Value */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Sparkles className="h-4 w-4" />
-                  Müşteri Yaşam Boyu Değeri
+                  Customer Lifetime Value
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Bir yolcunun uzun vadede getirdiği toplam gelir
+                  Total revenue a passenger brings over time
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Hesaplama Örneği:</p>
+                  <p className="text-sm font-medium">Calculation Example:</p>
                   <div className="mt-2 p-2 bg-white rounded border text-sm">
                     <ul className="space-y-1">
-                      <li>• Ortalama bilet: 600₺</li>
-                      <li>• Yıllık uçuş: 2 kez</li>
-                      <li>• Sadakat süresi: 5 yıl</li>
+                      <li>• Average ticket: $600</li>
+                      <li>• Flights per year: 2</li>
+                      <li>• Loyalty duration: 5 years</li>
                       <li className="border-t mt-1 pt-1 font-medium">
-                        Toplam = 600₺ × 2 × 5 = 6.000₺
+                        Total = $600 × 2 × 5 = $6,000
                       </li>
                     </ul>
                   </div>
@@ -150,43 +149,43 @@ export default function AirlineCRM() {
           </CardContent>
         </Card>
 
-        {/* Müşteri Tipleri */}
+        {/* Customer Types */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-blue-500" />
-              Müşteri Tipleri 👥
+              Customer Types 👥
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               {[
                 {
-                  title: "Yeni Müşteriler 🆕",
-                  description: "İlk kez uçacak yolcular",
-                  strategy: "Hoş geldin indirimleri, ilk uçuşa özel hediyeler"
+                  title: "New Customers 🆕",
+                  description: "First-time passengers",
+                  strategy: "Welcome discounts, special first-flight gifts"
                 },
                 {
-                  title: "Sadık Müşteriler ⭐",
-                  description: "Sürekli bizimle uçan yolcular",
-                  strategy: "Mil puanları, özel check-in, ücretsiz bagaj hakkı"
+                  title: "Loyal Customers ⭐",
+                  description: "Passengers who fly with us regularly",
+                  strategy: "Miles points, priority check-in, free baggage"
                 },
                 {
-                  title: "Kaybedilen Müşteriler 😢",
-                  description: "12+ aydır uçuş yapmayan yolcular",
-                  strategy: "Özel geri dönüş kampanyaları, kişiye özel teklifler"
+                  title: "Lost Customers 😢",
+                  description: "Haven't flown in 12+ months",
+                  strategy: "Special return campaigns, personalized offers"
                 },
                 {
-                  title: "Risk Altındaki Müşteriler ⚠️",
-                  description: "Uçuş sıklığı azalan yolcular",
-                  strategy: "Erken müdahale, özel teklifler, anket ve geri bildirim"
+                  title: "At-Risk Customers ⚠️",
+                  description: "Flying less frequently than before",
+                  strategy: "Early intervention, special offers, surveys"
                 }
               ].map((type) => (
                 <div key={type.title} className="border rounded-lg p-6">
                   <h3 className="text-lg font-semibold">{type.title}</h3>
                   <p className="text-gray-600 mt-2">{type.description}</p>
                   <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                    <p className="text-sm font-medium">Nasıl İlgileniyoruz:</p>
+                    <p className="text-sm font-medium">How We Handle Them:</p>
                     <p className="text-sm mt-1">{type.strategy}</p>
                   </div>
                 </div>
@@ -195,43 +194,43 @@ export default function AirlineCRM() {
           </CardContent>
         </Card>
 
-        {/* Başarı Hikayeleri */}
+        {/* Success Stories */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5 text-blue-500" />
-              Başarı Hikayeleri 🌟
+              Success Stories 🌟
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {[
                 {
-                  title: "Yapay Zeka ile Müşteri Kazanımı",
-                  problem: "Genel reklamlar yeterince etkili değildi",
+                  title: "Customer Acquisition with AI",
+                  problem: "Generic ads weren't effective enough",
                   solution: [
-                    "Yapay zeka ile müşteri davranışlarını analiz ettiler",
-                    "Kişiye özel reklamlar gösterdiler",
-                    "Reklam bütçesini daha akıllıca kullandılar"
+                    "Used AI to analyze customer behavior",
+                    "Created personalized advertisements",
+                    "Used marketing budget more intelligently"
                   ],
                   results: [
-                    "Müşteri kazanma maliyeti %30 düştü",
-                    "Reklam tıklanma oranı %18 arttı",
-                    "E-posta açılma oranı 3 kat arttı"
+                    "Customer acquisition cost dropped by 30%",
+                    "Ad click rate increased by 18%",
+                    "Email open rate tripled"
                   ]
                 },
                 {
-                  title: "Sadakat Programı Başarısı",
-                  problem: "Yolcular sık uçmasına rağmen az harcıyordu",
+                  title: "Loyalty Program Success",
+                  problem: "Passengers flew often but spent little",
                   solution: [
-                    "Kademeli sadakat programı başlattılar",
-                    "Kişiye özel kampanyalar sundular",
-                    "Dinamik fiyatlandırma kullandılar"
+                    "Launched tiered loyalty program",
+                    "Offered personalized campaigns",
+                    "Implemented dynamic pricing"
                   ],
                   results: [
-                    "Müşteri değeri %25 arttı",
-                    "Üst kademe üyelerin harcaması %40 arttı",
-                    "Ek hizmet geliri %12 yükseldi"
+                    "Customer value increased by 25%",
+                    "Top-tier members spent 40% more",
+                    "Additional service revenue up by 12%"
                   ]
                 }
               ].map((story) => (
@@ -243,7 +242,7 @@ export default function AirlineCRM() {
                       <p className="text-gray-600">{story.problem}</p>
                     </div>
                     <div>
-                      <p className="font-medium">Çözüm:</p>
+                      <p className="font-medium">Solution:</p>
                       <ul className="list-disc pl-5 text-gray-600">
                         {story.solution.map((item, index) => (
                           <li key={index}>{item}</li>
@@ -251,7 +250,7 @@ export default function AirlineCRM() {
                       </ul>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="font-medium">Sonuçlar:</p>
+                      <p className="font-medium">Results:</p>
                       <ul className="mt-2 space-y-1">
                         {story.results.map((result, index) => (
                           <li key={index} className="flex items-center gap-2">
@@ -269,7 +268,7 @@ export default function AirlineCRM() {
         </Card>
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
-          <p>IATA ve ICAO standartlarına uygun olarak hazırlanmıştır</p>
+          <p>Based on IATA and ICAO standards</p>
           <p className="mt-2">© Aviation Performance Analytics</p>
         </footer>
       </div>
