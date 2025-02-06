@@ -51,7 +51,7 @@ const PassengerMetricsCalculator = () => {
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="loadFactor">Load Factor</TabsTrigger>
         <TabsTrigger value="overbooking">Overbooking</TabsTrigger>
-        <TabsTrigger value="rasm">RASM</TabsTrigger>
+        <TabsTrigger value="rasm">Revenue per Available Seat Mile (RASM)</TabsTrigger>
         <TabsTrigger value="breakEven">Break-even</TabsTrigger>
       </TabsList>
 
@@ -210,9 +210,11 @@ const PassengerMetricsCalculator = () => {
             </div>
             <div className="pt-4">
               <p className="text-lg font-semibold">
-                RASM: {rasmParams.distance && rasmParams.availableSeats ? 
-                  '$' + calculateRASM(rasmParams).toFixed(4) + ' per ASM' : 
-                  'Enter values to calculate'}
+                Revenue per Available Seat {rasmParams.unit === 'miles' ? 'Mile' : 'Kilometer'}: {
+                  rasmParams.distance && rasmParams.availableSeats ? 
+                  `$${calculateRASM(rasmParams).toFixed(4)} per AS${rasmParams.unit === 'miles' ? 'M' : 'K'}` : 
+                  'Enter values to calculate'
+                }
               </p>
             </div>
           </CardContent>
