@@ -4,31 +4,19 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer
 } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
 import AircraftSelector from '@/components/aircraft/AircraftSelector';
 import HighFidelityCalculator from '@/components/fuel/HighFidelityCalculator';
 import SimplifiedCalculator from '@/components/fuel/SimplifiedCalculator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Sample aircraft data - would normally come from API
-const AIRCRAFT_DATA = [
-  { 
-    id: 1,
-    name: 'Airbus A320neo',
-    emptyWeight: 45000,
-    maxTakeoffWeight: 79000,
-    maxPayload: 20000,
-    fuelCapacity: 24000,
-    baseFuelFlow: 2400,
-    cruiseSpeed: 450,
-    maxAltitude: 39000,
-    maxRange: 3400,
-    fuelEfficiency: 0.029
-  }
-];
-
 export default function Dashboard() {
-  const [selectedAircraft, setSelectedAircraft] = useState(AIRCRAFT_DATA[0]);
+  const [selectedAircraft, setSelectedAircraft] = useState<any>(null);
   const [results, setResults] = useState<any>(null);
+
+  const { data: aircraftData } = useQuery({
+    queryKey: ['/api/aircraft'],
+  });
 
   const handleCalculationResults = (newResults: any) => {
     setResults(newResults);
@@ -44,28 +32,32 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div>
             <AircraftSelector
-              aircraft={AIRCRAFT_DATA}
+              aircraft={aircraftData || []}
               selectedAircraft={selectedAircraft}
               onSelect={setSelectedAircraft}
             />
           </div>
 
-          <div>
-            <HighFidelityCalculator
-              aircraft={selectedAircraft}
-              onCalculate={handleCalculationResults}
-            />
-          </div>
+          {selectedAircraft && (
+            <>
+              <div>
+                <HighFidelityCalculator
+                  aircraft={selectedAircraft}
+                  onCalculate={handleCalculationResults}
+                />
+              </div>
 
-          <div>
-            <SimplifiedCalculator
-              aircraft={selectedAircraft}
-              onCalculate={handleCalculationResults}
-            />
-          </div>
+              <div>
+                <SimplifiedCalculator
+                  aircraft={selectedAircraft}
+                  onCalculate={handleCalculationResults}
+                />
+              </div>
+            </>
+          )}
         </div>
 
-        {results && (
+        {results && selectedAircraft && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
