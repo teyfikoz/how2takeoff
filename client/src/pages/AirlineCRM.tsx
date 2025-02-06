@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiAirchina } from "react-icons/si";
 import { Users, TrendingUp, Calculator, PieChart, Target, UserCheck, DollarSign, Brain, Sparkles } from "lucide-react";
+import CRMCalculator from "@/components/CRMCalculator";
 
 export default function AirlineCRM() {
   return (
@@ -264,6 +265,23 @@ export default function AirlineCRM() {
                 </div>
               ))}
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Add CRM Calculator Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-blue-500" />
+              Interactive CRM Calculator
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-6">
+              Customize your airline's CRM parameters and analyze customer data with this interactive calculator.
+              Adjust the thresholds and parameters to match your airline's specific needs.
+            </p>
+            <CRMCalculator />
           </CardContent>
         </Card>
 
