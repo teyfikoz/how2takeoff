@@ -18,14 +18,26 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     fuelPerNM: aircraft.baseFuelFlow / aircraft.cruiseSpeed
   }));
 
-  // Rüzgar etkisi analizi için örnek veriler
+  // Genişletilmiş rüzgar etkisi analizi
   const windEffectData = aircraftData.map(aircraft => {
     const baseRange = aircraft.maxRange;
-    return [0, 10, 20, 30, 40, 50].map(windSpeed => ({
-      name: aircraft.name,
-      windSpeed,
-      range: baseRange * (1 - (windSpeed / 100)) // Basit rüzgar etkisi hesaplaması
-    }));
+    // Rüzgar hızı varyasyonları (-40%, -20%, 0%, +20%, +40%)
+    const windSpeedVariations = [-0.4, -0.2, 0, 0.2, 0.4];
+    const baseWindSpeed = 20; // Örnek baz rüzgar hızı
+    const windDirection = 180; // Ters rüzgar senaryosu
+
+    return windSpeedVariations.map(variation => {
+      const windSpeed = baseWindSpeed * (1 + variation);
+      const windEffect = Math.cos((windDirection * Math.PI) / 180) * windSpeed;
+      const effectiveRange = baseRange * (1 - (windEffect / aircraft.cruiseSpeed));
+
+      return {
+        name: aircraft.name,
+        variation: `${variation >= 0 ? '+' : ''}${variation * 100}%`,
+        windSpeed: Math.round(windSpeed),
+        range: Math.round(effectiveRange)
+      };
+    });
   }).flat();
 
   // Yük kapasitesi kullanım oranı analizi
@@ -33,7 +45,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     return [0.25, 0.5, 0.75, 1].map(loadFactor => ({
       name: aircraft.name,
       loadFactor: loadFactor * 100,
-      fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor * 0.1)) // Yük faktörü etkisi
+      fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor * 0.1))
     }));
   }).flat();
 
@@ -54,7 +66,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Fuel Efficiency Comparison</h3>
+        <h3 className="text-xl font-bold mb-4">Yakıt Verimliliği Karşılaştırması</h3>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={fuelEfficiencyData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -62,29 +74,36 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="efficiency" fill="#8884d8" name="Efficiency Score" />
-            <Bar dataKey="fuelPerNM" fill="#82ca9d" name="Fuel per NM" />
+            <Bar dataKey="efficiency" fill="#8884d8" name="Verimlilik Skoru" />
+            <Bar dataKey="fuelPerNM" fill="#82ca9d" name="NM Başına Yakıt" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Wind Effect Analysis</h3>
+        <h3 className="text-xl font-bold mb-4">Rüzgar Etkisi Analizi</h3>
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={windEffectData}>
+          <LineChart>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="windSpeed" label={{ value: 'Wind Speed (kt)', position: 'bottom' }} />
-            <YAxis label={{ value: 'Range (nm)', angle: -90, position: 'insideLeft' }} />
+            <XAxis 
+              dataKey="variation" 
+              label={{ value: 'Rüzgar Hızı Değişimi', position: 'bottom' }} 
+            />
+            <YAxis 
+              label={{ value: 'Efektif Menzil (km)', angle: -90, position: 'insideLeft' }} 
+            />
             <Tooltip />
             <Legend />
             {aircraftData.map((aircraft, index) => (
               <Line
                 key={aircraft.id}
                 type="monotone"
-                dataKey="range"
                 data={windEffectData.filter(d => d.name === aircraft.name)}
-                name={aircraft.name}
+                dataKey="range"
+                name={`${aircraft.name} Menzili`}
                 stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
+                dot={{ r: 4 }}
+                activeDot={{ r: 8 }}
               />
             ))}
           </LineChart>
@@ -92,12 +111,12 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Payload Efficiency Impact</h3>
+        <h3 className="text-xl font-bold mb-4">Yük Faktörü Etkisi</h3>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={payloadEfficiencyData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="loadFactor" label={{ value: 'Payload Load Factor (%)', position: 'bottom' }} />
-            <YAxis label={{ value: 'Fuel Efficiency', angle: -90, position: 'insideLeft' }} />
+            <XAxis dataKey="loadFactor" label={{ value: 'Yük Faktörü (%)', position: 'bottom' }} />
+            <YAxis label={{ value: 'Yakıt Verimliliği', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
             <Legend />
             {aircraftData.map((aircraft, index) => (
@@ -115,7 +134,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Range vs Payload Comparison</h3>
+        <h3 className="text-xl font-bold mb-4">Menzil ve Yük Kapasitesi</h3>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={rangeComparisonData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -124,14 +143,14 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
             <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
             <Tooltip />
             <Legend />
-            <Bar yAxisId="left" dataKey="maxRange" fill="#8884d8" name="Max Range (nm)" />
-            <Bar yAxisId="right" dataKey="maxPayload" fill="#82ca9d" name="Max Payload (tons)" />
+            <Bar yAxisId="left" dataKey="maxRange" fill="#8884d8" name="Maksimum Menzil (km)" />
+            <Bar yAxisId="right" dataKey="maxPayload" fill="#82ca9d" name="Maksimum Yük (ton)" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Emissions Comparison</h3>
+        <h3 className="text-xl font-bold mb-4">Emisyon Karşılaştırması</h3>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={emissionsData}>
             <CartesianGrid strokeDasharray="3 3" />
