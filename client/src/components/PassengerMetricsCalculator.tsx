@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   calculateLoadFactor,
   calculateOverbookingLimit,
@@ -32,8 +33,9 @@ const PassengerMetricsCalculator = () => {
   const [rasmParams, setRasmParams] = useState<RASMParams>({
     totalRevenue: 0,
     availableSeats: 0,
-    distanceInMiles: 0,
-    numberOfFlights: 0
+    distance: 0,
+    numberOfFlights: 0,
+    unit: 'miles'
   });
 
   // Break-even State
@@ -167,15 +169,32 @@ const PassengerMetricsCalculator = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Distance (miles)</Label>
-                <Input
-                  type="number"
-                  value={rasmParams.distanceInMiles}
-                  onChange={(e) => setRasmParams({
-                    ...rasmParams,
-                    distanceInMiles: Number(e.target.value)
-                  })}
-                />
+                <Label>Distance</Label>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    value={rasmParams.distance}
+                    onChange={(e) => setRasmParams({
+                      ...rasmParams,
+                      distance: Number(e.target.value)
+                    })}
+                  />
+                  <Select
+                    value={rasmParams.unit}
+                    onValueChange={(value: 'miles' | 'kilometers') => setRasmParams({
+                      ...rasmParams,
+                      unit: value
+                    })}
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="miles">Miles</SelectItem>
+                      <SelectItem value="kilometers">Kilometers</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Number of Flights</Label>
@@ -191,7 +210,7 @@ const PassengerMetricsCalculator = () => {
             </div>
             <div className="pt-4">
               <p className="text-lg font-semibold">
-                RASM: {rasmParams.distanceInMiles && rasmParams.availableSeats ? 
+                RASM: {rasmParams.distance && rasmParams.availableSeats ? 
                   '$' + calculateRASM(rasmParams).toFixed(4) + ' per ASM' : 
                   'Enter values to calculate'}
               </p>

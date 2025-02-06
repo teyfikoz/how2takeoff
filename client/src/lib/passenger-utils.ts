@@ -14,8 +14,9 @@ export interface OverbookingParams {
 export interface RASMParams {
   totalRevenue: number;
   availableSeats: number;
-  distanceInMiles: number;
+  distance: number;
   numberOfFlights: number;
+  unit: 'miles' | 'kilometers';
 }
 
 export interface BreakEvenParams {
@@ -46,8 +47,11 @@ export const calculateOverbookingLimit = (params: OverbookingParams): number => 
   return Math.min(recommendedBookings, maxSafeBookings);
 };
 
+const KM_TO_MILES = 0.621371;
+
 export const calculateRASM = (params: RASMParams): number => {
-  const { totalRevenue, availableSeats, distanceInMiles, numberOfFlights } = params;
+  const { totalRevenue, availableSeats, distance, numberOfFlights, unit } = params;
+  const distanceInMiles = unit === 'kilometers' ? distance * KM_TO_MILES : distance;
   const totalASM = availableSeats * distanceInMiles * numberOfFlights;
   return totalRevenue / totalASM;
 };
