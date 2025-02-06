@@ -26,7 +26,7 @@ function Navbar() {
             </Link>
             <Link href="/revenue-management" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <TrendingUp className="h-5 w-5 mr-2" />
-              Revenue Management
+              Revenue Management & Route Opt.
             </Link>
             <Link href="/basic-aviation-passenger" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <BookOpen className="h-5 w-5 mr-2" />
