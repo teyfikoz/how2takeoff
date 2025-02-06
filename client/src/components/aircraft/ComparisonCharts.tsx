@@ -88,7 +88,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               domain={['auto', 'auto']}
             />
             <Tooltip />
-            <Legend />
+            <Legend verticalAlign="bottom" height={36} />
             {aircraftData.map((aircraft, index) => (
               <Line
                 key={aircraft.id}

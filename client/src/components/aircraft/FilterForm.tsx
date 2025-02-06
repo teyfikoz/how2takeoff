@@ -16,12 +16,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const filterSchema = z.object({
-  passengers: z.number().min(0, "Yolcu sayısı 0'dan büyük olmalı"),
-  cargo: z.number().min(0, "Kargo ağırlığı 0'dan büyük olmalı"),
-  range: z.number().min(0, "Menzil 0'dan büyük olmalı"),
-  alternateRange: z.number().min(0, "Alternatif menzil 0'dan büyük olmalı"),
-  windSpeed: z.number().min(0, "Rüzgar hızı 0'dan büyük olmalı"),
-  windDirection: z.number().min(0).max(360, "Rüzgar yönü 0-360 derece arasında olmalı")
+  passengers: z.number().min(0, "Number of passengers must be greater than 0"),
+  cargo: z.number().min(0, "Cargo weight must be greater than 0"),
+  range: z.number().min(0, "Range must be greater than 0"),
+  alternateRange: z.number().min(0, "Alternate range must be greater than 0"),
+  windSpeed: z.number().min(0, "Wind speed must be greater than 0"),
+  windDirection: z.number().min(0).max(360, "Wind direction must be between 0-360 degrees")
 });
 
 type FilterFormData = z.infer<typeof filterSchema>;
@@ -44,7 +44,7 @@ export default function FilterForm({ onFilter }: Props) {
   });
 
   React.useEffect(() => {
-    // İlk yüklemede varsayılan değerlerle filtrelemeyi başlat
+    // Trigger initial filtering with default values
     const defaultValues = form.getValues();
     onFilter(defaultValues);
   }, []);
@@ -52,7 +52,7 @@ export default function FilterForm({ onFilter }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Uçuş Gereksinimleri</CardTitle>
+        <CardTitle>Flight Requirements</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -63,7 +63,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="passengers"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Yolcu Sayısı</FormLabel>
+                    <FormLabel>Number of Passengers</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -77,7 +77,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="cargo"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Kargo Ağırlığı (kg)</FormLabel>
+                    <FormLabel>Cargo Weight (kg)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -91,7 +91,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="range"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Menzil (km)</FormLabel>
+                    <FormLabel>Range (km)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -105,7 +105,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="alternateRange"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Alternatif Menzil (km)</FormLabel>
+                    <FormLabel>Alternate Range (km)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -119,7 +119,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="windSpeed"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Rüzgar Hızı (kt)</FormLabel>
+                    <FormLabel>Wind Speed (kt)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -133,7 +133,7 @@ export default function FilterForm({ onFilter }: Props) {
                 name="windDirection"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Rüzgar Yönü (derece)</FormLabel>
+                    <FormLabel>Wind Direction (degrees)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
                     </FormControl>
@@ -143,7 +143,7 @@ export default function FilterForm({ onFilter }: Props) {
               />
             </div>
 
-            <Button type="submit" className="w-full">Uygun Uçakları Bul</Button>
+            <Button type="submit" className="w-full">Find Suitable Aircraft</Button>
           </form>
         </Form>
       </CardContent>
