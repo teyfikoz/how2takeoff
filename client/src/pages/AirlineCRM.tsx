@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiAirchina } from "react-icons/si";
-import { Users, TrendingUp, BarChart, PieChart, Target, UserCheck, DollarSign, Brain } from "lucide-react";
+import { Users, TrendingUp, Calculator, PieChart, Target, UserCheck, DollarSign, Brain, Sparkles } from "lucide-react";
 
 export default function AirlineCRM() {
   return (
@@ -11,269 +11,249 @@ export default function AirlineCRM() {
           <div className="flex items-center gap-3">
             <SiAirchina className="h-8 w-8 text-blue-600" />
             <h1 className="text-3xl font-bold text-gray-900">
-              Airline CRM Analytics Guide
+              Airline CRM Analytics - Basit Anlatım ✈️
             </h1>
           </div>
           <p className="text-gray-600 mt-2">
-            Comprehensive guide to Customer Relationship Management analytics in the airline industry.
+            Havayollarının müşteri ilişkilerini nasıl yönettiğini basit bir şekilde anlatan rehber.
           </p>
         </header>
 
-        {/* Introduction */}
+        {/* CRM Nedir? */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5 text-blue-500" />
-              What is Airline CRM Analytics?
+              CRM Nedir? 🤔
             </CardTitle>
           </CardHeader>
           <CardContent className="prose max-w-none">
             <p>
-              Airline Customer Relationship Management (CRM) analytics is a data-driven approach that enables 
-              airlines to analyze customer behavior, optimize marketing efforts, and enhance customer loyalty. 
-              It leverages big data, machine learning, and predictive analytics to improve passenger experience 
-              and increase revenue.
+              CRM (Customer Relationship Management - Müşteri İlişkileri Yönetimi), 
+              havayollarının yolcularını daha iyi tanımak ve onlara daha iyi hizmet 
+              vermek için kullandığı bir sistemdir.
             </p>
             <div className="grid md:grid-cols-2 gap-6 mt-6">
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Key Objectives</h3>
+                <h3 className="font-semibold text-lg mb-4">Ne İşe Yarar? 🎯</h3>
                 <ul className="space-y-2">
-                  {[
-                    "Customer segmentation – Identifying high-value vs. low-value customers",
-                    "Personalized offers – Targeting customers with relevant promotions",
-                    "Churn prediction – Identifying passengers likely to switch airlines",
-                    "Optimizing CLV – Increasing the long-term revenue per customer"
-                  ].map((objective) => (
-                    <li key={objective} className="flex items-start gap-2">
-                      <span className="text-green-500">✓</span>
-                      {objective}
-                    </li>
-                  ))}
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
+                    Yeni yolcular bulmaya yardımcı olur
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
+                    Mevcut yolcuları mutlu eder
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
+                    Yolcuların başka havayollarına geçmesini önler
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-500">✓</span>
+                    Her yolcudan daha fazla gelir elde etmeye yardımcı olur
+                  </li>
                 </ul>
               </div>
               <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-4">Areas Covered</h3>
-                <ul className="space-y-2">
-                  {[
-                    "Customer Segmentation - Categorizing passengers based on behavior",
-                    "Loyalty Programs - Offering incentives to retain travelers",
-                    "Customer Journey Analysis - Tracking passenger interactions",
-                    "Churn Analysis - Identifying at-risk customers",
-                    "Revenue Optimization - Recommending additional services"
-                  ].map((area) => (
-                    <li key={area} className="flex items-start gap-2">
-                      <span className="text-blue-500">•</span>
-                      {area}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="font-semibold text-lg mb-4">Örnek 💡</h3>
+                <p>
+                  Bir iş insanının genelde son dakika uçuş rezervasyonu yaptığını fark eden 
+                  havayolu, ona özel son dakika fırsatları sunar. Böylece hem yolcu mutlu 
+                  olur, hem de havayolu daha çok bilet satar.
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Core Metrics */}
+        {/* Önemli Hesaplamalar */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart className="h-5 w-5 text-blue-500" />
-              Core CRM Metrics
+              <Calculator className="h-5 w-5 text-blue-500" />
+              Önemli Hesaplamalar 🧮
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-3 gap-6">
-              {/* CAC Card */}
+              {/* Yeni Müşteri Maliyeti */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
-                  Customer Acquisition Cost (CAC)
+                  Yeni Müşteri Maliyeti
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Total expenses incurred to attract a new customer
+                  Bir yeni yolcu kazanmak için harcanan para
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Formula:</p>
-                  <p className="text-sm mt-1">
-                    Marketing & Sales Expenses / Number of New Customers
+                  <p className="text-sm font-medium">Formül:</p>
+                  <div className="mt-2 p-2 bg-white rounded border text-sm">
+                    Yeni Müşteri Maliyeti = 
+                    <div className="border-t mt-1 pt-1">
+                      Pazarlama Giderleri ÷ Yeni Müşteri Sayısı
+                    </div>
+                  </div>
+                  <p className="text-sm mt-2 text-gray-600">
+                    Örnek: 500.000₺ ÷ 10.000 yeni yolcu = 50₺/yolcu
                   </p>
-                  <p className="text-sm mt-2">Example: $500,000 / 10,000 = $50 per customer</p>
                 </div>
               </div>
 
-              {/* CRC Card */}
+              {/* Müşteri Tutma Maliyeti */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <UserCheck className="h-4 w-4" />
-                  Customer Retention Cost (CRC)
+                  Müşteri Tutma Maliyeti
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Investment needed to maintain existing customers
+                  Mevcut yolcuları memnun etmek için harcanan para
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Formula:</p>
-                  <p className="text-sm mt-1">
-                    Loyalty Program Costs / Number of Retained Customers
+                  <p className="text-sm font-medium">Formül:</p>
+                  <div className="mt-2 p-2 bg-white rounded border text-sm">
+                    Müşteri Tutma Maliyeti =
+                    <div className="border-t mt-1 pt-1">
+                      Sadakat Programı Giderleri ÷ Mevcut Müşteri Sayısı
+                    </div>
+                  </div>
+                  <p className="text-sm mt-2 text-gray-600">
+                    Örnek: 200.000₺ ÷ 50.000 yolcu = 4₺/yolcu
                   </p>
-                  <p className="text-sm mt-2">Example: $200,000 / 50,000 = $4 per customer</p>
                 </div>
               </div>
 
-              {/* CLV Card */}
+              {/* Müşteri Yaşam Boyu Değeri */}
               <div className="border rounded-lg p-6">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Customer Lifetime Value (CLV)
+                  <Sparkles className="h-4 w-4" />
+                  Müşteri Yaşam Boyu Değeri
                 </h3>
                 <p className="text-gray-600 mt-2">
-                  Total revenue generated throughout customer relationship
+                  Bir yolcunun uzun vadede getirdiği toplam gelir
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm font-medium">Example Calculation:</p>
-                  <ul className="text-sm mt-1 space-y-1">
-                    <li>Average ticket: $600</li>
-                    <li>Flights per year: 2</li>
-                    <li>Loyalty duration: 5 years</li>
-                    <li>CLV = $600 × 2 × 5 = $6,000</li>
-                  </ul>
+                  <p className="text-sm font-medium">Hesaplama Örneği:</p>
+                  <div className="mt-2 p-2 bg-white rounded border text-sm">
+                    <ul className="space-y-1">
+                      <li>• Ortalama bilet: 600₺</li>
+                      <li>• Yıllık uçuş: 2 kez</li>
+                      <li>• Sadakat süresi: 5 yıl</li>
+                      <li className="border-t mt-1 pt-1 font-medium">
+                        Toplam = 600₺ × 2 × 5 = 6.000₺
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Customer Segmentation */}
+        {/* Müşteri Tipleri */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-blue-500" />
-              Customer Segmentation
+              Müşteri Tipleri 👥
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-6">
-                {[
-                  {
-                    title: "New Customers",
-                    description: "First-time passengers who have never flown with the airline before",
-                    strategy: "Welcome promotions, discount offers, first-flight bonuses"
-                  },
-                  {
-                    title: "Retained Customers",
-                    description: "Frequent flyers who consistently book with the airline",
-                    strategy: "Loyalty programs, exclusive discounts, priority boarding"
-                  }
-                ].map((segment) => (
-                  <div key={segment.title} className="border rounded-lg p-6">
-                    <h3 className="text-lg font-semibold">{segment.title}</h3>
-                    <p className="text-gray-600 mt-2">{segment.description}</p>
-                    <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                      <p className="text-sm font-medium">Strategy:</p>
-                      <p className="text-sm mt-1">{segment.strategy}</p>
-                    </div>
+              {[
+                {
+                  title: "Yeni Müşteriler 🆕",
+                  description: "İlk kez uçacak yolcular",
+                  strategy: "Hoş geldin indirimleri, ilk uçuşa özel hediyeler"
+                },
+                {
+                  title: "Sadık Müşteriler ⭐",
+                  description: "Sürekli bizimle uçan yolcular",
+                  strategy: "Mil puanları, özel check-in, ücretsiz bagaj hakkı"
+                },
+                {
+                  title: "Kaybedilen Müşteriler 😢",
+                  description: "12+ aydır uçuş yapmayan yolcular",
+                  strategy: "Özel geri dönüş kampanyaları, kişiye özel teklifler"
+                },
+                {
+                  title: "Risk Altındaki Müşteriler ⚠️",
+                  description: "Uçuş sıklığı azalan yolcular",
+                  strategy: "Erken müdahale, özel teklifler, anket ve geri bildirim"
+                }
+              ].map((type) => (
+                <div key={type.title} className="border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold">{type.title}</h3>
+                  <p className="text-gray-600 mt-2">{type.description}</p>
+                  <div className="bg-blue-50 p-4 rounded-lg mt-4">
+                    <p className="text-sm font-medium">Nasıl İlgileniyoruz:</p>
+                    <p className="text-sm mt-1">{type.strategy}</p>
                   </div>
-                ))}
-              </div>
-              <div className="space-y-6">
-                {[
-                  {
-                    title: "Churned Customers",
-                    description: "Passengers who have not flown for a long period (e.g., 12+ months)",
-                    strategy: "Win-back campaigns, special promotions, personalized offers"
-                  },
-                  {
-                    title: "High Churn-Risk Customers",
-                    description: "Customers whose flight frequency has significantly declined",
-                    strategy: "Personalized engagement, targeted promotions, proactive support"
-                  }
-                ].map((segment) => (
-                  <div key={segment.title} className="border rounded-lg p-6">
-                    <h3 className="text-lg font-semibold">{segment.title}</h3>
-                    <p className="text-gray-600 mt-2">{segment.description}</p>
-                    <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                      <p className="text-sm font-medium">Strategy:</p>
-                      <p className="text-sm mt-1">{segment.strategy}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
-        {/* Case Studies */}
+        {/* Başarı Hikayeleri */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="h-5 w-5 text-blue-500" />
-              Real-World Case Studies
+              Başarı Hikayeleri 🌟
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {[
                 {
-                  title: "Reducing Customer Acquisition Costs through AI",
-                  problem: "High customer acquisition costs due to generic marketing campaigns",
+                  title: "Yapay Zeka ile Müşteri Kazanımı",
+                  problem: "Genel reklamlar yeterince etkili değildi",
                   solution: [
-                    "AI-powered predictive analytics integration",
-                    "Personalized marketing campaigns",
-                    "Optimized ad spending targeting"
+                    "Yapay zeka ile müşteri davranışlarını analiz ettiler",
+                    "Kişiye özel reklamlar gösterdiler",
+                    "Reklam bütçesini daha akıllıca kullandılar"
                   ],
                   results: [
-                    "CAC reduced by 30%",
-                    "Conversion rates increased by 18%",
-                    "3x higher email engagement"
+                    "Müşteri kazanma maliyeti %30 düştü",
+                    "Reklam tıklanma oranı %18 arttı",
+                    "E-posta açılma oranı 3 kat arttı"
                   ]
                 },
                 {
-                  title: "Boosting CLV through Personalized Loyalty",
-                  problem: "Stagnant customer spending despite frequent flights",
+                  title: "Sadakat Programı Başarısı",
+                  problem: "Yolcular sık uçmasına rağmen az harcıyordu",
                   solution: [
-                    "Tier-based loyalty program",
-                    "Personalized promotions",
-                    "Dynamic pricing strategies"
+                    "Kademeli sadakat programı başlattılar",
+                    "Kişiye özel kampanyalar sundular",
+                    "Dinamik fiyatlandırma kullandılar"
                   ],
                   results: [
-                    "CLV increased by 25%",
-                    "40% higher spending in top tier",
-                    "12% boost in ancillary revenue"
-                  ]
-                },
-                {
-                  title: "Predicting and Reducing Churn",
-                  problem: "20% of frequent flyers stopped booking after 12 months",
-                  solution: [
-                    "ML-based churn prediction model",
-                    "Automated retention offers",
-                    "Engagement level tracking"
-                  ],
-                  results: [
-                    "Churn rate decreased by 18%",
-                    "30% at-risk customers rebooked",
-                    "3x improvement in retention marketing ROI"
+                    "Müşteri değeri %25 arttı",
+                    "Üst kademe üyelerin harcaması %40 arttı",
+                    "Ek hizmet geliri %12 yükseldi"
                   ]
                 }
-              ].map((study) => (
-                <div key={study.title} className="border rounded-lg p-6">
-                  <h3 className="text-lg font-semibold">{study.title}</h3>
+              ].map((story) => (
+                <div key={story.title} className="border rounded-lg p-6">
+                  <h3 className="text-lg font-semibold">{story.title}</h3>
                   <div className="mt-4 space-y-4">
                     <div>
                       <p className="font-medium">Problem:</p>
-                      <p className="text-gray-600">{study.problem}</p>
+                      <p className="text-gray-600">{story.problem}</p>
                     </div>
                     <div>
-                      <p className="font-medium">Solution:</p>
+                      <p className="font-medium">Çözüm:</p>
                       <ul className="list-disc pl-5 text-gray-600">
-                        {study.solution.map((item, index) => (
+                        {story.solution.map((item, index) => (
                           <li key={index}>{item}</li>
                         ))}
                       </ul>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="font-medium">Results:</p>
+                      <p className="font-medium">Sonuçlar:</p>
                       <ul className="mt-2 space-y-1">
-                        {study.results.map((result, index) => (
+                        {story.results.map((result, index) => (
                           <li key={index} className="flex items-center gap-2">
                             <span className="text-green-500">🚀</span>
                             {result}
@@ -289,7 +269,7 @@ export default function AirlineCRM() {
         </Card>
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
-          <p>Based on IATA and ICAO CRM analytics guidelines</p>
+          <p>IATA ve ICAO standartlarına uygun olarak hazırlanmıştır</p>
           <p className="mt-2">© Aviation Performance Analytics</p>
         </footer>
       </div>
