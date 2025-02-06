@@ -34,14 +34,20 @@ export default function FilterForm({ onFilter }: Props) {
   const form = useForm<FilterFormData>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      passengers: 0,
-      cargo: 0,
-      range: 0,
-      alternateRange: 0,
-      windSpeed: 0,
+      passengers: 150,
+      cargo: 15000,
+      range: 5000,
+      alternateRange: 1000,
+      windSpeed: 20,
       windDirection: 0
     }
   });
+
+  React.useEffect(() => {
+    // İlk yüklemede varsayılan değerlerle filtrelemeyi başlat
+    const defaultValues = form.getValues();
+    onFilter(defaultValues);
+  }, []);
 
   return (
     <Card>
