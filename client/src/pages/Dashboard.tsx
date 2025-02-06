@@ -42,7 +42,7 @@ export default function Dashboard() {
       const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
 
       scenarios.push({
-        label: `${(variation >= 0 ? '+' : '')}${variation * 100}% rüzgar`,
+        label: `${(variation >= 0 ? '+' : '')}${variation * 100}% wind`,
         speed: modifiedSpeed,
         effectiveRange: Math.round(effectiveRange)
       });
@@ -55,20 +55,20 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // Yolcu kapasitesi kontrolü
+      // Passenger capacity check
       const hasEnoughCapacity =
         aircraft.capacity.min <= filterCriteria.passengers &&
         aircraft.capacity.max >= filterCriteria.passengers;
 
-      // Kargo kapasitesi kontrolü
+      // Cargo capacity check
       const hasEnoughCargoCapacity = aircraft.cargoCapacity >= filterCriteria.cargo;
 
-      // Menzil kontrolü (rüzgar etkisi hesaplanarak)
+      // Range check (with wind effect)
       const windEffect = Math.cos((filterCriteria.windDirection * Math.PI) / 180) * filterCriteria.windSpeed;
       const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
       const hasEnoughRange = effectiveRange >= filterCriteria.range;
 
-      // Alternatif menzil kontrolü
+      // Alternate range check
       const hasEnoughAlternateRange = effectiveRange >= filterCriteria.alternateRange;
 
       return hasEnoughCapacity && hasEnoughCargoCapacity && hasEnoughRange && hasEnoughAlternateRange;
@@ -84,10 +84,10 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto p-6 space-y-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Havacılık Analiz Paneli
+            Aviation Analysis Dashboard
           </h1>
           <p className="text-gray-600 mt-2">
-            Uçuş gereksinimlerinize göre en uygun uçak tiplerini bulun ve detaylı analizleri inceleyin.
+            Find the most suitable aircraft types based on your flight requirements and analyze detailed comparisons.
           </p>
         </header>
 
@@ -97,7 +97,7 @@ export default function Dashboard() {
           <>
             <Card>
               <CardHeader>
-                <CardTitle>Uygun Uçak Tipleri</CardTitle>
+                <CardTitle>Suitable Aircraft Types</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -108,10 +108,10 @@ export default function Dashboard() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
-                          <p>Yolcu Kapasitesi: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
-                          <p>Kargo Kapasitesi: {aircraft.cargoCapacity} kg</p>
-                          <p>Menzil: {aircraft.maxRange} km</p>
-                          <p>Yakıt Verimliliği: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
+                          <p>Passenger Capacity: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
+                          <p>Cargo Capacity: {aircraft.cargoCapacity} kg</p>
+                          <p>Range: {aircraft.maxRange} km</p>
+                          <p>Fuel Efficiency: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
                         </div>
                       </CardContent>
                     </Card>
@@ -122,7 +122,7 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Rüzgar Senaryoları Karşılaştırması</CardTitle>
+                <CardTitle>Wind Scenario Comparison</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -134,13 +134,13 @@ export default function Dashboard() {
                       <CardContent>
                         <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>Menzil: {aircraft.maxRange} km</div>
-                            <div>Seyir Hızı: {aircraft.cruiseSpeed} knot</div>
+                            <div>Range: {aircraft.maxRange} km</div>
+                            <div>Cruise Speed: {aircraft.cruiseSpeed} knots</div>
                           </div>
 
                           {filterCriteria && (
                             <div className="space-y-3">
-                              <h4 className="font-semibold">Rüzgar Senaryoları:</h4>
+                              <h4 className="font-semibold">Wind Scenarios:</h4>
                               <div className="space-y-2">
                                 {generateWindScenarios(filterCriteria.windSpeed, aircraft).map((scenario) => (
                                   <div
@@ -152,11 +152,11 @@ export default function Dashboard() {
                                         <span className="font-medium">{scenario.label}</span>
                                         <br />
                                         <span className="text-gray-600">
-                                          {Math.round(scenario.speed)} knot
+                                          {Math.round(scenario.speed)} knots
                                         </span>
                                       </div>
                                       <div className="text-right">
-                                        <span className="text-gray-600">Efektif Menzil</span>
+                                        <span className="text-gray-600">Effective Range</span>
                                         <br />
                                         <span className="font-medium">
                                           {scenario.effectiveRange} km
@@ -178,7 +178,7 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Karşılaştırmalı Analiz</CardTitle>
+                <CardTitle>Comparative Analysis</CardTitle>
               </CardHeader>
               <CardContent>
                 <ComparisonCharts aircraftData={filteredAircraft} />
@@ -191,15 +191,15 @@ export default function Dashboard() {
           <Card>
             <CardContent className="p-6">
               <p className="text-center text-gray-500">
-                Belirtilen kriterlere uygun uçak bulunamadı. Lütfen kriterleri güncelleyin.
+                No aircraft found matching the specified criteria. Please update your requirements.
               </p>
             </CardContent>
           </Card>
         )}
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
-          <p>Veriler BADA (Base of Aircraft Data) modeline dayanmaktadır</p>
-          <p className="mt-2">© 2024 Havacılık Performans Analitiği</p>
+          <p>Data based on BADA (Base of Aircraft Data) model</p>
+          <p className="mt-2">© 2024 Aviation Performance Analytics</p>
         </footer>
       </div>
     </div>
