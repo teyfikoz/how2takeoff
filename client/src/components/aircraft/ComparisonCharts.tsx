@@ -1,8 +1,7 @@
 import React from 'react';
 import {
-  BarChart, Bar, LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, BarChart, Bar
 } from 'recharts';
 
 interface Props {
@@ -58,23 +57,26 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
+      <div className="bg-white p-6 rounded-lg shadow col-span-2">
         <h3 className="text-xl font-bold mb-4">Payload Factor Impact</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={payloadEfficiencyData}>
+        <ResponsiveContainer width="100%" height={500}>
+          <LineChart 
+            data={payloadEfficiencyData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 30 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="loadFactor" 
               label={{ 
                 value: 'Load Factor (%)', 
                 position: 'insideBottom',
-                offset: -5
+                offset: -10
               }}
               ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
               domain={[0, 100]}
-              minTickGap={0}
+              type="number"
+              padding={{ left: 30, right: 30 }}
               interval={0}
-              padding={{ left: 0, right: 0 }}
             />
             <YAxis 
               label={{ 
@@ -83,6 +85,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 position: 'insideLeft',
                 offset: 15
               }}
+              domain={['auto', 'auto']}
             />
             <Tooltip />
             <Legend />
@@ -96,6 +99,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
                 dot={{ r: 4 }}
                 activeDot={{ r: 6 }}
+                strokeWidth={2}
               />
             ))}
           </LineChart>
