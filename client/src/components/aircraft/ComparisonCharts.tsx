@@ -65,12 +65,24 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="loadFactor" 
-              label={{ value: 'Load Factor (%)', position: 'bottom' }}
+              label={{ 
+                value: 'Load Factor (%)', 
+                position: 'insideBottom',
+                offset: -5
+              }}
               ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
               domain={[0, 100]}
+              minTickGap={0}
+              interval={0}
+              padding={{ left: 0, right: 0 }}
             />
             <YAxis 
-              label={{ value: 'Fuel Efficiency', angle: -90, position: 'insideLeft' }}
+              label={{ 
+                value: 'Fuel Efficiency', 
+                angle: -90, 
+                position: 'insideLeft',
+                offset: 15
+              }}
             />
             <Tooltip />
             <Legend />
