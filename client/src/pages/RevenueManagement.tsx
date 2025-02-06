@@ -84,6 +84,173 @@ export default function RevenueManagement() {
           </CardContent>
         </Card>
 
+        {/* Contribution Margins */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-blue-500" />
+              Contribution Margins
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Direct Contribution</h3>
+                <p className="text-gray-600">
+                  Revenue after deducting variable operating costs (fuel, navigation fees, ground handling).
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm font-medium">Example:</p>
+                  <ul className="list-disc pl-5 text-sm mt-2">
+                    <li>Flight Revenue: $200,000</li>
+                    <li>Fuel Cost: $50,000</li>
+                    <li>Ground Handling: $20,000</li>
+                    <li>Direct Contribution: $130,000</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Operating Margin</h3>
+                <p className="text-gray-600">
+                  Direct contribution minus aircraft-related fixed costs (lease payments, crew salaries).
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm font-medium">Example:</p>
+                  <ul className="list-disc pl-5 text-sm mt-2">
+                    <li>Direct Contribution: $130,000</li>
+                    <li>Aircraft Lease: $40,000</li>
+                    <li>Crew Costs: $10,000</li>
+                    <li>Operating Margin: $80,000</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Net Contribution</h3>
+                <p className="text-gray-600">
+                  Final profitability after corporate overheads and marketing expenses.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm font-medium">Example:</p>
+                  <ul className="list-disc pl-5 text-sm mt-2">
+                    <li>Operating Margin: $80,000</li>
+                    <li>Marketing Costs: $15,000</li>
+                    <li>Overheads: $20,000</li>
+                    <li>Net Contribution: $45,000</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Landing-Based Revenue & Costs */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plane className="h-5 w-5 text-blue-500" />
+              Landing-Based Revenue & Costs
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Landing Revenue</h3>
+                <p className="text-gray-600">
+                  Revenue streams generated per aircraft landing.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Components:</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Passenger Charges ($15 per passenger)</li>
+                    <li>Cargo Handling Fees ($5,000 per landing)</li>
+                    <li>Airport Retail Commissions</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Landing Costs</h3>
+                <p className="text-gray-600">
+                  Fees paid for airport and air traffic control services.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">Cost Breakdown:</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Weight-Based Landing Fees: $2,500</li>
+                    <li>Ground Handling: $1,000</li>
+                    <li>Navigation Fees: $1,500</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Joint Ventures & Code-Sharing */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <GitBranch className="h-5 w-5 text-blue-500" />
+              Joint Ventures & Code-Sharing
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Joint Ventures (JVs)</h3>
+                  <p className="text-gray-600">
+                    Deep airline partnerships with schedule coordination and revenue sharing.
+                  </p>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-sm">
+                      Example: Delta Airlines, Air France-KLM, and Virgin Atlantic's
+                      transatlantic JV with coordinated schedules and shared revenue.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Code-Sharing</h3>
+                  <p className="text-gray-600">
+                    Airlines selling tickets on partner flights under their own flight numbers.
+                  </p>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-sm">
+                      Example: American Airlines marketing British Airways flights
+                      from New York to London as AA-coded flights.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-2">Case Study: Emirates & Qantas Partnership</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium">Strategy:</h4>
+                    <ul className="list-disc pl-5 space-y-1 mt-2">
+                      <li>Qantas routes European traffic via Dubai</li>
+                      <li>Emirates gains Australian market access</li>
+                      <li>Shared frequent flyer benefits</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Results:</h4>
+                    <ul className="list-disc pl-5 space-y-1 mt-2">
+                      <li>15% revenue increase for Qantas</li>
+                      <li>20% market share growth for Emirates</li>
+                      <li>Improved customer satisfaction</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Network Models */}
         <Card>
           <CardHeader>
@@ -227,7 +394,6 @@ export default function RevenueManagement() {
           </CardContent>
         </Card>
 
-
         {/* Real World Case Study */}
         <Card>
           <CardHeader>
@@ -334,6 +500,27 @@ export default function RevenueManagement() {
                       <li>85% load factor achieved</li>
                       <li>40% market share captured</li>
                       <li>Enhanced Latin America presence</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h3 className="font-semibold mb-2">Fuel Optimization Case Study:  Route A → Route B</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium">Optimization Strategy:</h4>
+                    <ul className="list-disc pl-5 space-y-1 mt-2">
+                      <li>Optimized flight paths</li>
+                      <li>Improved aircraft maintenance</li>
+                      <li>More efficient fuel consumption techniques</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Results:</h4>
+                    <ul className="list-disc pl-5 space-y-1 mt-2">
+                      <li>Fuel consumption reduced by 10%</li>
+                      <li>Cost savings of $50,000 per year</li>
+                      <li>Lower carbon emissions</li>
                     </ul>
                   </div>
                 </div>
