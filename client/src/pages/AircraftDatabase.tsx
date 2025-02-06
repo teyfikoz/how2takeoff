@@ -12,9 +12,6 @@ import { Label } from "@/components/ui/label";
 import { insertAircraftSchema } from '@shared/schema';
 import { useLocation } from "wouter";
 
-// Admin token - gerçek uygulamada bu daha güvenli bir şekilde saklanmalı
-const ADMIN_TOKEN = 'admin-secret-token';
-
 export default function AircraftDatabase() {
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
@@ -37,17 +34,19 @@ export default function AircraftDatabase() {
       fuelEfficiency: 0,
       capacity: { min: 0, max: 0 },
       cargoCapacity: 0,
-      speed: 0
+      speed: 0,
+      // New fields
+      fuelBurnPer100kmSeat: 0,
+      co2EmissionFactor: 2.5,
+      baseFuelCost: 0,
+      operatingCostPerHour: 0,
+      turnaroundTime: 0
     }
   });
 
   const onSubmit = async (data: any) => {
     try {
-      await apiRequest('POST', '/api/admin/aircraft', data, {
-        headers: {
-          'Authorization': `Bearer ${ADMIN_TOKEN}`
-        }
-      });
+      await apiRequest('POST', '/api/aircraft', data);
       queryClient.invalidateQueries({ queryKey: ['/api/aircraft'] });
       toast({
         title: "Success",
@@ -57,7 +56,7 @@ export default function AircraftDatabase() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add aircraft - Admin access required",
+        description: "Failed to add aircraft",
         variant: "destructive",
       });
     }
@@ -150,11 +149,37 @@ export default function AircraftDatabase() {
                 <Label>Speed (km/h)</Label>
                 <Input type="number" {...form.register('speed', { valueAsNumber: true })} />
               </div>
+
+              {/* New efficiency and emissions fields */}
+              <div className="space-y-2">
+                <Label>Fuel Burn per 100km/seat (L)</Label>
+                <Input type="number" step="0.1" {...form.register('fuelBurnPer100kmSeat', { valueAsNumber: true })} />
+              </div>
+
+              <div className="space-y-2">
+                <Label>CO₂ Emission Factor (kg/L)</Label>
+                <Input type="number" step="0.1" {...form.register('co2EmissionFactor', { valueAsNumber: true })} />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Base Fuel Cost (USD/L)</Label>
+                <Input type="number" step="0.01" {...form.register('baseFuelCost', { valueAsNumber: true })} />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Operating Cost per Hour (USD)</Label>
+                <Input type="number" {...form.register('operatingCostPerHour', { valueAsNumber: true })} />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Turnaround Time (min)</Label>
+                <Input type="number" {...form.register('turnaroundTime', { valueAsNumber: true })} />
+              </div>
             </div>
 
             <Button type="submit" className="w-full">
               <PlusCircle className="w-4 h-4 mr-2" />
-              Add Aircraft (Admin Only)
+              Add Aircraft
             </Button>
 
             <Button 
@@ -177,7 +202,9 @@ export default function AircraftDatabase() {
                     <th className="py-2 text-left">Capacity</th>
                     <th className="py-2 text-left">Range (nm)</th>
                     <th className="py-2 text-left">Speed (km/h)</th>
-                    <th className="py-2 text-left">Cargo Capacity (kg)</th>
+                    <th className="py-2 text-left">Fuel Efficiency</th>
+                    <th className="py-2 text-left">CO₂ Factor</th>
+                    <th className="py-2 text-left">Op. Cost/hr</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -187,7 +214,9 @@ export default function AircraftDatabase() {
                       <td className="py-2">{aircraft.capacity.min}-{aircraft.capacity.max}</td>
                       <td className="py-2">{aircraft.maxRange}</td>
                       <td className="py-2">{aircraft.speed}</td>
-                      <td className="py-2">{aircraft.cargoCapacity}</td>
+                      <td className="py-2">{aircraft.fuelBurnPer100kmSeat?.toFixed(1)} L/100km/seat</td>
+                      <td className="py-2">{aircraft.co2EmissionFactor} kg/L</td>
+                      <td className="py-2">${aircraft.operatingCostPerHour}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -16,7 +16,13 @@ export const aircraftTypes = pgTable("aircraft_types", {
   fuelEfficiency: real("fuel_efficiency").notNull(),
   capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull().default({ min: 0, max: 0 }),
   cargoCapacity: real("cargo_capacity").notNull().default(0),
-  speed: real("speed").notNull().default(0)
+  speed: real("speed").notNull().default(0),
+  // New fields for carbon calculations
+  fuelBurnPer100kmSeat: real("fuel_burn_per_100km_seat").notNull().default(0),
+  co2EmissionFactor: real("co2_emission_factor").notNull().default(2.5),
+  baseFuelCost: real("base_fuel_cost").notNull().default(0),
+  operatingCostPerHour: real("operating_cost_per_hour").notNull().default(0),
+  turnaroundTime: integer("turnaround_time").notNull().default(0)
 });
 
 export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
@@ -37,7 +43,12 @@ export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
   fuelEfficiency: true,
   capacity: true,
   cargoCapacity: true,
-  speed: true
+  speed: true,
+  fuelBurnPer100kmSeat: true,
+  co2EmissionFactor: true,
+  baseFuelCost: true,
+  operatingCostPerHour: true,
+  turnaroundTime: true
 });
 
 export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
@@ -58,7 +69,7 @@ export const insertCalculationSchema = createInsertSchema(flightCalculations).pi
   distance: true,
   payload: true,
   fuelRequired: true,
-  co2_emissions: true,
+  co2Emissions: true,
   calculationType: true
 });
 
