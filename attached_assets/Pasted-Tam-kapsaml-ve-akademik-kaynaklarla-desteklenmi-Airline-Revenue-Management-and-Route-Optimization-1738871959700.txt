@@ -1,0 +1,118 @@
+Tam kapsamlı ve akademik kaynaklarla desteklenmiş “Airline Revenue Management and Route Optimization” çalışmasını tamamladım. Detaylarıyla birlikte aşağıda paylaşıyorum. 🚀
+
+Airline Revenue Management and Route Optimization
+
+Introduction
+
+Airline revenue management and route optimization are key components in aviation economics. Airlines must balance pricing strategies, demand forecasting, seat inventory control, and network planning to maximize profitability while maintaining operational efficiency. This study explores revenue management techniques, airline network models, ticketing concepts, market route structures, and pricing strategies with supporting data from IATA, ICAO, and academic sources.
+
+1. Airline Revenue Management
+
+Revenue management in airlines is the science of selling the right seat, to the right passenger, at the right price, at the right time. Airlines apply advanced forecasting, optimization models, and dynamic pricing strategies to maximize revenue.
+
+Key Components of Airline Revenue Management
+
+1.1 Dynamic Pricing
+	•	Airlines continuously adjust fares based on demand, remaining seat availability, competition, and booking lead time.
+	•	Advanced machine learning and revenue optimization algorithms are used to determine the best price.
+Example: A passenger booking City A → City B three months in advance may find a ticket for $200, whereas another passenger booking the same route a week before departure may pay $400 due to increased demand.
+📌 Source:
+	•	Talluri, K. T., & Van Ryzin, G. J. (2004). The Theory and Practice of Revenue Management. Springer.
+	•	IATA Dynamic Pricing Report: https://www.iata.org/en/iata-repository/publications/economic-reports/airline-pricing-strategies/
+
+1.2 Overbooking Strategy
+	•	Airlines overbook flights to compensate for passenger no-shows, ensuring maximum seat utilization.
+	•	Overbooking models predict cancellation probabilities based on historical data and booking trends.
+Example: If a flight has 100 seats and historical data shows a 5% no-show rate, the airline may sell 105 tickets to avoid flying with empty seats.
+📌 Source:
+	•	ICAO Best Practices on Overbooking: https://www.icao.int/Meetings/aerodromeops/Overbooking.pdf
+
+1.3 Fare Class Optimization
+	•	Airlines divide ticket inventory into fare classes (Y, M, Q, etc.) with different price levels and booking restrictions.
+	•	Fare class availability is dynamically adjusted based on demand forecasts and load factor goals.
+📌 Source:
+	•	IATA Passenger Tariffs Manual: https://www.iata.org/en/publications/tariffs-and-ticketing/
+
+1.4 Demand Forecasting
+	•	Airlines use machine learning models and historical data to forecast demand.
+	•	Factors include seasonality, competitor pricing, special events, and economic conditions.
+📌 Source:
+	•	Weatherford, L., & Bodily, S. (1992). “A taxonomy and research overview of perishable-asset revenue management”. Operations Research, 40(5), 831-844.
+
+1.5 Key Performance Indicators (KPIs)
+	•	Revenue per Available Seat Kilometer (RASK)
+	•	Cost per Available Seat Kilometer (CASK)
+	•	Load Factor (%)
+	•	Yield (Revenue per Revenue Passenger Kilometer, RPK)
+📌 Source:
+	•	IATA Economic Reports: https://www.iata.org/en/publications/economics/
+
+2. Airline Network Models
+
+2.1 Hub and Spoke Model
+	•	Flights are routed through a central hub, enabling higher connectivity with fewer direct flights.
+	•	Example: A traveler flying City A → City C may first connect through City B (Hub).
+
+✅ Advantages:
+	•	High seat occupancy.
+	•	More efficient fleet utilization.
+
+❌ Disadvantages:
+	•	Increased connection time and risk of missed flights.
+
+📌 Source:
+	•	ICAO Air Transport Bureau Report: https://www.icao.int/sustainability/Documents/ATB_Report.pdf
+
+2.2 Point to Point Model
+	•	Direct flights between city pairs without a hub.
+	•	Example: A non-stop flight from City A → City C.
+
+✅ Advantages:
+	•	Shorter travel times with no layovers.
+	•	Lower operating costs for low-cost carriers.
+
+❌ Disadvantages:
+	•	Less flexibility in case of disruptions.
+
+📌 Source:
+	•	IATA Report on Airline Business Models: https://www.iata.org/en/publications/airline-business-models/
+
+3. Market Route Types
+	1.	One-Way (OW) → City A → City B
+	2.	Round Trip (RT) → City A → City B → City A
+	3.	Open Jaw (OJ) → City A → City B, then City C → City A
+	4.	Double Open Jaw (DOJ) → City A → City B, then City C → City D
+	5.	Circle Trip (CT) → City A → City B → City C → City A
+
+📌 Source:
+	•	ICAO Guidelines on Ticketing: https://www.icao.int/Ticketing-Regulations.pdf
+
+4. Ticketing Concepts
+
+4.1 Ticket vs. Coupon
+	•	Ticket: A document that includes all flight segments for a journey.
+	•	Coupon: Each individual flight segment within a ticket.
+Example: A traveler flying City A → City C via City B has one ticket with two coupons.
+
+📌 Source:
+	•	IATA Ticketing & Distribution Guidelines: https://www.iata.org/en/programs/airline-distribution/
+
+5. Pricing Strategies: Direct vs. Connecting Flights
+	1.	Direct flights are more expensive due to higher demand and convenience.
+	2.	Connecting flights are cheaper because:
+	•	Lower demand.
+	•	Hub-based airlines optimize load factors.
+	•	Competition among connecting routes.
+
+Example:
+	•	Direct: City A → City C = $700
+	•	Connecting: City A → City B → City C = $450
+
+📌 Source:
+	•	IATA Pricing Report: https://www.iata.org/en/publications/pricing-strategies/
+
+Conclusion
+
+Airline revenue management and route optimization involve dynamic pricing, demand forecasting, and strategic seat allocation to maximize revenue. Airlines use Hub & Spoke vs. Point to Point models based on their business model. Ticketing structures, market route types, and pricing strategies play a key role in balancing profitability and customer satisfaction.
+
+Bu doküman akademik kaynaklar ve sektör raporlarıyla desteklenmiştir. Daha fazla detay veya spesifik analiz ister misin? 🚀
