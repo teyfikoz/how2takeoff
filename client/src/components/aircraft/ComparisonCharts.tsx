@@ -18,12 +18,12 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     fuelPerNM: aircraft.baseFuelFlow / aircraft.cruiseSpeed
   }));
 
-  // Payload efficiency impact analysis
+  // Payload efficiency impact analysis with 10% intervals
   const payloadEfficiencyData = aircraftData.map(aircraft => {
-    return [0.25, 0.5, 0.75, 1].map(loadFactor => ({
+    return Array.from({ length: 11 }, (_, i) => i * 10).map(loadFactor => ({
       name: aircraft.name,
-      loadFactor: loadFactor * 100,
-      fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor * 0.1))
+      loadFactor: loadFactor,
+      fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1))
     }));
   }).flat();
 
@@ -37,8 +37,8 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Emissions data
   const emissionsData = aircraftData.map(aircraft => ({
     name: aircraft.name,
-    'CO2 Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16, // CO2 emission factor
-    'NOx Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014 // NOx emission factor
+    'CO2 Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16,
+    'NOx Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014
   }));
 
   return (
@@ -63,8 +63,15 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={payloadEfficiencyData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="loadFactor" label={{ value: 'Load Factor (%)', position: 'bottom' }} />
-            <YAxis label={{ value: 'Fuel Efficiency', angle: -90, position: 'insideLeft' }} />
+            <XAxis 
+              dataKey="loadFactor" 
+              label={{ value: 'Load Factor (%)', position: 'bottom' }}
+              ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+              domain={[0, 100]}
+            />
+            <YAxis 
+              label={{ value: 'Fuel Efficiency', angle: -90, position: 'insideLeft' }}
+            />
             <Tooltip />
             <Legend />
             {aircraftData.map((aircraft, index) => (
@@ -75,6 +82,8 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 data={payloadEfficiencyData.filter(d => d.name === aircraft.name)}
                 name={aircraft.name}
                 stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
               />
             ))}
           </LineChart>
