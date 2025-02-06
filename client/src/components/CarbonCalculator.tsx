@@ -18,13 +18,14 @@ const CarbonCalculator: React.FC = () => {
     distance: 0,
     unit: 'kilometers',
     passengers: 1,
-    fuelEfficiency: AIRCRAFT_EFFICIENCY['Boeing 737-800'],
+    aircraftType: 'Boeing 737-800',
     offsetPricePerTon: 25 // Default carbon credit price per ton
   });
 
   const emissions = params.distance ? calculateCarbonEmissions(params) : 0;
   const offsetCost = params.distance ? calculateOffsetCredits(params) : 0;
   const environmentalScore = params.distance ? calculateEnvironmentalScore(params) : 0;
+  const aircraftData = AIRCRAFT_EFFICIENCY[params.aircraftType];
 
   return (
     <Card>
@@ -74,18 +75,18 @@ const CarbonCalculator: React.FC = () => {
           <div className="space-y-2">
             <Label>Aircraft Type</Label>
             <Select
-              value={String(params.fuelEfficiency)}
+              value={params.aircraftType}
               onValueChange={(value) => setParams({
                 ...params,
-                fuelEfficiency: Number(value)
+                aircraftType: value
               })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select aircraft" />
               </SelectTrigger>
               <SelectContent>
-                {Object.entries(AIRCRAFT_EFFICIENCY).map(([aircraft, efficiency]) => (
-                  <SelectItem key={aircraft} value={String(efficiency)}>
+                {Object.keys(AIRCRAFT_EFFICIENCY).map((aircraft) => (
+                  <SelectItem key={aircraft} value={aircraft}>
                     {aircraft}
                   </SelectItem>
                 ))}
@@ -108,9 +109,12 @@ const CarbonCalculator: React.FC = () => {
 
         <div className="space-y-4 pt-4">
           <div>
-            <Label>Carbon Emissions per Passenger</Label>
+            <Label>Carbon Emissions per Trip</Label>
             <p className="text-2xl font-bold">
               {emissions.toFixed(2)} kg CO₂
+            </p>
+            <p className="text-sm text-gray-500">
+              Per passenger: {(emissions / params.passengers).toFixed(2)} kg CO₂
             </p>
           </div>
 
@@ -119,7 +123,22 @@ const CarbonCalculator: React.FC = () => {
             <p className="text-2xl font-bold text-green-600">
               ${offsetCost.toFixed(2)}
             </p>
+            <p className="text-sm text-gray-500">
+              Per passenger: ${(offsetCost / params.passengers).toFixed(2)}
+            </p>
           </div>
+
+          {aircraftData && (
+            <div>
+              <Label>Aircraft Efficiency Data</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                <p>Fuel Burn per 100km/seat: {aircraftData.fuelBurnPer100kmSeat}L</p>
+                <p>CO₂ Emission Factor: {aircraftData.co2EmissionFactor} kg/L</p>
+                <p>Operating Cost/Hour: ${aircraftData.operatingCostPerHour}</p>
+                <p>Turnaround Time: {aircraftData.turnaroundTime} min</p>
+              </div>
+            </div>
+          )}
 
           <div>
             <Label>Environmental Impact Score</Label>
@@ -127,6 +146,9 @@ const CarbonCalculator: React.FC = () => {
               <Progress value={environmentalScore} className="w-full" />
               <p className="text-sm text-gray-500">
                 Score: {environmentalScore.toFixed(0)}/100
+                {environmentalScore > 75 ? " (Excellent)" :
+                 environmentalScore > 50 ? " (Good)" :
+                 environmentalScore > 25 ? " (Fair)" : " (Poor)"}
               </p>
             </div>
           </div>

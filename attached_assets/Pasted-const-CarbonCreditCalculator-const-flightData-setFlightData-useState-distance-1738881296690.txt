@@ -1,0 +1,70 @@
+const CarbonCreditCalculator = () => {
+  const [flightData, setFlightData] = useState({
+    distance: 0,
+    passengers: 0,
+    aircraftType: '',
+    offsetPrice: 25 // USD/ton
+  });
+
+  const calculateEmissions = () => {
+    const aircraft = AIRCRAFT_DATA.find(a => a.model === flightData.aircraftType);
+    if (!aircraft) return null;
+
+    // 1. Temel yakıt tüketimi (kg)
+    const fuelConsumption = calculateFuelConsumption(aircraft, flightData.distance);
+    
+    // 2. Yolcu başına yakıt tüketimi
+    const fuelPerPassenger = fuelConsumption / flightData.passengers;
+    
+    // 3. CO2 emisyonu hesaplama (kg)
+    // Jet yakıtı için CO2 emisyon faktörü = 3.16 kg CO2/kg yakıt
+    const co2PerPassenger = fuelPerPassenger * 3.16;
+    
+    // 4. Karbon offset maliyeti (USD)
+    // Ton başına dönüştürme
+    const offsetCost = (co2PerPassenger / 1000) * flightData.offsetPrice;
+
+    // 5. Çevresel etki skoru (0-100)
+    // Benchmark değerlere göre normalize edilmiş skor
+    const impactScore = calculateEnvironmentalScore(co2PerPassenger);
+
+    return {
+      co2PerPassenger,
+      offsetCost,
+      impactScore
+    };
+  };
+
+  const calculateFuelConsumption = (aircraft, distance) => {
+    // Temel yakıt tüketimi
+    const baseConsumption = aircraft.baseFuelFlow * distance / 100;
+    
+    // Faz faktörleri
+    const phaseFactor = {
+      takeoff: 2.0,  // %20 mesafe
+      cruise: 1.0,   // %60 mesafe
+      landing: 1.5   // %20 mesafe
+    };
+
+    // Toplam yakıt = her faz için (mesafe * yakıt akışı * faz faktörü)
+    return (
+      baseConsumption * 0.2 * phaseFactor.takeoff +
+      baseConsumption * 0.6 * phaseFactor.cruise +
+      baseConsumption * 0.2 * phaseFactor.landing
+    );
+  };
+
+  const calculateEnvironmentalScore = (co2) => {
+    // Benchmark değerler (kg CO2/yolcu)
+    const best = 2.0;   // En verimli uçuş
+    const worst = 5.0;  // En verimsiz uçuş
+    
+    // Lineer skor hesaplama (0-100)
+    const score = 100 - ((co2 - best) / (worst - best)) * 100;
+    return Math.max(0, Math.min(100, score));
+  };
+
+  return (
+    // UI kısmı...
+  );
+};

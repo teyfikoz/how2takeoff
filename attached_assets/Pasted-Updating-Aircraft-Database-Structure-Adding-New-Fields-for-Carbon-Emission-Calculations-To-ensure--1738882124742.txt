@@ -1,0 +1,104 @@
+Updating Aircraft Database Structure: Adding New Fields for Carbon Emission Calculations
+
+To ensure accurate fuel consumption and carbon emission calculations, your Aircraft Database needs to be updated with new fields. Below, I will outline:
+	1.	Current Aircraft Database Fields
+	2.	New Fields to Add for Better Data & Calculations
+	3.	Updated Table Structure for Displaying Aircraft Information
+	4.	How to Update the Admin Panel for New Inputs
+	5.	SQL Schema Update for the Database
+
+1. Current Aircraft Database Fields
+
+Your existing aircraft database includes the following fields:
+
+Field Name	Description
+Aircraft Name	Aircraft model (e.g., Boeing 787-9)
+Max Payload (kg)	Maximum weight the aircraft can carry (passengers + cargo)
+Empty Weight (kg)	Aircraft’s weight without passengers, fuel, or cargo
+Fuel Capacity (kg)	Maximum amount of fuel the aircraft can hold
+Cruise Speed (kt)	Typical cruising speed in knots
+Max Altitude (ft)	Maximum operational altitude of the aircraft
+Max Takeoff Weight (kg)	Maximum weight at takeoff
+Base Fuel Flow (kg/hr)	Fuel burn per hour
+Max Range (nm)	Maximum distance the aircraft can fly
+Cargo Capacity (kg)	Maximum weight of cargo that can be carried
+Min Capacity	Minimum number of passengers the aircraft can accommodate
+Max Capacity	Maximum number of passengers the aircraft can accommodate
+Speed (km/h)	Average speed during cruise
+
+2. New Fields to Add for Fuel & Carbon Emission Calculations
+
+These new fields will allow better tracking of fuel efficiency, CO₂ emissions, and operating costs.
+
+New Field Name	Description
+Fuel Burn per 100 km per seat (L/100km/seat)	Fuel efficiency based on distance & seating
+CO₂ Emission Factor (kg CO₂/L)	Conversion rate of fuel burn to CO₂ (default = 2.5 kg CO₂/L)
+Fuel Efficiency (L/km)	Fuel consumption per kilometer
+Base Fuel Cost (USD/L)	Average cost of fuel per liter
+Operating Cost per Hour (USD/hr)	Estimated cost per hour of operation
+Turnaround Time (min)	Time needed to refuel, unload, and board before next flight
+
+3. Updated Table Structure for Displaying Aircraft Information
+
+Once a new aircraft is added to the database, it should be displayed with both existing and new fields.
+
+Aircraft Name	Capacity	Range (nm)	Speed (km/h)	Cargo Capacity (kg)	Fuel Burn per 100 km/seat (L)	CO₂ Emission Factor (kg CO₂/L)	Fuel Efficiency (L/km)	Operating Cost per Hour (USD/hr)
+Boeing 787-9	290-335	7355	954	52587	2.3	2.5	0.024	$6,500
+Airbus A350-900	300-350	8100	945	53300	2.4	2.5	0.025	$6,800
+Boeing 737 MAX 8	178-210	6570	839	20865	2.1	2.5	0.021	$3,200
+
+4. Updating the Admin Panel for New Inputs
+
+Your Admin - Aircraft Database form should be updated to allow input for new fuel-related parameters.
+
+📌 Current Inputs:
+✔ Aircraft Name
+✔ Max Payload (kg)
+✔ Empty Weight (kg)
+✔ Fuel Capacity (kg)
+✔ Cruise Speed (kt)
+✔ Max Altitude (ft)
+✔ Max Takeoff Weight (kg)
+✔ Base Fuel Flow (kg/hr)
+✔ Max Range (nm)
+✔ Cargo Capacity (kg)
+✔ Min Capacity
+✔ Max Capacity
+✔ Speed (km/h)
+
+📌 New Inputs to Add:
+✔ Fuel Burn per 100 km per seat (L/100km/seat)
+✔ CO₂ Emission Factor (kg CO₂/L) → Default: 2.5
+✔ Fuel Efficiency (L/km)
+✔ Base Fuel Cost (USD/L)
+✔ Operating Cost per Hour (USD/hr)
+✔ Turnaround Time (min)
+
+5. SQL Schema Update for the Database
+
+To reflect these changes in your database, update your SQL schema to include the new columns.
+
+ALTER TABLE Aircrafts
+ADD COLUMN fuel_burn_per_100km_seat FLOAT DEFAULT 2.3,
+ADD COLUMN co2_emission_factor FLOAT DEFAULT 2.5,
+ADD COLUMN fuel_efficiency FLOAT DEFAULT 0.024,
+ADD COLUMN base_fuel_cost FLOAT DEFAULT 1.50,
+ADD COLUMN operating_cost_per_hour FLOAT DEFAULT 5000,
+ADD COLUMN turnaround_time INT DEFAULT 45;
+
+📌 Explanation of New Fields in SQL Table:
+	•	fuel_burn_per_100km_seat: Fuel burn per seat per 100 km
+	•	co2_emission_factor: CO₂ conversion factor per liter of fuel (default = 2.5 kg CO₂/L)
+	•	fuel_efficiency: Fuel consumption per kilometer
+	•	base_fuel_cost: Fuel cost per liter
+	•	operating_cost_per_hour: Cost of operation per hour
+	•	turnaround_time: Turnaround time for the aircraft
+
+6. Summary of Changes & Next Steps
+
+✅ New database fields added for fuel & CO₂ calculations.
+✅ Admin panel updated to allow input for additional aircraft performance metrics.
+✅ Aircraft display table updated to include new performance data.
+✅ SQL database schema updated with new columns.
+
+📌 Would you like me to generate the actual Python/SQL script to automate the database updates? 🚀
