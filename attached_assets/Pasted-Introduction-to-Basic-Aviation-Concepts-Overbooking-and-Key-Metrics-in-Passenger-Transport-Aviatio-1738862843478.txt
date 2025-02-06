@@ -1,0 +1,127 @@
+Introduction to Basic Aviation Concepts: Overbooking and Key Metrics in Passenger Transport
+
+Aviation is a complex industry that requires precise calculations and strategies to ensure profitability while maintaining high service levels. One of the fundamental aspects of airline operations is overbooking, which is a common practice in passenger transport. Additionally, there are key performance indicators (KPIs) used to measure an airline’s efficiency and profitability. Let’s break these down in a simple and beginner-friendly way.
+
+1. Why Do Airlines Overbook Flights?
+
+Overbooking is the practice of selling more tickets than available seats on a flight. This might seem counterintuitive, but it is based on historical data and passenger behavior. Here’s why airlines do it:
+
+A. Passengers Sometimes Don’t Show Up (No-Shows)
+
+Many passengers miss their flights due to reasons such as:
+	•	Last-minute changes in plans
+	•	Flight delays affecting connections
+	•	Booking multiple flights and choosing one (corporate travelers do this often)
+
+B. Maximizing Revenue and Load Factor
+
+Airlines operate on thin profit margins, meaning they need to fill as many seats as possible to be profitable. If they don’t sell extra tickets, empty seats lead to lost revenue.
+
+C. The Compensation System
+
+If too many passengers show up, airlines compensate some to take a later flight by offering:
+	•	Cash or travel vouchers
+	•	Free hotel accommodations
+	•	Meal allowances
+
+Since the cost of compensation is usually lower than the revenue gained from overbooking, airlines continue this practice strategically.
+
+2. Key Aviation Metrics and Formulas
+
+Airlines use specific metrics to measure their performance and efficiency. Let’s break them down with simple explanations.
+
+A. Available Seat Kilometers (ASK)
+
+Formula:
+￼
+Meaning:
+This measures the total seating capacity an airline offers over a certain distance. It’s like counting all the seats available on all flights and multiplying by the distance flown.
+
+Example:
+If an airline operates a plane with 200 seats over a 1,000 km route, the ASK is:
+￼
+
+B. Revenue Passenger Kilometers (RPK)
+
+Formula:
+￼
+Meaning:
+This measures how many paying passengers actually travel on flights. It tells how much of the available capacity is actually being used.
+
+Example:
+If 150 passengers fly the same 1,000 km route, the RPK is:
+￼
+
+C. Load Factor (LF)
+
+Formula:
+￼
+Meaning:
+This tells us how efficiently an airline is filling its seats. A higher Load Factor means fewer empty seats and better efficiency.
+
+Example:
+￼
+A 75% Load Factor means that 75% of available seats were actually sold and used by passengers.
+
+D. Revenue Yield (RY)
+
+Formula:
+￼
+Meaning:
+This measures how much revenue an airline earns per kilometer flown by a paying passenger.
+
+E. Cost per Available Seat Kilometer (CASK)
+
+Formula:
+￼
+Meaning:
+This represents the cost of flying one seat for one kilometer, including fuel, salaries, maintenance, and airport fees. Airlines aim to keep CASK low to remain profitable.
+
+F. Revenue per Available Seat Kilometer (RASK)
+
+Formula:
+￼
+Meaning:
+This tells how much money an airline earns for each available seat per kilometer. It is a key indicator of financial performance.
+
+Profitability Formula:
+￼
+If RASK is higher than CASK, the airline is making a profit. If not, it is losing money.
+
+3. Simple Example to Tie Everything Together
+
+Imagine an airline operates a flight:
+	•	200 seats
+	•	1,000 km route
+	•	150 passengers booked tickets
+	•	Each ticket costs $100
+	•	Total operating cost for the flight is $15,000
+
+Step 1: Calculate ASK and RPK
+
+￼
+￼
+
+Step 2: Load Factor (LF)
+
+￼
+
+Step 3: Revenue Yield (RY)
+
+￼
+
+Step 4: Calculate RASK and CASK
+
+￼
+￼
+
+Step 5: Profitability Check
+
+￼
+The airline breaks even on this flight. If RASK was lower than CASK, the airline would lose money.
+
+Final Thoughts
+
+These fundamental aviation metrics help airlines make data-driven decisions. Understanding these key concepts is essential for anyone working in airline revenue management, operations, or finance. Overbooking is one of many strategies airlines use to maximize revenue and minimize losses. By carefully managing ASK, RPK, Load Factor, RASK, and CASK, airlines can ensure profitability while providing reliable passenger service.
+
+Would you like a real-world airline case study with actual data to practice these calculations? 🚀
