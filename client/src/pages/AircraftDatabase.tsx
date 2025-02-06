@@ -10,9 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { insertAircraftSchema } from '@shared/schema';
+import { useLocation } from "wouter";
+
+// Admin token - gerçek uygulamada bu daha güvenli bir şekilde saklanmalı
+const ADMIN_TOKEN = 'admin-secret-token';
 
 export default function AircraftDatabase() {
   const { toast } = useToast();
+  const [_, setLocation] = useLocation();
   const { data: aircraftData } = useQuery({
     queryKey: ['/api/aircraft'],
   });
@@ -38,7 +43,11 @@ export default function AircraftDatabase() {
 
   const onSubmit = async (data: any) => {
     try {
-      await apiRequest('POST', '/api/aircraft', data);
+      await apiRequest('POST', '/api/admin/aircraft', data, {
+        headers: {
+          'Authorization': `Bearer ${ADMIN_TOKEN}`
+        }
+      });
       queryClient.invalidateQueries({ queryKey: ['/api/aircraft'] });
       toast({
         title: "Success",
@@ -48,7 +57,7 @@ export default function AircraftDatabase() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add aircraft",
+        description: "Failed to add aircraft - Admin access required",
         variant: "destructive",
       });
     }
@@ -60,7 +69,7 @@ export default function AircraftDatabase() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Database className="w-6 h-6 text-blue-500" />
-            <CardTitle>Aircraft Database</CardTitle>
+            <CardTitle>Admin - Aircraft Database</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
@@ -70,7 +79,7 @@ export default function AircraftDatabase() {
                 <Label>Aircraft Name</Label>
                 <Input {...form.register('name')} />
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Empty Weight (kg)</Label>
                 <Input type="number" {...form.register('emptyWeight', { valueAsNumber: true })} />
@@ -145,7 +154,16 @@ export default function AircraftDatabase() {
 
             <Button type="submit" className="w-full">
               <PlusCircle className="w-4 h-4 mr-2" />
-              Add Aircraft
+              Add Aircraft (Admin Only)
+            </Button>
+
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full mt-2"
+              onClick={() => setLocation("/")}
+            >
+              Back to Dashboard
             </Button>
           </form>
 

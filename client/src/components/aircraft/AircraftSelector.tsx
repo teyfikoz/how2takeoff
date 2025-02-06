@@ -8,9 +8,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { useLocation } from "wouter";
 
 interface Props {
   aircraft: any[];
@@ -19,22 +16,10 @@ interface Props {
 }
 
 export default function AircraftSelector({ aircraft, selectedAircraft, onSelect }: Props) {
-  const [_, setLocation] = useLocation();
-
   return (
     <Card className="bg-white shadow-lg">
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl font-bold">Aircraft Selection</CardTitle>
-          <Button 
-            variant="outline" 
-            onClick={() => setLocation("/database")}
-            className="flex items-center gap-2 text-lg h-10 px-6"
-          >
-            <PlusCircle className="h-5 w-5" />
-            Add Aircraft
-          </Button>
-        </div>
+        <CardTitle className="text-2xl font-bold">Aircraft Selection</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <Select 
