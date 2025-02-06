@@ -199,7 +199,7 @@ export default function Dashboard() {
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
           <p>Data based on BADA (Base of Aircraft Data) model</p>
-          <p className="mt-2">© 2024 Aviation Performance Analytics</p>
+          <p className="mt-2">© Aviation Performance Analytics</p>
         </footer>
       </div>
     </div>

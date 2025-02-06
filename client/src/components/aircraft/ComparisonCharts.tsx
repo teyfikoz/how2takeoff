@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie,
+  BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer
 } from 'recharts';
@@ -37,8 +37,8 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Emissions data
   const emissionsData = aircraftData.map(aircraft => ({
     name: aircraft.name,
-    co2: aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16, // CO2 emission factor
-    nox: aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014 // NOx emission factor
+    'CO2 Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16, // CO2 emission factor
+    'NOx Emissions': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014 // NOx emission factor
   }));
 
   return (
@@ -100,15 +100,15 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Emissions Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={emissionsData}>
+          <BarChart data={emissionsData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="co2" stroke="#ff7300" name="CO2" />
-            <Line type="monotone" dataKey="nox" stroke="#387908" name="NOx" />
-          </LineChart>
+            <Bar dataKey="CO2 Emissions" fill="#ff7300" name="CO2" />
+            <Bar dataKey="NOx Emissions" fill="#387908" name="NOx" />
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
