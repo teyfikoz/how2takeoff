@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import AircraftSelector from '@/components/aircraft/AircraftSelector';
 import HighFidelityCalculator from '@/components/fuel/HighFidelityCalculator';
 import SimplifiedCalculator from '@/components/fuel/SimplifiedCalculator';
+import ComparisonCharts from '@/components/aircraft/ComparisonCharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Dashboard() {
@@ -56,6 +57,17 @@ export default function Dashboard() {
             </>
           )}
         </div>
+
+        {aircraftData && aircraftData.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Aircraft Performance Comparison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ComparisonCharts aircraftData={aircraftData} />
+            </CardContent>
+          </Card>
+        )}
 
         {results && selectedAircraft && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
