@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import {
   LineChart, Line, ComposedChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend,
   ResponsiveContainer
 } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
@@ -9,6 +9,13 @@ import FilterForm from '@/components/aircraft/FilterForm';
 import ComparisonCharts from '@/components/aircraft/ComparisonCharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Aircraft } from '@shared/schema';
+import { ArrowRight, Wind } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FilterCriteria {
   passengers: number;
@@ -140,27 +147,51 @@ export default function Dashboard() {
 
                           {filterCriteria && (
                             <div className="space-y-3">
-                              <h4 className="font-semibold">Wind Scenarios:</h4>
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-semibold">Wind Scenarios:</h4>
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <Wind className="h-4 w-4 text-gray-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Shows how different wind speeds affect the effective range</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
                               <div className="space-y-2">
                                 {generateWindScenarios(filterCriteria.windSpeed, aircraft).map((scenario) => (
                                   <div
                                     key={scenario.label}
-                                    className="bg-gray-100 p-2 rounded-md"
+                                    className="bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition-colors"
                                   >
-                                    <div className="grid grid-cols-2 gap-1 text-sm">
+                                    <div className="grid grid-cols-3 gap-2">
                                       <div>
-                                        <span className="font-medium">{scenario.label}</span>
-                                        <br />
-                                        <span className="text-gray-600">
-                                          {Math.round(scenario.speed)} knots
-                                        </span>
+                                        <span className="font-medium text-sm">{scenario.label}</span>
+                                        <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
+                                          <Wind className="h-4 w-4" />
+                                          {Math.round(scenario.speed)} kt
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center justify-center">
+                                        <div
+                                          className="flex items-center text-gray-500"
+                                          style={{
+                                            transform: `rotate(${filterCriteria.windDirection}deg)`
+                                          }}
+                                        >
+                                          <ArrowRight className="h-5 w-5" />
+                                        </div>
                                       </div>
                                       <div className="text-right">
-                                        <span className="text-gray-600">Effective Range</span>
-                                        <br />
-                                        <span className="font-medium">
-                                          {scenario.effectiveRange} km
-                                        </span>
+                                        <span className="text-gray-600 text-sm">Effective Range</span>
+                                        <div className="font-medium">
+                                          {new Intl.NumberFormat('en-US').format(scenario.effectiveRange)} km
+                                          <span className="text-sm text-gray-500 ml-1">
+                                            ({Math.round((scenario.effectiveRange / aircraft.maxRange) * 100)}%)
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
