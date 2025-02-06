@@ -7,6 +7,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiAirchina } from "react-icons/si";
 import { Plane, GitBranch, Ticket, DollarSign, Network, Globe, TrendingUp } from "lucide-react";
+import RouteOptimization from "@/components/RouteOptimization";
+import { Calculator } from "lucide-react";
+
 
 export default function RevenueManagement() {
   return (
@@ -441,6 +444,19 @@ export default function RevenueManagement() {
                 </li>
               </ul>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Added Route Optimization Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-blue-500" />
+              Route Optimization & Emissions Calculator
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RouteOptimization />
           </CardContent>
         </Card>
 
