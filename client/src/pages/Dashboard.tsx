@@ -24,11 +24,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Aviation Fuel Analysis Dashboard
-        </h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto p-6 space-y-8">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Aviation Fuel Analysis Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Analyze and compare fuel efficiency, emissions, and performance metrics across different aircraft types.
+            Use our advanced FEAT (Fuel Efficiency Analysis Tool) models for precise calculations.
+          </p>
+        </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div>
@@ -59,9 +65,12 @@ export default function Dashboard() {
         </div>
 
         {aircraftData && aircraftData.length > 0 && (
-          <Card>
+          <Card className="mt-8">
             <CardHeader>
-              <CardTitle>Aircraft Performance Comparison</CardTitle>
+              <CardTitle className="text-2xl">Aircraft Performance Comparison</CardTitle>
+              <p className="text-gray-600">
+                Compare key performance metrics across different aircraft types
+              </p>
             </CardHeader>
             <CardContent>
               <ComparisonCharts aircraftData={aircraftData} />
@@ -70,7 +79,7 @@ export default function Dashboard() {
         )}
 
         {results && selectedAircraft && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
             <Card>
               <CardHeader>
                 <CardTitle>Fuel Consumption Analysis</CardTitle>
@@ -129,6 +138,11 @@ export default function Dashboard() {
             </Card>
           </div>
         )}
+
+        <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
+          <p>Data based on typical aircraft performance metrics and BADA (Base of Aircraft Data) model</p>
+          <p className="mt-2">© 2024 Aviation Performance Analytics</p>
+        </footer>
       </div>
     </div>
   );
