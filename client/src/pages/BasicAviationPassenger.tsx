@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PassengerMetricsCalculator from "@/components/PassengerMetricsCalculator";
 
 export default function BasicAviationPassenger() {
   return (
@@ -16,11 +17,12 @@ export default function BasicAviationPassenger() {
         </header>
 
         <Tabs defaultValue="concepts" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="concepts">Key Concepts</TabsTrigger>
             <TabsTrigger value="metrics">Aviation Metrics</TabsTrigger>
             <TabsTrigger value="calculations">Example Calculations</TabsTrigger>
             <TabsTrigger value="case-study">Case Study</TabsTrigger>
+            <TabsTrigger value="calculator">Interactive Calculator</TabsTrigger>
           </TabsList>
 
           <TabsContent value="concepts">
@@ -228,6 +230,21 @@ export default function BasicAviationPassenger() {
                     </ul>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="calculator">
+            <Card>
+              <CardHeader>
+                <CardTitle>Interactive Aviation Metrics Calculator</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-6">
+                  Use this interactive calculator to compute key aviation metrics including load factor, 
+                  overbooking limits, revenue per available seat mile (RASM), and break-even load factor.
+                </p>
+                <PassengerMetricsCalculator />
               </CardContent>
             </Card>
           </TabsContent>
