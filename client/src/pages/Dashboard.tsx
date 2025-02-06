@@ -97,6 +97,31 @@ export default function Dashboard() {
           <>
             <Card>
               <CardHeader>
+                <CardTitle>Uygun Uçak Tipleri</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredAircraft.map((aircraft: Aircraft) => (
+                    <Card key={aircraft.id} className="shadow-md">
+                      <CardHeader>
+                        <CardTitle className="text-lg">{aircraft.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <p>Yolcu Kapasitesi: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
+                          <p>Kargo Kapasitesi: {aircraft.cargoCapacity} kg</p>
+                          <p>Menzil: {aircraft.maxRange} km</p>
+                          <p>Yakıt Verimliliği: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle>Rüzgar Senaryoları Karşılaştırması</CardTitle>
               </CardHeader>
               <CardContent>
@@ -146,33 +171,6 @@ export default function Dashboard() {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Uygun Uçak Tipleri</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  {filteredAircraft.map((aircraft: Aircraft) => (
-                    <div key={aircraft.id} className="border-b pb-8 last:border-b-0">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>{aircraft.name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-2">
-                            <p>Yolcu Kapasitesi: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
-                            <p>Kargo Kapasitesi: {aircraft.cargoCapacity} kg</p>
-                            <p>Menzil: {aircraft.maxRange} km</p>
-                            <p>Yakıt Verimliliği: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
                   ))}
                 </div>
               </CardContent>
