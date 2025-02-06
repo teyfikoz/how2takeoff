@@ -9,7 +9,8 @@ import BasicAviationPassenger from "@/pages/BasicAviationPassenger";
 import BasicAviationCargo from "@/pages/BasicAviationCargo";
 import RevenueManagement from "@/pages/RevenueManagement";
 import CarrierTypes from "@/pages/CarrierTypes";
-import { Database, Home, BookOpen, TrendingUp, Plane } from "lucide-react";
+import TicketingDistribution from "@/pages/TicketingDistribution";
+import { Database, Home, BookOpen, TrendingUp, Plane, Globe } from "lucide-react";
 
 function Navbar() {
   return (
@@ -28,6 +29,10 @@ function Navbar() {
             <Link href="/revenue-management" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <TrendingUp className="h-5 w-5 mr-2" />
               Revenue Management & Route Opt.
+            </Link>
+            <Link href="/ticketing-distribution" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <Globe className="h-5 w-5 mr-2" />
+              Ticketing & Distribution
             </Link>
             <Link href="/basic-aviation-cargo" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <BookOpen className="h-5 w-5 mr-2" />
@@ -56,6 +61,7 @@ function Router() {
         <Route path="/" component={Dashboard} />
         <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
         <Route path="/revenue-management" component={RevenueManagement} />
+        <Route path="/ticketing-distribution" component={TicketingDistribution} />
         <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
         <Route path="/carrier-types" component={CarrierTypes} />
         <Route path="/database" component={AircraftDatabase} />

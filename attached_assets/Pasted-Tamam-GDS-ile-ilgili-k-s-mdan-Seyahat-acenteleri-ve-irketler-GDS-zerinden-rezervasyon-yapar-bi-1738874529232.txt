@@ -1,0 +1,101 @@
+Tamam! GDS ile ilgili kısımdan “Seyahat acenteleri ve şirketler, GDS üzerinden rezervasyon yapar” bilgisini kaldırdım. Diğer tüm bilgiler olduğu gibi kaldı.
+
+Güncellenmiş versiyon:
+
+Airline Ticketing & Distribution Strategies ✈️🎟️
+
+1. Introduction: Airline Ticketing & Distribution Overview
+
+Havayolu şirketleri, biletlerini farklı satış ve dağıtım kanalları aracılığıyla yolculara ulaştırır. Bu kanallar, doğrudan (direct sales) ve dolaylı (indirect sales) olmak üzere iki ana gruba ayrılır.
+
+Havayolları, gelirlerini artırmak, müşteri tabanını genişletmek ve operasyonel maliyetlerini yönetmek için bu satış kanallarını stratejik olarak kullanır.
+
+2. Airline Ticket Sales Channels: Overview
+
+Aşağıdaki tablo, havayolu bilet satış kanallarını genel hatlarıyla karşılaştırmaktadır:
+
+Satış Kanalı	Tanım	Örnekler	Avantajlar	Dikkat Edilmesi Gerekenler
+Direct Sales (Doğrudan Satış)	Havayolunun kendi web sitesi, mobil uygulaması, çağrı merkezi veya bilet ofisleri üzerinden yapılan satışlar.	Airline Websites, Mobile Apps, Call Centers	Daha düşük maliyetler ve doğrudan müşteri yönetimi sağlar.	Dijital altyapı ve pazarlama yatırımı gerektirir.
+GDS (Global Distribution Systems)	Seyahat acenteleri ve kurumsal müşteriler için küresel bilet dağıtım sistemleri.	Amadeus, Sabre, Travelport	Dünya çapında dağıtım imkanı sunar ve kurumsal müşterilere erişim sağlar.	GDS kullanım maliyetleri göz önünde bulundurulmalıdır.
+OTA (Online Travel Agencies - Çevrimiçi Seyahat Acenteleri)	İnternet üzerinden bilet satışı yapan platformlar. Yolcular, farklı havayollarının fiyatlarını karşılaştırarak satın alma yapabilir.	Expedia, Skyscanner, Kayak	Geniş kullanıcı tabanı ve online erişim sağlar.	Fiyat rekabeti yüksek olabilir.
+TMC (Travel Management Companies - Seyahat Yönetim Şirketleri)	Kurumsal müşterilere yönelik seyahat yönetimi hizmetleri sunan şirketler. Şirketler için seyahat politikalarına uygun çözümler sunar.	CWT, BCD Travel, American Express GBT	Şirketler için seyahat harcamalarını yönetmeyi kolaylaştırır.	Kurumsal anlaşmalara dayalı çalıştığı için esneklik sınırlı olabilir.
+Metasearch Engines (Metasearch Motorları)	Farklı platformlardan bilet fiyatlarını karşılaştırmaya olanak tanıyan sistemler.	Google Flights, Skyscanner, Momondo	Havayollarının görünürlüğünü artırabilir.	Doğrudan satış yerine yönlendirme yapar.
+
+📌 Kaynaklar:
+	•	IATA Airline Sales & Distribution: https://www.iata.org/en/programs/airline-distribution/
+	•	Amadeus Airline Sales Insights: https://amadeus.com/en/insights/
+
+3. Global Distribution Systems (GDS) 🏢
+
+GDS Nedir?
+
+Global Distribution Systems (GDS), havayolu biletlerinin, otel rezervasyonlarının ve diğer seyahat hizmetlerinin seyahat acenteleri ve kurumsal müşteriler tarafından rezervasyon yapılmasını sağlayan merkezi sistemlerdir.
+
+Havayolları, GDS sistemlerine uçuşlarını, fiyatlarını ve koltuk bilgilerini yükleyerek daha geniş bir müşteri kitlesine ulaşır.
+
+📌 GDS’in Çalışma Mekanizması:
+	1.	Havayolu, GDS sistemine uçuş envanterini yükler.
+	2.	GDS, biletleme sürecini yönetir ve tüm işlemleri kayıt altına alır.
+
+📌 Avantajlar:
+✅ Küresel erişim imkanı sunar.
+✅ Büyük kurumsal müşterilere yönelik rezervasyon yönetimini kolaylaştırır.
+
+📌 Dikkat Edilmesi Gerekenler:
+⚠ GDS sistemlerine entegrasyon ve kullanım maliyetleri olabilir.
+⚠ Tüm havayolları GDS kullanmayabilir, özellikle düşük maliyetli taşıyıcılar.
+
+📌 Kaynaklar:
+	•	Amadeus GDS Solutions: https://www.amadeus.com/
+	•	Sabre Airline Technology: https://www.sabre.com/
+
+4. Corporate Sales & Travel Management Companies (TMC) 🏢💼
+
+Büyük şirketler, çalışanlarının iş seyahatlerini yönetmek için havayolları ile doğrudan anlaşmalar yapabilir veya TMC (Travel Management Companies - Seyahat Yönetim Şirketleri) hizmetlerinden faydalanabilir.
+
+Kurumsal Satış (Corporate Sales)
+
+📌 Kurumsal müşteriler için özel fiyatlandırma ve avantajlar sunar.
+📌 Şirket içi seyahat politikalarına uygun çözümler geliştirilir.
+
+TMC (Travel Management Companies) Nedir?
+
+TMC’ler, büyük ölçekli şirketlerin uçuş, otel ve seyahat giderlerini yönetmelerine yardımcı olan profesyonel firmalardır.
+
+📌 TMC’nin Avantajları:
+✅ Şirketlerin seyahat harcamalarını yönetmesini kolaylaştırır.
+✅ Rezervasyon süreçlerini ve seyahat politikalarını tek bir çatı altında toplar.
+
+📌 Kaynaklar:
+	•	BCD Travel Corporate Solutions: https://www.bcdtravel.com/
+	•	American Express GBT Business Travel Insights: https://www.amexglobalbusinesstravel.com/
+
+5. OTA (Online Travel Agencies) ve Metasearch Motorları
+
+OTA (Online Travel Agencies - Çevrimiçi Seyahat Acenteleri)
+
+OTA’lar, internet üzerinden bilet satışı yapan platformlardır. Yolcular, OTA’lar aracılığıyla farklı havayollarının fiyatlarını karşılaştırabilir ve rezervasyon yapabilir.
+
+📌 Örnek OTA’lar:
+	•	Expedia
+	•	Skyscanner
+	•	Kayak
+
+📌 Metasearch Motorları (Fiyat Karşılaştırma Siteleri)
+Metasearch motorları, farklı platformlardaki fiyatları karşılaştırarak kullanıcılara en uygun seçeneği sunar. Ancak, doğrudan satış yerine kullanıcıları havayolu veya OTA web sitelerine yönlendirebilir.
+
+📌 Örnek Metasearch Motorları:
+	•	Google Flights
+	•	Momondo
+
+📌 Kaynaklar:
+	•	IATA OTA Report: https://www.iata.org/en/publications/economics/
+
+Sonuç ve Özet
+
+✅ Havayolları, farklı satış kanallarını kullanarak müşteri erişimini genişletir.
+✅ GDS, kurumsal müşteriler ve seyahat acenteleri için kritik bir dağıtım sistemidir.
+✅ TMC’ler, şirketler için seyahat yönetimi çözümleri sunar.
+✅ OTA ve metasearch motorları, fiyat karşılaştırma ve online görünürlük sağlar.
+
+📌 Eklemek veya daha fazla detaylandırmak istediğin bir konu var mı? 🚀
