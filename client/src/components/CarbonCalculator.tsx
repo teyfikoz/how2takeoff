@@ -13,7 +13,7 @@ import {
   type CarbonOffsetParams
 } from '@/lib/carbon-utils';
 
-const CarbonCalculator = () => {
+const CarbonCalculator: React.FC = () => {
   const [params, setParams] = useState<CarbonOffsetParams>({
     distance: 0,
     unit: 'kilometers',
@@ -49,7 +49,7 @@ const CarbonCalculator = () => {
                 })}
               >
                 <SelectTrigger className="w-[120px]">
-                  <SelectValue />
+                  <SelectValue placeholder="Select unit" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="miles">Miles</SelectItem>
@@ -81,7 +81,7 @@ const CarbonCalculator = () => {
               })}
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select aircraft" />
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(AIRCRAFT_EFFICIENCY).map(([aircraft, efficiency]) => (
