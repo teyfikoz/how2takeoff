@@ -1,0 +1,130 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Airbus Uçak Modelleri
+Airbus A319
+Kapasite: 140-160 yolcu
+Menzil: 6,950 km
+Hız: 840 km/s
+Airbus A320
+Kapasite: 140-240 yolcu
+Menzil: 6,300 km
+Hız: 840 km/s
+Airbus A321
+Kapasite: 185-240 yolcu
+Menzil: 7,400 km
+Hız: 840 km/s
+Airbus A350-900
+Kapasite: 300-410 yolcu
+Menzil: 15,000 km
+Hız: 910 km/s
+Airbus A350-1000
+Kapasite: 410-440 yolcu
+Menzil: 16,100 km
+Hız: 910 km/s
+Boeing Uçak Modelleri
+Boeing 737-800
+Kapasite: 162-189 yolcu
+Menzil: 5,665 km
+Hız: 842 km/s
+Boeing 747-8
+Kapasite: 410-524 yolcu
+Menzil: 14,320 km
+Hız: 910 km/s
+Boeing 777-200ER
+Kapasite: 314-396 yolcu
+Menzil: 14,800 km
+Hız: 905 km/s
+Boeing 787-9
+Kapasite: 296-296 yolcu
+Menzil: 14,140 km
+Hız: 910 km/s
+Boeing 787-8
+Kapasite: 242-290 yolcu
+Menzil: 13,530 km
+Hız: 910 km/s
+Genel Karşılaştırma
+Yakıt Verimliliği: Airbus, genellikle daha modern ve yakıt verimliliği yüksek uçaklar üretme konusunda öne çıkıyor.
+Kokpit Tasarımı: Airbus uçaklarının kokpitleri daha otomatik sistemlerle donatılmışken, Boeing uçakları daha manuel kontrol sunuyor.
+Kapasite ve Menzil: Her iki üretici de geniş bir yolcu kapasitesi ve menzil yelpazesi sunuyor, bu da havayolu şirketlerinin ihtiyaçlarına göre seçim yapmalarını sağlıyor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Embraer ve Bombardier markalarına ait bazı yolcu uçakları ve genel özellikleri:
+Embraer Uçak Modelleri
+Embraer E170
+Kapasite: 66-78 yolcu
+Menzil: 4,600 km
+Hız: 780 km/s
+Embraer E175
+Kapasite: 76-88 yolcu
+Menzil: 4,600 km
+Hız: 780 km/s
+Embraer E190
+Kapasite: 96-114 yolcu
+Menzil: 5,200 km
+Hız: 830 km/s
+Embraer E195
+Kapasite: 100-124 yolcu
+Menzil: 4,800 km
+Hız: 830 km/s
+Embraer E195-E2
+Kapasite: 132 yolcu
+Menzil: 4,600 km
+Hız: 815 km/s
+Bombardier Uçak Modelleri
+Bombardier CRJ100/CRJ200
+Kapasite: 50 yolcu
+Menzil: 2,500 km
+Hız: 780 km/s
+Bombardier CRJ700
+Kapasite: 70 yolcu
+Menzil: 2,800 km
+Hız: 780 km/s
+Bombardier CRJ900
+Kapasite: 90 yolcu
+Menzil: 2,500 km
+Hız: 780 km/s
+Bombardier CRJ1000
+Kapasite: 100 yolcu
+Menzil: 2,800 km
+Hız: 780 km/s
+Bombardier C Serisi (Airbus A220 olarak da bilinir)
+Kapasite: 100-149 yolcu
+Menzil: 6,300 km
+Hız: 840 km/s
+
