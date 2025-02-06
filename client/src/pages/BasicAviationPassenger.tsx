@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PassengerMetricsCalculator from "@/components/PassengerMetricsCalculator";
+import CarbonCalculator from "@/components/CarbonCalculator";
 
 export default function BasicAviationPassenger() {
   return (
@@ -12,17 +13,18 @@ export default function BasicAviationPassenger() {
             Basic Aviation Passenger Concepts
           </h1>
           <p className="mt-2 text-gray-600">
-            Understanding fundamental passenger aviation concepts, metrics, and industry practices
+            Understanding fundamental passenger aviation concepts, metrics, and sustainability
           </p>
         </header>
 
         <Tabs defaultValue="concepts" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="concepts">Key Concepts</TabsTrigger>
             <TabsTrigger value="metrics">Aviation Metrics</TabsTrigger>
             <TabsTrigger value="calculations">Example Calculations</TabsTrigger>
             <TabsTrigger value="case-study">Case Study</TabsTrigger>
             <TabsTrigger value="calculator">Interactive Calculator</TabsTrigger>
+            <TabsTrigger value="carbon">Carbon Credits</TabsTrigger>
           </TabsList>
 
           <TabsContent value="concepts">
@@ -245,6 +247,20 @@ export default function BasicAviationPassenger() {
                   overbooking limits, revenue per available seat mile (RASM), and break-even load factor.
                 </p>
                 <PassengerMetricsCalculator />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="carbon">
+            <Card>
+              <CardHeader>
+                <CardTitle>Sustainable Travel Carbon Credit Calculator</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-6">
+                  Calculate your flight's carbon emissions and determine the cost of carbon offset credits 
+                  to help neutralize your environmental impact.
+                </p>
+                <CarbonCalculator />
               </CardContent>
             </Card>
           </TabsContent>
