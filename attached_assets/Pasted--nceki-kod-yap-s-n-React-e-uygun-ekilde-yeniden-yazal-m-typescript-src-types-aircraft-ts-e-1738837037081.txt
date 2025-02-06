@@ -1,0 +1,110 @@
+Önceki kod yapısını React'e uygun şekilde yeniden yazalım:
+
+```typescript
+// src/types/aircraft.ts
+export interface Aircraft {
+  id: number;
+  name: string; 
+  maxTakeoffWeight: number;
+  emptyWeight: number;
+  maxFuelCapacity: number;
+  maxPayload: number;
+  baseFuelFlow: number;
+  fuelEfficiency: number;
+  cgLimits: {
+    forward: number;
+    aft: number;
+  };
+}
+
+// src/utils/calculations.ts
+export class FuelCalculator {
+  private aircraft: Aircraft;
+
+  constructor(aircraft: Aircraft) {
+    this.aircraft = aircraft;
+  }
+
+  calculateFuelBurn(distance: number, payloadWeight: number): number {
+    const baseConsumption = this.aircraft.baseFuelFlow * this.aircraft.fuelEfficiency;
+    const loadFactor = payloadWeight / this.aircraft.maxPayload;
+    
+    return baseConsumption * distance * (1 + loadFactor * 0.1);
+  }
+
+  calculateEmissions(fuelBurn: number): {co2: number, nox: number} {
+    return {
+      co2: fuelBurn * 3.16,
+      nox: fuelBurn * 0.014
+    };
+  }
+}
+
+// src/utils/weightBalance.ts
+export class WeightBalanceCalculator {
+  private aircraft: Aircraft;
+
+  constructor(aircraft: Aircraft) {
+    this.aircraft = aircraft;
+  }
+
+  calculateCG(payload: number, fuelWeight: number): number {
+    const totalWeight = this.aircraft.emptyWeight + payload + fuelWeight;
+    // CG calculation logic
+    return (totalWeight * 0.4); // Simplified for example
+  }
+
+  isWithinLimits(cgPercentMAC: number): boolean {
+    return cgPercentMAC >= this.aircraft.cgLimits.forward && 
+           cgPercentMAC <= this.aircraft.cgLimits.aft;
+  }
+}
+
+// src/components/FlightAnalysis.tsx
+import React, { useState } from 'react';
+import { FuelCalculator, WeightBalanceCalculator } from '../utils';
+import { Aircraft } from '../types';
+
+interface FormData {
+  distance: number;
+  payload: number;
+  cruiseAltitude: number;
+  temperature: number;
+}
+
+export const FlightAnalysis: React.FC = () => {
+  const [selectedAircraft, setSelectedAircraft] = useState<Aircraft>(null);
+  const [formData, setFormData] = useState<FormData>({
+    distance: 1000,
+    payload: 15000,
+    cruiseAltitude: 35000,
+    temperature: 15
+  });
+
+  const [results, setResults] = useState(null);
+
+  const handleCalculate = () => {
+    const fuelCalc = new FuelCalculator(selectedAircraft);
+    const wbCalc = new WeightBalanceCalculator(selectedAircraft);
+
+    const fuelBurn = fuelCalc.calculateFuelBurn(formData.distance, formData.payload);
+    const emissions = fuelCalc.calculateEmissions(fuelBurn);
+    const cg = wbCalc.calculateCG(formData.payload, fuelBurn);
+
+    setResults({
+      fuelBurn,
+      emissions,
+      cg,
+      isWithinLimits: wbCalc.isWithinLimits(cg)
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      {/* Form ve sonuç gösterimi burada olacak */}
+    </div>
+  );
+};
+```
+
+Devam edelim mi? Kontrol paneli ve veri görselleştirme componentlerini de ekleyebiliriz.
