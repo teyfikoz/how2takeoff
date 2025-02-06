@@ -16,7 +16,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import AdvancedAnalytics from '@/components/aircraft/AdvancedAnalytics';
 
 interface FilterCriteria {
   passengers: number;
@@ -205,15 +204,6 @@ export default function Dashboard() {
                     </Card>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Advanced Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AdvancedAnalytics aircraftData={filteredAircraft} />
               </CardContent>
             </Card>
 
