@@ -5,7 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/Dashboard";
 import AircraftDatabase from "@/pages/AircraftDatabase";
-import BasicAviation from "@/pages/BasicAviation";
+import BasicAviationPassenger from "@/pages/BasicAviationPassenger";
+import BasicAviationCargo from "@/pages/BasicAviationCargo";
 import { Database, Home, BookOpen } from "lucide-react";
 
 function Navbar() {
@@ -22,9 +23,13 @@ function Navbar() {
               <Database className="h-5 w-5 mr-2" />
               Aircraft Database
             </Link>
-            <Link href="/basic-aviation" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+            <Link href="/basic-aviation-passenger" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
               <BookOpen className="h-5 w-5 mr-2" />
-              Basic Aviation
+              Basic Aviation Passenger
+            </Link>
+            <Link href="/basic-aviation-cargo" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <BookOpen className="h-5 w-5 mr-2" />
+              Basic Aviation Cargo
             </Link>
           </div>
         </div>
@@ -40,7 +45,8 @@ function Router() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/database" component={AircraftDatabase} />
-        <Route path="/basic-aviation" component={BasicAviation} />
+        <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
+        <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
         <Route component={NotFound} />
       </Switch>
     </div>
