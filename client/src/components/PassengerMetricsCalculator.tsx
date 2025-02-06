@@ -8,10 +8,12 @@ import {
   calculateLoadFactor,
   calculateOverbookingLimit,
   calculateRASM,
+  calculateCASM,
   calculateBreakEvenLoadFactor,
   type LoadFactorParams,
   type OverbookingParams,
   type RASMParams,
+  type CASMParams,
   type BreakEvenParams
 } from '@/lib/passenger-utils';
 
@@ -38,6 +40,15 @@ const PassengerMetricsCalculator = () => {
     unit: 'miles'
   });
 
+  // CASM State
+  const [casmParams, setCasmParams] = useState<CASMParams>({
+    totalCost: 0,
+    availableSeats: 0,
+    distance: 0,
+    numberOfFlights: 0,
+    unit: 'miles'
+  });
+
   // Break-even State
   const [breakEvenParams, setBreakEvenParams] = useState<BreakEvenParams>({
     fixedCosts: 0,
@@ -51,7 +62,7 @@ const PassengerMetricsCalculator = () => {
       <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="loadFactor">Load Factor</TabsTrigger>
         <TabsTrigger value="overbooking">Overbooking</TabsTrigger>
-        <TabsTrigger value="rasm">Revenue per Available Seat Mile (RASM)</TabsTrigger>
+        <TabsTrigger value="metrics">Revenue/Cost Metrics</TabsTrigger>
         <TabsTrigger value="breakEven">Break-even</TabsTrigger>
       </TabsList>
 
@@ -142,7 +153,7 @@ const PassengerMetricsCalculator = () => {
         </Card>
       </TabsContent>
 
-      <TabsContent value="rasm">
+      <TabsContent value="metrics">
         <Card>
           <CardContent className="space-y-4 pt-4">
             <div className="grid grid-cols-2 gap-4">
@@ -158,14 +169,32 @@ const PassengerMetricsCalculator = () => {
                 />
               </div>
               <div className="space-y-2">
+                <Label>Total Cost ($)</Label>
+                <Input
+                  type="number"
+                  value={casmParams.totalCost}
+                  onChange={(e) => setCasmParams({
+                    ...casmParams,
+                    totalCost: Number(e.target.value)
+                  })}
+                />
+              </div>
+              <div className="space-y-2">
                 <Label>Available Seats</Label>
                 <Input
                   type="number"
                   value={rasmParams.availableSeats}
-                  onChange={(e) => setRasmParams({
-                    ...rasmParams,
-                    availableSeats: Number(e.target.value)
-                  })}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    setRasmParams({
+                      ...rasmParams,
+                      availableSeats: value
+                    });
+                    setCasmParams({
+                      ...casmParams,
+                      availableSeats: value
+                    });
+                  }}
                 />
               </div>
               <div className="space-y-2">
@@ -174,17 +203,30 @@ const PassengerMetricsCalculator = () => {
                   <Input
                     type="number"
                     value={rasmParams.distance}
-                    onChange={(e) => setRasmParams({
-                      ...rasmParams,
-                      distance: Number(e.target.value)
-                    })}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      setRasmParams({
+                        ...rasmParams,
+                        distance: value
+                      });
+                      setCasmParams({
+                        ...casmParams,
+                        distance: value
+                      });
+                    }}
                   />
                   <Select
                     value={rasmParams.unit}
-                    onValueChange={(value: 'miles' | 'kilometers') => setRasmParams({
-                      ...rasmParams,
-                      unit: value
-                    })}
+                    onValueChange={(value: 'miles' | 'kilometers') => {
+                      setRasmParams({
+                        ...rasmParams,
+                        unit: value
+                      });
+                      setCasmParams({
+                        ...casmParams,
+                        unit: value
+                      });
+                    }}
                   >
                     <SelectTrigger className="w-[120px]">
                       <SelectValue />
@@ -201,18 +243,32 @@ const PassengerMetricsCalculator = () => {
                 <Input
                   type="number"
                   value={rasmParams.numberOfFlights}
-                  onChange={(e) => setRasmParams({
-                    ...rasmParams,
-                    numberOfFlights: Number(e.target.value)
-                  })}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    setRasmParams({
+                      ...rasmParams,
+                      numberOfFlights: value
+                    });
+                    setCasmParams({
+                      ...casmParams,
+                      numberOfFlights: value
+                    });
+                  }}
                 />
               </div>
             </div>
-            <div className="pt-4">
+            <div className="pt-4 space-y-2">
               <p className="text-lg font-semibold">
-                Revenue per Available Seat {rasmParams.unit === 'miles' ? 'Mile' : 'Kilometer'}: {
+                Revenue per Available Seat {rasmParams.unit === 'miles' ? 'Mile (RASM)' : 'Kilometer (RASK)'}: {
                   rasmParams.distance && rasmParams.availableSeats ? 
                   `$${calculateRASM(rasmParams).toFixed(4)} per AS${rasmParams.unit === 'miles' ? 'M' : 'K'}` : 
+                  'Enter values to calculate'
+                }
+              </p>
+              <p className="text-lg font-semibold">
+                Cost per Available Seat {casmParams.unit === 'miles' ? 'Mile (CASM)' : 'Kilometer (CASK)'}: {
+                  casmParams.distance && casmParams.availableSeats ? 
+                  `$${calculateCASM(casmParams).toFixed(4)} per AS${casmParams.unit === 'miles' ? 'M' : 'K'}` : 
                   'Enter values to calculate'
                 }
               </p>

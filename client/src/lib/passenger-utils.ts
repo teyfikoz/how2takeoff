@@ -19,6 +19,14 @@ export interface RASMParams {
   unit: 'miles' | 'kilometers';
 }
 
+export interface CASMParams {
+  totalCost: number;
+  availableSeats: number;
+  distance: number;
+  numberOfFlights: number;
+  unit: 'miles' | 'kilometers';
+}
+
 export interface BreakEvenParams {
   fixedCosts: number;
   averageTicketPrice: number;
@@ -54,6 +62,13 @@ export const calculateRASM = (params: RASMParams): number => {
   const distanceInMiles = unit === 'kilometers' ? distance * KM_TO_MILES : distance;
   const totalASM = availableSeats * distanceInMiles * numberOfFlights;
   return totalRevenue / totalASM;
+};
+
+export const calculateCASM = (params: CASMParams): number => {
+  const { totalCost, availableSeats, distance, numberOfFlights, unit } = params;
+  const distanceInMiles = unit === 'kilometers' ? distance * KM_TO_MILES : distance;
+  const totalASM = availableSeats * distanceInMiles * numberOfFlights;
+  return totalCost / totalASM;
 };
 
 export const calculateBreakEvenLoadFactor = (params: BreakEvenParams): number => {
