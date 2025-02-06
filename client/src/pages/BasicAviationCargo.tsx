@@ -38,6 +38,7 @@ export default function BasicAviationCargo() {
                         <li>Uses cargo hold of passenger aircraft</li>
                         <li>Additional revenue without extra flights</li>
                         <li>Ideal for mail and small packages</li>
+                        <li>Efficient use of existing capacity</li>
                       </ul>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-md">
@@ -46,6 +47,7 @@ export default function BasicAviationCargo() {
                         <li>Cargo-only aircraft operations</li>
                         <li>Used by express carriers (DHL, FedEx)</li>
                         <li>Handles bulk freight and heavy cargo</li>
+                        <li>Maximum cargo capacity utilization</li>
                       </ul>
                     </div>
                   </div>
@@ -59,7 +61,32 @@ export default function BasicAviationCargo() {
                       <li>Ideal for high-value, perishable items</li>
                       <li>Global reach and accessibility</li>
                       <li>Integration with global supply chains</li>
+                      <li>Reliability and security in transport</li>
+                      <li>Specialized handling capabilities</li>
                     </ul>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mt-6">Cargo Categories</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">General Cargo</h4>
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>Standard packages and goods</li>
+                        <li>Industrial equipment</li>
+                        <li>Retail merchandise</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Special Cargo</h4>
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>Perishable goods</li>
+                        <li>Pharmaceutical products</li>
+                        <li>Live animals</li>
+                        <li>Dangerous goods</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -72,26 +99,46 @@ export default function BasicAviationCargo() {
                 <CardTitle>Key Cargo Metrics</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">AFTK (Available Freight Tonne Kilometers)</h4>
-                    <p className="text-sm mt-2">Total capacity available for cargo transport</p>
-                    <p className="font-mono text-sm mt-1">AFTK = Available Cargo Space × Distance</p>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">AFTK (Available Freight Tonne Kilometers)</h4>
+                      <p className="text-sm mt-2">Total capacity available for cargo transport</p>
+                      <p className="font-mono text-sm mt-1">AFTK = Available Cargo Space × Distance</p>
+                      <p className="text-sm mt-2 text-gray-600">Measures potential cargo capacity</p>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">RFTK (Revenue Freight Tonne Kilometers)</h4>
+                      <p className="text-sm mt-2">Actual volume of paying cargo transported</p>
+                      <p className="font-mono text-sm mt-1">RFTK = Actual Cargo × Distance</p>
+                      <p className="text-sm mt-2 text-gray-600">Measures actual cargo performance</p>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Freight Load Factor (FLF)</h4>
+                      <p className="text-sm mt-2">Efficiency of cargo space utilization</p>
+                      <p className="font-mono text-sm mt-1">FLF = (RFTK ÷ AFTK) × 100%</p>
+                      <p className="text-sm mt-2 text-gray-600">Key efficiency indicator</p>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Cargo Yield</h4>
+                      <p className="text-sm mt-2">Revenue per tonne-kilometer of cargo</p>
+                      <p className="font-mono text-sm mt-1">Yield = Revenue ÷ RFTK</p>
+                      <p className="text-sm mt-2 text-gray-600">Profitability indicator</p>
+                    </div>
                   </div>
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">RFTK (Revenue Freight Tonne Kilometers)</h4>
-                    <p className="text-sm mt-2">Actual volume of paying cargo transported</p>
-                    <p className="font-mono text-sm mt-1">RFTK = Actual Cargo × Distance</p>
-                  </div>
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">Freight Load Factor (FLF)</h4>
-                    <p className="text-sm mt-2">Efficiency of cargo space utilization</p>
-                    <p className="font-mono text-sm mt-1">FLF = (RFTK ÷ AFTK) × 100%</p>
-                  </div>
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">Cargo Yield</h4>
-                    <p className="text-sm mt-2">Revenue per tonne-kilometer of cargo</p>
-                    <p className="font-mono text-sm mt-1">Yield = Revenue ÷ RFTK</p>
+
+                  <div>
+                    <h3 className="text-lg font-semibold">Performance Analysis</h3>
+                    <div className="bg-gray-100 p-4 rounded-md mt-2">
+                      <h4 className="font-semibold">Key Performance Indicators</h4>
+                      <ul className="list-disc pl-4 mt-2 space-y-2">
+                        <li>Capacity utilization rates</li>
+                        <li>Revenue per cargo tonne</li>
+                        <li>Operating costs per tonne</li>
+                        <li>On-time performance</li>
+                        <li>Handling efficiency</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -104,38 +151,72 @@ export default function BasicAviationCargo() {
                 <CardTitle>Passenger vs Cargo Operations</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Emirates</h3>
-                    <div className="space-y-3">
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Network</p>
-                        <p className="text-sm">Serves 150+ cities in 80 countries</p>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Emirates</h3>
+                      <div className="space-y-3">
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Network Coverage</p>
+                          <p className="text-sm">Serves 150+ cities in 80 countries</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Fleet Composition</p>
+                          <p className="text-sm">Large fleet of A380s and 777s</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Cargo Performance</p>
+                          <p className="text-sm">2.23 million metric tons (2023/24)</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Strategic Focus</p>
+                          <p className="text-sm">Balanced passenger-cargo operations</p>
+                        </div>
                       </div>
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Fleet</p>
-                        <p className="text-sm">Large fleet of A380s and 777s</p>
-                      </div>
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Cargo Volume (2023/24)</p>
-                        <p className="text-sm">2.18 million metric tons</p>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Delta Air Lines</h3>
+                      <div className="space-y-3">
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Network Reach</p>
+                          <p className="text-sm">325 destinations in 52 countries</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Fleet Strategy</p>
+                          <p className="text-sm">Mixed fleet for varied operations</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Cargo Approach</p>
+                          <p className="text-sm">Focus on belly cargo integration</p>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-md">
+                          <p className="font-semibold">Market Position</p>
+                          <p className="text-sm">Strong domestic network emphasis</p>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Delta Air Lines</h3>
-                    <div className="space-y-3">
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Network</p>
-                        <p className="text-sm">325 destinations in 52 countries</p>
-                      </div>
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Fleet</p>
-                        <p className="text-sm">Mixed fleet for varied operations</p>
-                      </div>
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-semibold">Strategy</p>
-                        <p className="text-sm">Focus on belly cargo integration</p>
+                    <h3 className="text-lg font-semibold">Operational Comparison</h3>
+                    <div className="bg-gray-100 p-4 rounded-md mt-2">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="font-semibold">Emirates Advantages</h4>
+                          <ul className="list-disc pl-4 mt-2 text-sm">
+                            <li>Strong international presence</li>
+                            <li>Dedicated freighter fleet</li>
+                            <li>Strategic hub location</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">Delta Advantages</h4>
+                          <ul className="list-disc pl-4 mt-2 text-sm">
+                            <li>Extensive domestic network</li>
+                            <li>Efficient belly cargo utilization</li>
+                            <li>Strong regional connectivity</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -150,30 +231,72 @@ export default function BasicAviationCargo() {
                 <CardTitle>Optimization Strategies</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">Dynamic Fleet Usage</h4>
-                    <ul className="list-disc pl-4 mt-2 text-sm">
-                      <li>Convert passenger aircraft for cargo</li>
-                      <li>Flexible capacity management</li>
-                      <li>Seasonal demand adjustment</li>
-                    </ul>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Dynamic Fleet Usage</h4>
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>Convert passenger aircraft for cargo</li>
+                        <li>Flexible capacity management</li>
+                        <li>Seasonal demand adjustment</li>
+                        <li>Equipment optimization</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Revenue Management</h4>
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>Dynamic pricing strategies</li>
+                        <li>Priority cargo services</li>
+                        <li>Seasonal pricing adjustments</li>
+                        <li>Yield optimization</li>
+                      </ul>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md">
+                      <h4 className="font-semibold">Strategic Partnerships</h4>
+                      <ul className="list-disc pl-4 mt-2 text-sm">
+                        <li>E-commerce integration</li>
+                        <li>Logistics company alliances</li>
+                        <li>Express delivery services</li>
+                        <li>Last-mile partnerships</li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">Revenue Management</h4>
-                    <ul className="list-disc pl-4 mt-2 text-sm">
-                      <li>Dynamic pricing for cargo space</li>
-                      <li>Priority cargo services</li>
-                      <li>Seasonal pricing strategies</li>
-                    </ul>
+
+                  <div>
+                    <h3 className="text-lg font-semibold">Advanced Optimization Techniques</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                      <div className="bg-gray-100 p-4 rounded-md">
+                        <h4 className="font-semibold">Operational Efficiency</h4>
+                        <ul className="list-disc pl-4 mt-2 text-sm">
+                          <li>Route optimization</li>
+                          <li>Ground handling improvements</li>
+                          <li>Digital transformation</li>
+                          <li>Automated systems integration</li>
+                        </ul>
+                      </div>
+                      <div className="bg-gray-100 p-4 rounded-md">
+                        <h4 className="font-semibold">Market Expansion</h4>
+                        <ul className="list-disc pl-4 mt-2 text-sm">
+                          <li>New route development</li>
+                          <li>Specialized cargo services</li>
+                          <li>Market penetration strategies</li>
+                          <li>Network optimization</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-gray-100 p-4 rounded-md">
-                    <h4 className="font-semibold">Strategic Partnerships</h4>
-                    <ul className="list-disc pl-4 mt-2 text-sm">
-                      <li>E-commerce integration</li>
-                      <li>Logistics company alliances</li>
-                      <li>Express delivery services</li>
-                    </ul>
+
+                  <div>
+                    <h3 className="text-lg font-semibold">Future Trends</h3>
+                    <div className="bg-gray-100 p-4 rounded-md mt-2">
+                      <ul className="list-disc pl-4 space-y-2">
+                        <li>Sustainable cargo operations</li>
+                        <li>AI-powered demand forecasting</li>
+                        <li>Blockchain for cargo tracking</li>
+                        <li>Autonomous cargo handling</li>
+                        <li>Electric cargo aircraft development</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </CardContent>

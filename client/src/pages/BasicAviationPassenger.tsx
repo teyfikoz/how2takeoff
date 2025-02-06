@@ -26,11 +26,11 @@ export default function BasicAviationPassenger() {
           <TabsContent value="concepts">
             <Card>
               <CardHeader>
-                <CardTitle>Why Do Airlines Overbook Flights?</CardTitle>
+                <CardTitle>Passenger Aviation Fundamentals</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-semibold">Passenger No-Shows</h3>
+                  <h3 className="text-lg font-semibold">Passenger No-Shows and Overbooking</h3>
                   <p className="text-gray-600">Many passengers miss their flights due to:</p>
                   <ul className="list-disc pl-6 mt-2">
                     <li>Last-minute changes in plans</li>
@@ -91,16 +91,27 @@ export default function BasicAviationPassenger() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold">Other Important Metrics</h3>
+                  <h3 className="text-lg font-semibold">Revenue and Cost Metrics</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <div className="bg-gray-100 p-3 rounded-md">
                       <p className="font-semibold">RASK (Revenue per ASK)</p>
                       <p className="font-mono text-sm">Total Revenue ÷ ASK</p>
+                      <p className="text-sm mt-1">Measures revenue generation efficiency</p>
                     </div>
                     <div className="bg-gray-100 p-3 rounded-md">
                       <p className="font-semibold">CASK (Cost per ASK)</p>
                       <p className="font-mono text-sm">Total Cost ÷ ASK</p>
+                      <p className="text-sm mt-1">Measures operational cost efficiency</p>
                     </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold">Profitability Indicators</h3>
+                  <div className="bg-gray-100 p-4 rounded-md mt-2">
+                    <p className="font-semibold">Operating Margin</p>
+                    <p className="text-sm">Operating Income ÷ Total Revenue × 100%</p>
+                    <p className="text-sm mt-1">Indicates airline's operational efficiency</p>
                   </div>
                 </div>
               </CardContent>
@@ -148,9 +159,11 @@ export default function BasicAviationPassenger() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold mb-2">Revenue Yield:</h4>
+                      <h4 className="font-semibold mb-2">Revenue Analysis:</h4>
                       <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="font-mono">$100 × 150 = $15,000</p>
+                        <p className="font-mono">Revenue: $100 × 150 = $15,000</p>
+                        <p className="font-mono">RASK: $15,000 ÷ 200,000 = $0.075 per ASK</p>
+                        <p className="font-mono">CASK: $15,000 ÷ 200,000 = $0.075 per ASK</p>
                       </div>
                     </div>
                   </div>
@@ -175,24 +188,44 @@ export default function BasicAviationPassenger() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold">Strategic Insights</h3>
+                  <h3 className="text-lg font-semibold">Strategic Analysis</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <div className="bg-gray-100 p-4 rounded-md">
                       <h4 className="font-semibold">Load Factor Optimization</h4>
-                      <p className="text-sm text-gray-600">Implement dynamic pricing and targeted marketing campaigns</p>
+                      <p className="text-sm text-gray-600">
+                        Implementation of dynamic pricing and targeted marketing campaigns to increase passenger numbers
+                      </p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-md">
                       <h4 className="font-semibold">Revenue Enhancement</h4>
-                      <p className="text-sm text-gray-600">Focus on ancillary revenue streams and high-yield routes</p>
+                      <p className="text-sm text-gray-600">
+                        Focus on ancillary revenue streams and optimization of high-yield routes
+                      </p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-md">
                       <h4 className="font-semibold">Cost Management</h4>
-                      <p className="text-sm text-gray-600">Invest in fuel-efficient aircraft and streamline operations</p>
+                      <p className="text-sm text-gray-600">
+                        Investment in fuel-efficient aircraft and streamlined operations
+                      </p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-md">
-                      <h4 className="font-semibold">Financial Health</h4>
-                      <p className="text-sm text-gray-600">Continue debt reduction to improve financial flexibility</p>
+                      <h4 className="font-semibold">Financial Strategy</h4>
+                      <p className="text-sm text-gray-600">
+                        Continued focus on debt reduction to improve financial flexibility
+                      </p>
                     </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold">Future Outlook</h3>
+                  <div className="bg-gray-100 p-4 rounded-md mt-2">
+                    <ul className="list-disc pl-4 space-y-2">
+                      <li>Continued focus on operational efficiency</li>
+                      <li>Investment in modern fleet for better fuel efficiency</li>
+                      <li>Enhancement of customer experience</li>
+                      <li>Expansion of route network</li>
+                    </ul>
                   </div>
                 </div>
               </CardContent>
