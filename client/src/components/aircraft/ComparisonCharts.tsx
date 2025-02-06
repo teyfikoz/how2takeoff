@@ -115,13 +115,22 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Range and Payload Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={rangeComparisonData}>
+          <BarChart 
+            data={rangeComparisonData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis 
+              dataKey="name" 
+              angle={-45}
+              textAnchor="end"
+              height={60}
+              interval={0}
+            />
             <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
             <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '20px' }}/>
             <Bar yAxisId="left" dataKey="maxRange" fill="#8884d8" name="Max Range (km)" />
             <Bar yAxisId="right" dataKey="maxPayload" fill="#82ca9d" name="Max Payload (tons)" />
           </BarChart>
