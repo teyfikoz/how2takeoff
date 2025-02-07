@@ -18,13 +18,13 @@ export default function AboutMe() {
   };
 
   return (
-    <div className="p-6">
-      <Card>
+    <div className="container mx-auto p-6">
+      <Card className="max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold">About Me</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg">
             <p>Hi! I'm Teyfik ÖZ. I have experience in Airline Revenue Management, CRM, Data Analytics, Reporting, Sales & Marketing, and Corporate Sales. Throughout my career, I've had the opportunity to work on various projects across different industries, which has helped me gain a deeper understanding of business dynamics and develop a broader perspective.</p>
 
             <p>I completed my undergraduate studies in Physics at Istanbul Kültür University, then pursued a Master's degree in Energy Science and Technology at Istanbul Technical University (ITU). Additionally, I had the opportunity to study at Kungliga Tekniska Högskolan (KTH) in Sweden. My passion for science and analytics has also been reflected in my academic research.</p>
@@ -35,7 +35,7 @@ export default function AboutMe() {
               <h3 className="text-xl font-semibold mb-4">📌 Contact Information</h3>
               <div className="space-y-2">
                 <p>👤 Teyfik ÖZ</p>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   <Button
                     variant="outline"
                     className="flex items-center gap-2"
