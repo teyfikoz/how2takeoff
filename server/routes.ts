@@ -100,10 +100,47 @@ export function registerRoutes(app: Express) {
     }
   });
 
+  app.post('/api/analytics/profile-click', async (req, res) => {
+    const userId = req.session.userId;
+    const { type } = req.body;
+
+    if (!type || !['linkedin', 'email'].includes(type)) {
+      res.status(400).json({ error: "Invalid click type" });
+      return;
+    }
+
+    try {
+      await storage.saveProfileClick({
+        userId: userId || undefined,
+        clickType: type,
+        isAuthenticated: !!userId
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Profile click tracking error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   app.get('/api/admin/analytics', requireAdmin, async (_req, res) => {
     try {
-      const analytics = await storage.getAnalytics();
-      res.json(analytics);
+      const [analytics, profileClicks] = await Promise.all([
+        storage.getAnalytics(),
+        storage.getProfileClicks()
+      ]);
+
+      // Process profile clicks data
+      const profileClicksStats = {
+        linkedin: profileClicks.filter(click => click.clickType === 'linkedin').length,
+        email: profileClicks.filter(click => click.clickType === 'email').length,
+        authenticatedClicks: profileClicks.filter(click => click.isAuthenticated).length,
+        totalClicks: profileClicks.length
+      };
+
+      res.json({
+        analytics,
+        profileClicksStats
+      });
     } catch (error) {
       console.error("Analytics fetch error:", error);
       res.status(500).json({ error: "Internal server error" });

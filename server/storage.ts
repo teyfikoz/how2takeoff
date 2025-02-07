@@ -3,7 +3,8 @@ import {
   type User, type InsertUser,
   type Analytics, type InsertAnalytics,
   type Calculation, type InsertCalculation,
-  aircraftTypes, users, userAnalytics, flightCalculations
+  aircraftTypes, users, userAnalytics, flightCalculations,
+  type ProfileClick, type InsertProfileClick, profileClicks
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -22,6 +23,10 @@ export interface IStorage {
   // Analytics methods
   saveAnalytics(analytics: InsertAnalytics): Promise<void>;
   getAnalytics(): Promise<Analytics[]>;
+
+  // Profile analytics methods
+  saveProfileClick(click: InsertProfileClick): Promise<void>;
+  getProfileClicks(): Promise<ProfileClick[]>;
 }
 
 const initialAircraftData: InsertAircraft[] = [
@@ -396,6 +401,19 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(userAnalytics)
       .orderBy(userAnalytics.timestamp);
+  }
+    // Profile analytics methods
+  async saveProfileClick(click: InsertProfileClick): Promise<void> {
+    await db
+      .insert(profileClicks)
+      .values(click);
+  }
+
+  async getProfileClicks(): Promise<ProfileClick[]> {
+    return db
+      .select()
+      .from(profileClicks)
+      .orderBy(profileClicks.timestamp);
   }
 }
 

@@ -49,6 +49,14 @@ export const userAnalytics = pgTable("user_analytics", {
   isAuthenticated: boolean("is_authenticated").default(false)
 });
 
+export const profileClicks = pgTable("profile_clicks", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  clickType: text("click_type").notNull(), 
+  timestamp: timestamp("timestamp").defaultNow(),
+  isAuthenticated: boolean("is_authenticated").default(false)
+});
+
 export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
   capacity: z.object({
     min: z.number(),
@@ -93,6 +101,12 @@ export const insertAnalyticsSchema = createInsertSchema(userAnalytics).pick({
   isAuthenticated: true
 });
 
+export const insertProfileClickSchema = createInsertSchema(profileClicks).pick({
+  userId: true,
+  clickType: true,
+  isAuthenticated: true
+});
+
 export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
 export type Aircraft = typeof aircraftTypes.$inferSelect;
 
@@ -101,6 +115,9 @@ export type User = typeof users.$inferSelect;
 
 export type InsertAnalytics = z.infer<typeof insertAnalyticsSchema>;
 export type Analytics = typeof userAnalytics.$inferSelect;
+
+export type InsertProfileClick = z.infer<typeof insertProfileClickSchema>;
+export type ProfileClick = typeof profileClicks.$inferSelect;
 
 export const flightCalculations = pgTable("flight_calculations", {
   id: serial("id").primaryKey(),

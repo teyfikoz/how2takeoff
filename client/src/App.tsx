@@ -11,7 +11,8 @@ import RevenueManagement from "@/pages/RevenueManagement";
 import CarrierTypes from "@/pages/CarrierTypes";
 import TicketingDistribution from "@/pages/TicketingDistribution";
 import AirlineCRM from "@/pages/AirlineCRM";
-import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users } from "lucide-react";
+import AboutMe from "@/pages/AboutMe";
+import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User } from "lucide-react";
 
 function Navbar() {
   return (
@@ -51,6 +52,10 @@ function Navbar() {
               <Database className="h-5 w-5 mr-2" />
               Aircraft Database
             </Link>
+            <Link href="/about" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
+              <User className="h-5 w-5 mr-2" />
+              About Me
+            </Link>
           </div>
         </div>
       </div>
@@ -71,6 +76,7 @@ function Router() {
         <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
         <Route path="/carrier-types" component={CarrierTypes} />
         <Route path="/database" component={AircraftDatabase} />
+        <Route path="/about" component={AboutMe} />
         <Route component={NotFound} />
       </Switch>
     </div>
