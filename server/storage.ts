@@ -1,15 +1,27 @@
 import { 
   type Aircraft, type InsertAircraft,
+  type User, type InsertUser,
+  type Analytics, type InsertAnalytics,
   type Calculation, type InsertCalculation,
-  aircraftTypes, flightCalculations
+  aircraftTypes, users, userAnalytics, flightCalculations
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
 export interface IStorage {
+  // Aircraft methods
   getAllAircraft(): Promise<Aircraft[]>;
   createAircraft(aircraft: InsertAircraft): Promise<Aircraft>;
   saveCalculation(calculation: InsertCalculation): Promise<Calculation>;
+
+  // User methods
+  getUser(id: number): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  updateUserLoginStats(userId: number, stats: { lastLogin: Date; visitCount: number }): Promise<void>;
+
+  // Analytics methods
+  saveAnalytics(analytics: InsertAnalytics): Promise<void>;
+  getAnalytics(): Promise<Analytics[]>;
 }
 
 const initialAircraftData: InsertAircraft[] = [
@@ -316,6 +328,7 @@ const initialAircraftData: InsertAircraft[] = [
 ];
 
 export class DatabaseStorage implements IStorage {
+  // Existing aircraft methods
   async getAllAircraft(): Promise<Aircraft[]> {
     const aircraft = await db.select().from(aircraftTypes);
     if (aircraft.length === 0) {
@@ -342,6 +355,47 @@ export class DatabaseStorage implements IStorage {
       .values(insertCalculation)
       .returning();
     return calculation;
+  }
+
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
+    return user;
+  }
+
+  async updateUserLoginStats(userId: number, stats: { lastLogin: Date; visitCount: number }): Promise<void> {
+    await db
+      .update(users)
+      .set({
+        lastLogin: stats.lastLogin,
+        visitCount: stats.visitCount
+      })
+      .where(eq(users.id, userId));
+  }
+
+  // Analytics methods
+  async saveAnalytics(analytics: InsertAnalytics): Promise<void> {
+    await db
+      .insert(userAnalytics)
+      .values(analytics);
+  }
+
+  async getAnalytics(): Promise<Analytics[]> {
+    return db
+      .select()
+      .from(userAnalytics)
+      .orderBy(userAnalytics.timestamp);
   }
 }
 

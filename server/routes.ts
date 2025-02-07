@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
-import { insertAircraftSchema, insertCalculationSchema } from "@shared/schema";
+import { insertAircraftSchema, insertCalculationSchema, insertUserSchema } from "@shared/schema";
 import { requireAdmin } from "./middleware/auth";
+import bcrypt from "bcryptjs";
 
 export function registerRoutes(app: Express) {
   app.get('/api/aircraft', async (_req, res) => {
@@ -10,7 +11,48 @@ export function registerRoutes(app: Express) {
     res.json(aircraft);
   });
 
-  // Admin route'ları
+  // Authentication routes
+  app.get('/api/auth/user', (req, res) => {
+    res.json(req.user || null);
+  });
+
+  app.post('/api/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ error: "Email and password are required" });
+      return;
+    }
+
+    try {
+      const user = await storage.getUserByEmail(email);
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        res.status(401).json({ error: "Invalid credentials" });
+        return;
+      }
+
+      // Update analytics
+      await storage.updateUserLoginStats(user.id, {
+        lastLogin: new Date(),
+        visitCount: (user.visitCount || 0) + 1
+      });
+
+      // Set user in session
+      req.session.userId = user.id;
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    req.session.destroy(() => {
+      res.json({ success: true });
+    });
+  });
+
+  // Admin routes
   app.post('/api/admin/aircraft', requireAdmin, async (req, res) => {
     const parsed = insertAircraftSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -31,6 +73,41 @@ export function registerRoutes(app: Express) {
 
     const calculation = await storage.saveCalculation(parsed.data);
     res.json(calculation);
+  });
+
+  // Analytics routes
+  app.post('/api/analytics/pageview', async (req, res) => {
+    const userId = req.session.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const { path, duration, deviceType, browser } = req.body;
+    try {
+      await storage.saveAnalytics({
+        userId,
+        path,
+        duration,
+        deviceType,
+        browser,
+        isAuthenticated: true
+      });
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Analytics error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  app.get('/api/admin/analytics', requireAdmin, async (_req, res) => {
+    try {
+      const analytics = await storage.getAnalytics();
+      res.json(analytics);
+    } catch (error) {
+      console.error("Analytics fetch error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   });
 
   const httpServer = createServer(app);

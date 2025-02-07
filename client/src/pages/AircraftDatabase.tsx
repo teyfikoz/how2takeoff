@@ -11,10 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { insertAircraftSchema } from '@shared/schema';
 import { useLocation } from "wouter";
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AircraftDatabase() {
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
+  const { isAdmin } = useAuth();
+
   const { data: aircraftData } = useQuery({
     queryKey: ['/api/aircraft'],
   });
@@ -35,7 +38,6 @@ export default function AircraftDatabase() {
       capacity: { min: 0, max: 0 },
       cargoCapacity: 0,
       speed: 0,
-      // New fields
       fuelBurnPer100kmSeat: 0,
       co2EmissionFactor: 2.5,
       baseFuelCost: 0,
@@ -45,6 +47,15 @@ export default function AircraftDatabase() {
   });
 
   const onSubmit = async (data: any) => {
+    if (!isAdmin) {
+      toast({
+        title: "Unauthorized",
+        description: "You must be an admin to perform this action",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       await apiRequest('POST', '/api/aircraft', data);
       queryClient.invalidateQueries({ queryKey: ['/api/aircraft'] });
@@ -68,132 +79,135 @@ export default function AircraftDatabase() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Database className="w-6 h-6 text-blue-500" />
-            <CardTitle>Admin - Aircraft Database</CardTitle>
+            <CardTitle>Aircraft Database</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label>Aircraft Name</Label>
-                <Input {...form.register('name')} />
+          {/* Only show form for admin users */}
+          {isAdmin && (
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Aircraft Name</Label>
+                  <Input {...form.register('name')} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Empty Weight (kg)</Label>
+                  <Input type="number" {...form.register('emptyWeight', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Takeoff Weight (kg)</Label>
+                  <Input type="number" {...form.register('maxTakeoffWeight', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Payload (kg)</Label>
+                  <Input type="number" {...form.register('maxPayload', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Fuel Capacity (kg)</Label>
+                  <Input type="number" {...form.register('fuelCapacity', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Base Fuel Flow (kg/hr)</Label>
+                  <Input type="number" {...form.register('baseFuelFlow', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Cruise Speed (kt)</Label>
+                  <Input type="number" {...form.register('cruiseSpeed', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Altitude (ft)</Label>
+                  <Input type="number" {...form.register('maxAltitude', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Range (nm)</Label>
+                  <Input type="number" {...form.register('maxRange', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Fuel Efficiency</Label>
+                  <Input type="number" step="0.01" {...form.register('fuelEfficiency', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Min Capacity</Label>
+                  <Input 
+                    type="number" 
+                    {...form.register('capacity.min', { valueAsNumber: true })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Max Capacity</Label>
+                  <Input 
+                    type="number" 
+                    {...form.register('capacity.max', { valueAsNumber: true })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Cargo Capacity (kg)</Label>
+                  <Input type="number" {...form.register('cargoCapacity', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Speed (km/h)</Label>
+                  <Input type="number" {...form.register('speed', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Fuel Burn per 100km/seat (L)</Label>
+                  <Input type="number" step="0.1" {...form.register('fuelBurnPer100kmSeat', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>CO₂ Emission Factor (kg/L)</Label>
+                  <Input type="number" step="0.1" {...form.register('co2EmissionFactor', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Base Fuel Cost (USD/L)</Label>
+                  <Input type="number" step="0.01" {...form.register('baseFuelCost', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Operating Cost per Hour (USD)</Label>
+                  <Input type="number" {...form.register('operatingCostPerHour', { valueAsNumber: true })} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Turnaround Time (min)</Label>
+                  <Input type="number" {...form.register('turnaroundTime', { valueAsNumber: true })} />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Empty Weight (kg)</Label>
-                <Input type="number" {...form.register('emptyWeight', { valueAsNumber: true })} />
-              </div>
+              <Button type="submit" className="w-full">
+                <PlusCircle className="w-4 h-4 mr-2" />
+                Add Aircraft
+              </Button>
 
-              <div className="space-y-2">
-                <Label>Max Takeoff Weight (kg)</Label>
-                <Input type="number" {...form.register('maxTakeoffWeight', { valueAsNumber: true })} />
-              </div>
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full mt-2"
+                onClick={() => setLocation("/")}
+              >
+                Back to Dashboard
+              </Button>
+            </form>
+          )}
 
-              <div className="space-y-2">
-                <Label>Max Payload (kg)</Label>
-                <Input type="number" {...form.register('maxPayload', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Fuel Capacity (kg)</Label>
-                <Input type="number" {...form.register('fuelCapacity', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Base Fuel Flow (kg/hr)</Label>
-                <Input type="number" {...form.register('baseFuelFlow', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Cruise Speed (kt)</Label>
-                <Input type="number" {...form.register('cruiseSpeed', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Max Altitude (ft)</Label>
-                <Input type="number" {...form.register('maxAltitude', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Max Range (nm)</Label>
-                <Input type="number" {...form.register('maxRange', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Fuel Efficiency</Label>
-                <Input type="number" step="0.01" {...form.register('fuelEfficiency', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Min Capacity</Label>
-                <Input 
-                  type="number" 
-                  {...form.register('capacity.min', { valueAsNumber: true })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Max Capacity</Label>
-                <Input 
-                  type="number" 
-                  {...form.register('capacity.max', { valueAsNumber: true })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Cargo Capacity (kg)</Label>
-                <Input type="number" {...form.register('cargoCapacity', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Speed (km/h)</Label>
-                <Input type="number" {...form.register('speed', { valueAsNumber: true })} />
-              </div>
-
-              {/* New efficiency and emissions fields */}
-              <div className="space-y-2">
-                <Label>Fuel Burn per 100km/seat (L)</Label>
-                <Input type="number" step="0.1" {...form.register('fuelBurnPer100kmSeat', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>CO₂ Emission Factor (kg/L)</Label>
-                <Input type="number" step="0.1" {...form.register('co2EmissionFactor', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Base Fuel Cost (USD/L)</Label>
-                <Input type="number" step="0.01" {...form.register('baseFuelCost', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Operating Cost per Hour (USD)</Label>
-                <Input type="number" {...form.register('operatingCostPerHour', { valueAsNumber: true })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Turnaround Time (min)</Label>
-                <Input type="number" {...form.register('turnaroundTime', { valueAsNumber: true })} />
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full">
-              <PlusCircle className="w-4 h-4 mr-2" />
-              Add Aircraft
-            </Button>
-
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="w-full mt-2"
-              onClick={() => setLocation("/")}
-            >
-              Back to Dashboard
-            </Button>
-          </form>
-
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold mb-4">Existing Aircraft</h3>
+          {/* Aircraft list visible to all users */}
+          <div className={`${isAdmin ? 'mt-8' : 'mt-4'}`}>
+            <h3 className="text-lg font-semibold mb-4">Aircraft Database</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>

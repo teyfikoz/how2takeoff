@@ -1,21 +1,36 @@
 import { Request, Response, NextFunction } from 'express';
+import { storage } from '../storage';
 
-// Geçici olarak basit bir admin kontrolü yapıyoruz
-// Gerçek uygulamada bu daha güvenli olmalı
-const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'admin-secret-token';
+// Add user type to Express Request
+declare module 'express' {
+  interface Request {
+    user?: any;
+  }
+}
 
+// Authentication middleware
+export async function authenticate(req: Request, res: Response, next: NextFunction) {
+  if (req.session.userId) {
+    const user = await storage.getUser(req.session.userId);
+    if (user) {
+      req.user = user;
+    }
+  }
+  next();
+}
+
+// Authorization middleware for admin users
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized - No token provided' });
+  if (!req.user || !req.user.isAdmin) {
+    return res.status(403).json({ error: 'Forbidden - Admin access required' });
   }
+  next();
+}
 
-  const token = authHeader.split(' ')[1];
-  
-  if (token !== ADMIN_TOKEN) {
-    return res.status(403).json({ message: 'Forbidden - Not an admin' });
+// Authorization middleware for authenticated users
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Unauthorized - Login required' });
   }
-
   next();
 }
