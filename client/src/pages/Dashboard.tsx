@@ -39,82 +39,73 @@ export default function Dashboard() {
     queryKey: ['/api/aircraft'],
   });
 
-  const generateWindScenarios = (baseSpeed: number, aircraft: Aircraft) => {
-    const scenarios: WindScenario[] = [];
-    const variations = [-0.4, -0.2, 0, 0.2, 0.4]; // -40%, -20%, 0%, +20%, +40%
-
-    variations.forEach(variation => {
-      const modifiedSpeed = baseSpeed * (1 + variation);
-      const windEffect = Math.cos((filterCriteria!.windDirection * Math.PI) / 180) * modifiedSpeed;
-      const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
-
-      scenarios.push({
-        label: `${(variation >= 0 ? '+' : '')}${variation * 100}% wind`,
-        speed: modifiedSpeed,
-        effectiveRange: Math.round(effectiveRange)
-      });
-    });
-
-    return scenarios;
+  const calculateEffectiveRange = (aircraft: Aircraft, windSpeed: number, windDirection: number) => {
+    // Rüzgar yönünü radyana çevir
+    const windRadians = (windDirection * Math.PI) / 180;
+    // Rüzgar etkisini hesapla (cos ile rüzgarın uçuş yönündeki bileşenini al)
+    const windEffect = Math.cos(windRadians) * windSpeed;
+    // Rüzgar etkisi ile efektif hızı hesapla
+    const effectiveSpeed = aircraft.cruiseSpeed - windEffect;
+    // Efektif menzili hesapla
+    return aircraft.maxRange * (effectiveSpeed / aircraft.cruiseSpeed);
   };
 
-  // Sadece filtreleme fonksiyonunu güncelliyorum
   const filteredAircraft = useMemo(() => {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
       // 1. Yolcu kapasitesi kontrolü
-      const requestedPassengers = filterCriteria.passengers;
-      const hasValidCapacity = (
-        requestedPassengers >= aircraft.capacity.min &&
-        requestedPassengers <= aircraft.capacity.max
-      );
+      const passengerCheck = {
+        valid: filterCriteria.passengers >= aircraft.capacity.min && 
+               filterCriteria.passengers <= aircraft.capacity.max,
+        message: `Passengers ${filterCriteria.passengers} should be between ${aircraft.capacity.min} and ${aircraft.capacity.max}`
+      };
 
       // 2. Kargo kapasitesi kontrolü
-      const hasValidCargo = filterCriteria.cargo <= aircraft.cargoCapacity;
+      const cargoCheck = {
+        valid: filterCriteria.cargo <= aircraft.cargoCapacity,
+        message: `Cargo ${filterCriteria.cargo}kg should not exceed ${aircraft.cargoCapacity}kg`
+      };
 
-      // 3. Menzil kontrolü (rüzgar etkisi dahil)
-      const windRadians = (filterCriteria.windDirection * Math.PI) / 180;
-      const windEffect = Math.cos(windRadians) * filterCriteria.windSpeed;
-      // Rüzgar etkisini pozitif veya negatif olarak hesapla
-      const effectiveFactor = 1 - (windEffect / aircraft.cruiseSpeed);
-      const effectiveRange = aircraft.maxRange * effectiveFactor;
-      const hasValidRange = filterCriteria.range <= effectiveRange;
+      // 3. Menzil kontrolü
+      const effectiveRange = calculateEffectiveRange(
+        aircraft,
+        filterCriteria.windSpeed,
+        filterCriteria.windDirection
+      );
+
+      const rangeCheck = {
+        valid: filterCriteria.range <= effectiveRange,
+        message: `Range ${filterCriteria.range}km should not exceed effective range ${Math.round(effectiveRange)}km`
+      };
 
       // 4. Alternatif menzil kontrolü
-      const hasValidAlternateRange = filterCriteria.alternateRange <= effectiveRange;
+      const alternateRangeCheck = {
+        valid: filterCriteria.alternateRange <= effectiveRange,
+        message: `Alternate range ${filterCriteria.alternateRange}km should not exceed effective range ${Math.round(effectiveRange)}km`
+      };
 
-      // Debug için detaylı log
+      // Debug log
       console.log(`Aircraft ${aircraft.name} validation:`, {
-        name: aircraft.name,
-        capacity: {
-          valid: hasValidCapacity,
-          required: requestedPassengers,
-          min: aircraft.capacity.min,
-          max: aircraft.capacity.max,
-          check: `${aircraft.capacity.min} <= ${requestedPassengers} <= ${aircraft.capacity.max}`
+        checks: {
+          passengers: passengerCheck,
+          cargo: cargoCheck,
+          range: rangeCheck,
+          alternateRange: alternateRangeCheck
         },
-        cargo: {
-          valid: hasValidCargo,
-          required: filterCriteria.cargo,
-          maximum: aircraft.cargoCapacity,
-          check: `${filterCriteria.cargo} <= ${aircraft.cargoCapacity}`
-        },
-        range: {
-          valid: hasValidRange,
-          required: filterCriteria.range,
-          effective: effectiveRange.toFixed(0),
-          maximum: aircraft.maxRange,
+        details: {
           wind: {
-            effect: (windEffect).toFixed(2),
-            factor: effectiveFactor.toFixed(3),
+            speed: filterCriteria.windSpeed,
             direction: filterCriteria.windDirection,
-            speed: filterCriteria.windSpeed
+            effectiveRange: Math.round(effectiveRange)
           }
         }
       });
 
-      return hasValidCapacity && hasValidCargo && hasValidRange && hasValidAlternateRange;
+      return passengerCheck.valid && 
+             cargoCheck.valid && 
+             rangeCheck.valid && 
+             alternateRangeCheck.valid;
     });
   }, [aircraftData, filterCriteria]);
 
@@ -136,7 +127,7 @@ export default function Dashboard() {
 
         <FilterForm onFilter={handleFilter} />
 
-        {filteredAircraft.length > 0 && (
+        {filteredAircraft.length > 0 ? (
           <>
             <Card>
               <CardHeader>
@@ -152,8 +143,8 @@ export default function Dashboard() {
                       <CardContent>
                         <div className="space-y-2">
                           <p>Passenger Capacity: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
-                          <p>Cargo Capacity: {aircraft.cargoCapacity} kg</p>
-                          <p>Range: {aircraft.maxRange} km</p>
+                          <p>Cargo Capacity: {aircraft.cargoCapacity.toLocaleString()} kg</p>
+                          <p>Range: {aircraft.maxRange.toLocaleString()} km</p>
                           <p>Fuel Efficiency: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>
                         </div>
                       </CardContent>
@@ -165,106 +156,50 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Wind Scenario Comparison</CardTitle>
+                <CardTitle>Wind Impact Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredAircraft.map((aircraft) => (
-                    <Card key={aircraft.id} className="shadow-md">
-                      <CardHeader>
-                        <CardTitle className="text-lg">{aircraft.name}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>Range: {aircraft.maxRange} km</div>
-                            <div>Cruise Speed: {aircraft.cruiseSpeed} knots</div>
+                {filteredAircraft.map((aircraft) => (
+                  <div key={aircraft.id} className="mb-6">
+                    <h3 className="text-lg font-semibold mb-2">{aircraft.name}</h3>
+                    <div className="bg-white p-4 rounded-lg shadow">
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>Base Range: {aircraft.maxRange.toLocaleString()} km</div>
+                        <div>Cruise Speed: {aircraft.cruiseSpeed} knots</div>
+                      </div>
+
+                      {filterCriteria && (
+                        <div>
+                          <h4 className="font-medium mb-2">Effective Range with Current Wind:</h4>
+                          <div className="bg-gray-50 p-3 rounded">
+                            {calculateEffectiveRange(
+                              aircraft,
+                              filterCriteria.windSpeed,
+                              filterCriteria.windDirection
+                            ).toLocaleString()} km
                           </div>
-
-                          {filterCriteria && (
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-2">
-                                <h4 className="font-semibold">Wind Scenarios:</h4>
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <Wind className="h-4 w-4 text-gray-500" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Shows how different wind speeds affect the effective range</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              </div>
-                              <div className="space-y-2">
-                                {generateWindScenarios(filterCriteria.windSpeed, aircraft).map((scenario) => (
-                                  <div
-                                    key={scenario.label}
-                                    className="bg-gray-100 p-3 rounded-lg hover:bg-gray-200 transition-colors"
-                                  >
-                                    <div className="grid grid-cols-3 gap-2">
-                                      <div>
-                                        <span className="font-medium text-sm">{scenario.label}</span>
-                                        <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
-                                          <Wind className="h-4 w-4" />
-                                          {Math.round(scenario.speed)} kt
-                                        </div>
-                                      </div>
-                                      <div className="flex items-center justify-center">
-                                        <div
-                                          className="flex items-center text-gray-500"
-                                          style={{
-                                            transform: `rotate(${filterCriteria.windDirection}deg)`
-                                          }}
-                                        >
-                                          <ArrowRight className="h-5 w-5" />
-                                        </div>
-                                      </div>
-                                      <div className="text-right">
-                                        <span className="text-gray-600 text-sm">Effective Range</span>
-                                        <div className="font-medium">
-                                          {new Intl.NumberFormat('en-US').format(scenario.effectiveRange)} km
-                                          <span className="text-sm text-gray-500 ml-1">
-                                            ({Math.round((scenario.effectiveRange / aircraft.maxRange) * 100)}%)
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Comparative Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ComparisonCharts aircraftData={filteredAircraft} />
+                      )}
+                    </div>
+                  </div>
+                ))}
               </CardContent>
             </Card>
           </>
-        )}
-
-        {filterCriteria && filteredAircraft.length === 0 && (
+        ) : filterCriteria && (
           <Card>
             <CardContent className="p-6">
-              <div className="text-center text-gray-500">
-                <p>Belirtilen kriterlere uygun uçak bulunamadı. Lütfen şu kriterleri gözden geçirin:</p>
-                <div className="mt-4 text-left">
-                  <ul className="list-disc pl-6">
-                    <li>Yolcu Sayısı: {filterCriteria.passengers} (±%5 tolerans)</li>
-                    <li>Kargo Kapasitesi: {filterCriteria.cargo} kg (minimum)</li>
-                    <li>Menzil: {filterCriteria.range} km</li>
-                  </ul>
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-4">No Matching Aircraft Found</h3>
+                <p className="text-gray-600">The search criteria exceed available aircraft capabilities:</p>
+                <div className="mt-4 text-left max-w-md mx-auto">
+                  <div className="space-y-2">
+                    <div>• Passengers: {filterCriteria.passengers}</div>
+                    <div>• Cargo: {filterCriteria.cargo.toLocaleString()} kg</div>
+                    <div>• Range: {filterCriteria.range.toLocaleString()} km</div>
+                    <div>• Wind Speed: {filterCriteria.windSpeed} knots</div>
+                    <div>• Wind Direction: {filterCriteria.windDirection}°</div>
+                  </div>
                 </div>
               </div>
             </CardContent>

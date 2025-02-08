@@ -1,28 +1,26 @@
-import { pgTable, text, serial, integer, real, jsonb, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const aircraftTypes = pgTable("aircraft_types", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  emptyWeight: real("empty_weight").notNull(),
-  maxTakeoffWeight: real("max_takeoff_weight").notNull(),
-  maxPayload: real("max_payload").notNull(),
-  fuelCapacity: real("fuel_capacity").notNull(),
-  baseFuelFlow: real("base_fuel_flow").notNull(),
-  cruiseSpeed: real("cruise_speed").notNull(),
-  maxAltitude: integer("max_altitude").notNull(),
+  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull(),
+  cargoCapacity: real("cargo_capacity").notNull(),
   maxRange: integer("max_range").notNull(),
-  fuelEfficiency: real("fuel_efficiency").notNull(),
-  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull().default({ min: 0, max: 0 }),
-  cargoCapacity: real("cargo_capacity").notNull().default(0),
-  speed: real("speed").notNull().default(0),
-  fuelBurnPer100kmSeat: real("fuel_burn_per_100km_seat").notNull().default(0),
-  co2EmissionFactor: real("co2_emission_factor").notNull().default(2.5),
-  baseFuelCost: real("base_fuel_cost").notNull().default(0),
-  operatingCostPerHour: real("operating_cost_per_hour").notNull().default(0),
-  turnaroundTime: integer("turnaround_time").notNull().default(0)
+  cruiseSpeed: real("cruise_speed").notNull(),
+  fuelEfficiency: real("fuel_efficiency").notNull()
 });
+
+export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
+  capacity: z.object({
+    min: z.number(),
+    max: z.number()
+  })
+});
+
+export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
+export type Aircraft = typeof aircraftTypes.$inferSelect;
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -52,35 +50,9 @@ export const userAnalytics = pgTable("user_analytics", {
 export const profileClicks = pgTable("profile_clicks", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id),
-  clickType: text("click_type").notNull(), 
+  clickType: text("click_type").notNull(),
   timestamp: timestamp("timestamp").defaultNow(),
   isAuthenticated: boolean("is_authenticated").default(false)
-});
-
-export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
-  capacity: z.object({
-    min: z.number(),
-    max: z.number()
-  })
-}).pick({
-  name: true,
-  emptyWeight: true,
-  maxTakeoffWeight: true,
-  maxPayload: true,
-  fuelCapacity: true,
-  baseFuelFlow: true,
-  cruiseSpeed: true,
-  maxAltitude: true,
-  maxRange: true,
-  fuelEfficiency: true,
-  capacity: true,
-  cargoCapacity: true,
-  speed: true,
-  fuelBurnPer100kmSeat: true,
-  co2EmissionFactor: true,
-  baseFuelCost: true,
-  operatingCostPerHour: true,
-  turnaroundTime: true
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -106,9 +78,6 @@ export const insertProfileClickSchema = createInsertSchema(profileClicks).pick({
   clickType: true,
   isAuthenticated: true
 });
-
-export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
-export type Aircraft = typeof aircraftTypes.$inferSelect;
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
