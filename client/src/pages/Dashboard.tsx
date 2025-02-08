@@ -62,10 +62,10 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // More flexible passenger capacity check with 10% tolerance
-      const passengerTolerance = filterCriteria.passengers * 0.1;
+      // More precise passenger capacity check with 5% tolerance
+      const passengerTolerance = filterCriteria.passengers * 0.05;
       const hasEnoughCapacity =
-        aircraft.capacity.min <= (filterCriteria.passengers + passengerTolerance) &&
+        aircraft.capacity.min <= filterCriteria.passengers &&
         aircraft.capacity.max >= (filterCriteria.passengers - passengerTolerance);
 
       // More flexible cargo capacity check with 5% tolerance
@@ -224,7 +224,12 @@ export default function Dashboard() {
           <Card>
             <CardContent className="p-6">
               <p className="text-center text-gray-500">
-                No aircraft found matching the specified criteria. Please update your requirements.
+                Belirtilen kriterlere uygun uçak bulunamadı. Lütfen şu kriterleri gözden geçirin:
+                <ul className="mt-4 text-left list-disc pl-6">
+                  <li>Yolcu Sayısı: {filterCriteria.passengers} (±%5 tolerans)</li>
+                  <li>Kargo Kapasitesi: {filterCriteria.cargo} kg (minimum)</li>
+                  <li>Menzil: {filterCriteria.range} km</li>
+                </ul>
               </p>
             </CardContent>
           </Card>
