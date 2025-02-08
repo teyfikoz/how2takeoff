@@ -1,0 +1,83 @@
+📌 Direct vs. Indirect Airline Customers: Key Differences & CRM Impact
+
+In airline CRM systems, customers are categorized based on how they book their flights. The two main types are Direct Customers and Indirect Customers, and understanding the difference is crucial for airlines to optimize their marketing, retention, and loyalty strategies.
+
+1️⃣ Direct Customers (Airline-Owned Customers)
+
+✔ Who are they?
+
+These are customers who book their tickets directly through the airline’s official sales channels, including:
+	•	Airline website
+	•	Mobile app
+	•	Call center
+	•	Airline sales offices
+
+✔ Key Characteristics:
+
+✅ Full customer data ownership → The airline collects and retains all relevant details, including contact information, preferences, and frequent flyer status.
+✅ Higher personalization potential → Airlines can provide tailored offers, ancillary upsells, and targeted promotions.
+✅ Stronger loyalty opportunities → Customers who book directly are more likely to join and engage with airline loyalty programs.
+
+✔ CRM Impact:
+	•	Full customer profile is stored (travel history, seat preferences, previous purchases).
+	•	Direct marketing is more effective since airlines have complete ownership of communication channels.
+	•	Loyalty programs and retention efforts work better, reducing churn risk and increasing repeat bookings.
+
+📖 Sources:
+	•	IATA - The Future of Direct Distribution
+	•	Amadeus - Airline Direct Sales Strategies
+
+2️⃣ Indirect Customers (Third-Party Booking Customers)
+
+✔ Who are they?
+
+Customers who book flights through third-party platforms instead of airline-owned channels. These include:
+	•	Online Travel Agencies (OTAs) → Expedia, Skyscanner, Booking.com
+	•	Global Distribution Systems (GDS) → Amadeus, Sabre, Travelport
+	•	Corporate Travel Agencies (TMCs - Travel Management Companies)
+	•	Traditional brick-and-mortar travel agencies
+
+✔ Key Characteristics:
+
+❌ Limited customer data access → Airlines only receive basic details (name, flight itinerary), but not direct contact information.
+❌ Harder to personalize → Since the airline does not own the customer relationship, it cannot send direct offers or track behavior effectively.
+✅ High-value corporate travelers → Many premium and frequent business travelers fall into this category due to corporate agreements.
+
+✔ CRM Impact:
+	•	Partial customer profiles → Airlines need loyalty program sign-ups or post-booking interactions to enhance customer data.
+	•	Higher churn risk → Since indirect customers are not tied to the airline, they can easily switch to other carriers.
+	•	Requires additional marketing effort → Airlines must use retargeting campaigns, loyalty incentives, or exclusive benefits to encourage direct bookings in the future.
+
+📖 Sources:
+	•	McKinsey - The Shift to Direct Airline Sales
+	•	Sabre - GDS vs. Direct Sales
+
+📌 Airline Sales Office Customers: Direct or Indirect?
+
+A customer who books a ticket at an airline’s physical sales office is generally considered a Direct Customer because:
+
+✅ The transaction happens through an airline-owned channel (not via OTAs, GDS, or third-party travel agencies).
+✅ The airline has full access to customer data, including personal details, travel preferences, and loyalty status.
+✅ The airline can directly market to them, making future engagement and retention easier.
+
+However, there is one exception:
+📌 If the sales office processes a ticket issued through a travel agency (via GDS or corporate agreement), the customer may still be classified as Indirect, because the booking originated from a third-party system.
+
+📖 Sources:
+	•	IATA - Airline Sales Office Strategies
+
+📌 Summary: Direct vs. Indirect Customers in CRM
+
+Feature	Direct Customer	Indirect Customer
+Booking Channel	Airline website, mobile app, call center, sales offices	OTA, GDS, TMC, travel agencies
+Data Ownership	Full customer data (contact, preferences, history)	Limited data (name, flight details only)
+Personalization	High (customized offers, loyalty perks)	Low (harder to track engagement)
+Loyalty Potential	High (direct airline-customer relationship)	Lower (requires conversion efforts)
+CRM Impact	Easier retargeting, better engagement tracking	More churn risk, requires extra loyalty incentives
+
+📌 Key Takeaways for Airlines
+
+🚀 Direct customers are easier to retain and engage, while indirect customers require extra steps to be converted into loyal passengers.
+✔ Airlines use CRM strategies like loyalty programs, email campaigns, and retargeting ads to shift indirect customers to direct channels.
+📌 Sales office customers are direct customers unless their booking is processed through a travel agency’s system.
+

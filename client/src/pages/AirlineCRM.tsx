@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { SiAirchina } from "react-icons/si";
-import { Users, TrendingUp, Calculator, Target, UserCheck, DollarSign, Brain, Sparkles, History } from "lucide-react";
+import { Users, TrendingUp, Calculator, Target, UserCheck, DollarSign, Brain, Sparkles, History, 
+         Plane, CheckCircle, XCircle } from "lucide-react";
 import CRMCalculator from "@/components/CRMCalculator";
 
 export default function AirlineCRM() {
@@ -19,6 +21,178 @@ export default function AirlineCRM() {
             Comprehensive customer relationship management analytics and insights based on IATA standards
           </p>
         </header>
+
+        {/* Customer Journey Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-blue-500" />
+              Customer Journey in CRM System
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="awareness">
+                <AccordionTrigger className="text-lg font-semibold">
+                  1. Awareness & Search
+                </AccordionTrigger>
+                <AccordionContent className="space-y-2">
+                  <p>Customer starts their journey through:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Direct channels (airline website, mobile app, call center)</li>
+                    <li>Indirect channels (OTAs, GDS platforms, corporate travel)</li>
+                    <li>Anonymous browsing data collection for retargeting</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="booking">
+                <AccordionTrigger className="text-lg font-semibold">
+                  2. Booking & Data Collection
+                </AccordionTrigger>
+                <AccordionContent className="space-y-2">
+                  <p>Data capture varies by booking channel:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Direct booking → Full customer profile</li>
+                    <li>Indirect booking → Limited customer details</li>
+                    <li>CRM enrichment with loyalty program data</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="preflight">
+                <AccordionTrigger className="text-lg font-semibold">
+                  3. Pre-Flight Experience
+                </AccordionTrigger>
+                <AccordionContent className="space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Automated notifications and updates</li>
+                    <li>Personalized upsell opportunities</li>
+                    <li>Loyalty program benefits activation</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="flight">
+                <AccordionTrigger className="text-lg font-semibold">
+                  4. Flight Experience
+                </AccordionTrigger>
+                <AccordionContent className="space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Personalized in-flight services</li>
+                    <li>Crew CRM integration</li>
+                    <li>Premium services for high-value passengers</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="postflight">
+                <AccordionTrigger className="text-lg font-semibold">
+                  5. Post-Flight Engagement
+                </AccordionTrigger>
+                <AccordionContent className="space-y-2">
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Customer satisfaction surveys</li>
+                    <li>Targeted promotions based on travel history</li>
+                    <li>AI-powered churn prediction</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </CardContent>
+        </Card>
+
+        {/* Direct vs Indirect Customers */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UserCheck className="h-5 w-5 text-blue-500" />
+              Direct vs Indirect Customers
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4 text-blue-600">Direct Customers</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    Full customer data ownership
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    Higher personalization potential
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    Stronger loyalty opportunities
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4 text-red-600">Indirect Customers</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2">
+                    <XCircle className="h-4 w-4 text-red-500" />
+                    Limited customer data access
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <XCircle className="h-4 w-4 text-red-500" />
+                    Harder to personalize
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    High-value corporate travelers
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Customer Conversion Strategies */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-blue-500" />
+              Customer Conversion Strategies
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4">Incentivizing Direct Bookings</h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• Exclusive direct booking discounts</li>
+                  <li>• Bonus loyalty miles & points</li>
+                  <li>• Special ancillary benefits</li>
+                  <li>• Fare transparency & price matching</li>
+                </ul>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4">Enhanced Direct Experience</h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• Personalized offers & recommendations</li>
+                  <li>• User-friendly booking experience</li>
+                  <li>• Better refund & flexibility policies</li>
+                  <li>• Instant booking confirmation</li>
+                </ul>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border shadow-sm">
+                <h3 className="font-semibold text-lg mb-4">Retargeting Strategies</h3>
+                <ul className="space-y-2 text-sm">
+                  <li>• Post-booking email campaigns</li>
+                  <li>• Win-back offers for churned customers</li>
+                  <li>• Loyalty program enrollment targeting</li>
+                  <li>• Personalized retention incentives</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Key CRM Metrics Section */}
         <Card>

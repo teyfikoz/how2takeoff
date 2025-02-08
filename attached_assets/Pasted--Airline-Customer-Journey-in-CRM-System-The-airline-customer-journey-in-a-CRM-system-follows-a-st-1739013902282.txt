@@ -1,0 +1,60 @@
+📌 Airline Customer Journey in CRM System
+
+The airline customer journey in a CRM system follows a structured flow from first interaction to customer retention. The process can be visualized as follows:
+
+[Direct & Indirect Booking] → [CRM System] → [Customer Segmentation] → [Loyalty & Retention]
+
+Each phase plays a crucial role in understanding and managing airline customers effectively.
+
+✈️ 1. First Contact: Direct & Indirect Booking
+
+📌 How do customers book their flights?
+	•	Direct Booking Customers: Purchase tickets via the airline’s website, mobile app, call center, or sales offices. The airline owns their data, making it easier to track customer behavior and personalize offers.
+	•	Indirect Booking Customers: Book through travel agencies (TMCs), GDS platforms, OTAs, and corporate agreements. The airline receives only essential details (name, flight itinerary) but may not have direct access to full customer data unless the passenger joins the airline’s loyalty program.
+
+📖 Sources:
+	•	IATA - Direct vs. Indirect Distribution
+	•	Amadeus - Airline Distribution Strategies
+
+✈️ 2. CRM System: Customer Data Collection & Processing
+
+📌 What happens when a booking is made?
+	•	The CRM system captures customer information based on the booking source.
+	•	Direct bookings store full customer profiles (name, email, preferences, frequent flyer status).
+	•	Indirect bookings provide limited data, requiring additional steps like loyalty program sign-ups to enhance the CRM database.
+
+📖 Sources:
+	•	McKinsey - Personalization in Airline CRM
+	•	Sabre - How Airlines Use CRM Data
+
+✈️ 3. Customer Segmentation: Identifying Traveler Types
+
+📌 How does the airline classify customers?
+Based on flight history and engagement, CRM systems segment customers into categories:
+
+✔ Loyal Customers: Frequent flyers who generate high revenue. They receive priority services, exclusive deals, and tailored promotions.
+✔ Occasional Travelers: Infrequent flyers who may need seasonal promotions to encourage rebooking.
+✔ Churn-Risk Customers: Passengers who haven’t booked in 24 months. Airlines target them with win-back campaigns and discounts.
+
+📖 Sources:
+	•	Harvard Business Review - Customer Retention Strategies
+	•	IATA - Loyalty Program Best Practices
+
+✈️ 4. Loyalty & Retention: Engaging with Customers
+
+📌 How do airlines retain customers?
+Airlines use CRM insights to send personalized marketing, loyalty rewards, and special promotions to increase engagement and maximize retention.
+✔ Loyal customers get tier-based benefits (Gold, Platinum, Elite status).
+✔ Churn-risk customers receive reactivation offers to encourage new bookings.
+
+📖 Sources:
+	•	Forbes - How Airlines Maximize Customer Loyalty
+	•	IATA - CRM & Passenger Experience
+
+📌 Final Thought
+
+🚀 The structured CRM approach helps airlines:
+✅ Retain more customers at lower costs
+✅ Optimize marketing spend with targeted offers
+✅ Improve long-term customer loyalty & satisfaction
+
