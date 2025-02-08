@@ -63,42 +63,43 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // 1. Yolcu kapasitesi kontrolü (±5% tolerans)
-      const minAllowed = filterCriteria.passengers * 0.95; // -5%
-      const maxAllowed = filterCriteria.passengers * 1.05; // +5%
+      // 1. Yolcu kapasitesi kontrolü
+      const requestedPassengers = filterCriteria.passengers;
       const hasValidCapacity =
-        aircraft.capacity.min >= minAllowed &&
-        aircraft.capacity.max <= maxAllowed;
+        aircraft.capacity.min <= requestedPassengers &&
+        aircraft.capacity.max >= requestedPassengers;
 
-      // 2. Kargo kapasitesi kontrolü (minimum değer)
-      const hasValidCargo = aircraft.cargoCapacity >= filterCriteria.cargo;
+      // 2. Kargo kapasitesi kontrolü
+      const hasValidCargo = filterCriteria.cargo <= aircraft.cargoCapacity;
 
       // 3. Menzil kontrolü (rüzgar etkisi dahil)
       const windRadians = (filterCriteria.windDirection * Math.PI) / 180;
       const windEffect = Math.cos(windRadians) * filterCriteria.windSpeed;
       const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
-      const hasValidRange = effectiveRange >= filterCriteria.range;
+      const hasValidRange = filterCriteria.range <= effectiveRange;
 
       // 4. Alternatif menzil kontrolü
-      const hasValidAlternateRange = effectiveRange >= filterCriteria.alternateRange;
+      const hasValidAlternateRange = filterCriteria.alternateRange <= effectiveRange;
 
       // Debug bilgilerini logla
       console.log(`Aircraft ${aircraft.name} validation:`, {
         capacity: {
           valid: hasValidCapacity,
-          required: `${minAllowed.toFixed(0)}-${maxAllowed.toFixed(0)}`,
-          actual: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
-          check: `${aircraft.capacity.min} >= ${minAllowed.toFixed(0)} && ${aircraft.capacity.max} <= ${maxAllowed.toFixed(0)}`
+          required: requestedPassengers,
+          aircraftRange: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
+          check: `${aircraft.capacity.min} <= ${requestedPassengers} <= ${aircraft.capacity.max}`
         },
         cargo: {
           valid: hasValidCargo,
           required: filterCriteria.cargo,
-          actual: aircraft.cargoCapacity
+          maximum: aircraft.cargoCapacity,
+          check: `${filterCriteria.cargo} <= ${aircraft.cargoCapacity}`
         },
         range: {
           valid: hasValidRange,
           required: filterCriteria.range,
           effective: effectiveRange.toFixed(0),
+          maximum: aircraft.maxRange,
           wind: {
             effect: windEffect.toFixed(2),
             direction: filterCriteria.windDirection,
