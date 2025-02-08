@@ -1,0 +1,62 @@
+[vite] connecting...
+[vite] connected.
+Cannot read properties of undefined (reading 'min')
+at https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:535:35
+at Array.map (<anonymous>)
+at AircraftDatabase (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:527:69)
+at renderWithHooks (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:11548:26)
+at updateFunctionComponent (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:14582:28)
+at beginWork (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:15924:22)
+at HTMLUnknownElement.callCallback2 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3674:22)
+at Object.invokeGuardedCallbackDev (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3699:24)
+at invokeGuardedCallback (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3733:39)
+at beginWork$1 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19765:15)
+Cannot read properties of undefined (reading 'min')
+at https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:535:35
+at Array.map (<anonymous>)
+at AircraftDatabase (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:527:69)
+at renderWithHooks (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:11548:26)
+at updateFunctionComponent (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:14582:28)
+at beginWork (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:15924:22)
+at HTMLUnknownElement.callCallback2 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3674:22)
+at Object.invokeGuardedCallbackDev (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3699:24)
+at invokeGuardedCallback (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:3733:39)
+at beginWork$1 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19765:15)
+The above error occurred in the <AircraftDatabase> component:
+
+    at AircraftDatabase (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:33:21)
+    at Route (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:323:16)
+    at Switch (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:379:17)
+    at div
+    at Router
+    at QueryClientProvider (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ad216234:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+at AircraftDatabase (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:33:21)
+at Route (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:323:16)
+at Switch (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:379:17)
+at div
+at Router
+at QueryClientProvider (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ad216234:2805:3)
+at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+at t.value (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Cannot read properties of undefined (reading 'min')
+at https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:535:35
+at Array.map (<anonymous>)
+at AircraftDatabase (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/AircraftDatabase.tsx:527:69)
+at renderWithHooks (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:11548:26)
+at updateFunctionComponent (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:14582:28)
+at beginWork (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:15924:22)
+at beginWork$1 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19753:22)
+at performUnitOfWork (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19198:20)
+at workLoopSync (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19137:13)
+at renderRootSync (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=ad216234:19116:15)
