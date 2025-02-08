@@ -58,16 +58,17 @@ export default function Dashboard() {
     return scenarios;
   };
 
-  // Filtreleme mantığını güncelle
+  // Sadece filtreleme fonksiyonunu güncelliyorum
   const filteredAircraft = useMemo(() => {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
       // 1. Yolcu kapasitesi kontrolü
       const requestedPassengers = filterCriteria.passengers;
-      const hasValidCapacity =
-        aircraft.capacity.min <= requestedPassengers &&
-        aircraft.capacity.max >= requestedPassengers;
+      const hasValidCapacity = (
+        requestedPassengers >= aircraft.capacity.min &&
+        requestedPassengers <= aircraft.capacity.max
+      );
 
       // 2. Kargo kapasitesi kontrolü
       const hasValidCargo = filterCriteria.cargo <= aircraft.cargoCapacity;
@@ -75,18 +76,22 @@ export default function Dashboard() {
       // 3. Menzil kontrolü (rüzgar etkisi dahil)
       const windRadians = (filterCriteria.windDirection * Math.PI) / 180;
       const windEffect = Math.cos(windRadians) * filterCriteria.windSpeed;
-      const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
+      // Rüzgar etkisini pozitif veya negatif olarak hesapla
+      const effectiveFactor = 1 - (windEffect / aircraft.cruiseSpeed);
+      const effectiveRange = aircraft.maxRange * effectiveFactor;
       const hasValidRange = filterCriteria.range <= effectiveRange;
 
       // 4. Alternatif menzil kontrolü
       const hasValidAlternateRange = filterCriteria.alternateRange <= effectiveRange;
 
-      // Debug bilgilerini logla
+      // Debug için detaylı log
       console.log(`Aircraft ${aircraft.name} validation:`, {
+        name: aircraft.name,
         capacity: {
           valid: hasValidCapacity,
           required: requestedPassengers,
-          aircraftRange: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
+          min: aircraft.capacity.min,
+          max: aircraft.capacity.max,
           check: `${aircraft.capacity.min} <= ${requestedPassengers} <= ${aircraft.capacity.max}`
         },
         cargo: {
@@ -101,14 +106,11 @@ export default function Dashboard() {
           effective: effectiveRange.toFixed(0),
           maximum: aircraft.maxRange,
           wind: {
-            effect: windEffect.toFixed(2),
+            effect: (windEffect).toFixed(2),
+            factor: effectiveFactor.toFixed(3),
             direction: filterCriteria.windDirection,
             speed: filterCriteria.windSpeed
           }
-        },
-        alternate: {
-          valid: hasValidAlternateRange,
-          required: filterCriteria.alternateRange
         }
       });
 
