@@ -62,13 +62,15 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // Passenger capacity check
+      // More flexible passenger capacity check with 10% tolerance
+      const passengerTolerance = filterCriteria.passengers * 0.1;
       const hasEnoughCapacity =
-        aircraft.capacity.min <= filterCriteria.passengers &&
-        aircraft.capacity.max >= filterCriteria.passengers;
+        aircraft.capacity.min <= (filterCriteria.passengers + passengerTolerance) &&
+        aircraft.capacity.max >= (filterCriteria.passengers - passengerTolerance);
 
-      // Cargo capacity check
-      const hasEnoughCargoCapacity = aircraft.cargoCapacity >= filterCriteria.cargo;
+      // More flexible cargo capacity check with 5% tolerance
+      const cargoTolerance = filterCriteria.cargo * 0.05;
+      const hasEnoughCargoCapacity = aircraft.cargoCapacity >= (filterCriteria.cargo - cargoTolerance);
 
       // Range check (with wind effect)
       const windEffect = Math.cos((filterCriteria.windDirection * Math.PI) / 180) * filterCriteria.windSpeed;

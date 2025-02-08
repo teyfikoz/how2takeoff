@@ -12,7 +12,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Fuel efficiency comparison
   const fuelEfficiencyData = aircraftData.map(aircraft => ({
     name: aircraft.name,
-    efficiency: (aircraft.maxRange * aircraft.maxPayload) / 
+    efficiency: (aircraft.maxRange * aircraft.maxPayload) /
                (aircraft.fuelCapacity * 1000),
     fuelPerNM: aircraft.baseFuelFlow / aircraft.cruiseSpeed
   }));
@@ -47,10 +47,17 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={fuelEfficiencyData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis 
+              dataKey="name" 
+              angle={-45}
+              textAnchor="end"
+              height={80}
+              interval={0}
+              tick={{ fontSize: 12 }}
+            />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: 12, marginTop: '10px' }}/>
             <Bar dataKey="efficiency" fill="#8884d8" name="Efficiency Score" />
             <Bar dataKey="fuelPerNM" fill="#82ca9d" name="Fuel per NM" />
           </BarChart>
@@ -70,29 +77,31 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               label={{ 
                 value: 'Load Factor (%)', 
                 position: 'bottom',
-                offset: 0
+                offset: 0,
+                style: { fontSize: 12 }
               }}
-              ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+              tick={{ fontSize: 12 }}
+              ticks={[0, 20, 40, 60, 80, 100]}
               domain={[0, 100]}
               type="number"
-              padding={{ left: 30, right: 30 }}
-              interval={0}
             />
             <YAxis 
               label={{ 
                 value: 'Fuel Efficiency', 
                 angle: -90, 
                 position: 'insideLeft',
-                offset: -35
+                offset: -35,
+                style: { fontSize: 12 }
               }}
+              tick={{ fontSize: 12 }}
               domain={['auto', 'auto']}
-              padding={{ top: 20, bottom: 20 }}
             />
             <Tooltip />
             <Legend 
               verticalAlign="bottom" 
               height={36}
               wrapperStyle={{
+                fontSize: 12,
                 paddingTop: '20px'
               }}
             />
@@ -127,11 +136,12 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               textAnchor="end"
               height={60}
               interval={0}
+              tick={{fontSize: 12}}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{fontSize: 12}} />
+            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{fontSize: 12}} />
             <Tooltip />
-            <Legend wrapperStyle={{ paddingTop: '20px' }}/>
+            <Legend wrapperStyle={{ paddingTop: '20px', fontSize: 12 }}/>
             <Bar yAxisId="left" dataKey="maxRange" fill="#8884d8" name="Max Range (km)" />
             <Bar yAxisId="right" dataKey="maxPayload" fill="#82ca9d" name="Max Payload (tons)" />
           </BarChart>
@@ -143,10 +153,10 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={emissionsData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis dataKey="name" angle={-45} textAnchor="end" height={60} interval={0} tick={{fontSize: 12}} />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: 12, marginTop: '10px' }}/>
             <Bar dataKey="CO2 Emissions" fill="#ff7300" name="CO2" />
             <Bar dataKey="NOx Emissions" fill="#387908" name="NOx" />
           </BarChart>
