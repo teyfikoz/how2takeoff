@@ -65,11 +65,11 @@ export default function Dashboard() {
       // More precise passenger capacity check with 5% tolerance
       const passengerTolerance = filterCriteria.passengers * 0.05;
       const hasEnoughCapacity =
-        aircraft.capacity.min <= filterCriteria.passengers &&
-        aircraft.capacity.max >= (filterCriteria.passengers - passengerTolerance);
+        aircraft.capacity.min <= (filterCriteria.passengers + passengerTolerance) &&
+        aircraft.capacity.max >= filterCriteria.passengers;
 
-      // More flexible cargo capacity check with 5% tolerance
-      const cargoTolerance = filterCriteria.cargo * 0.05;
+      // More flexible cargo capacity check with 10% tolerance
+      const cargoTolerance = filterCriteria.cargo * 0.1;
       const hasEnoughCargoCapacity = aircraft.cargoCapacity >= (filterCriteria.cargo - cargoTolerance);
 
       // Range check (with wind effect)
