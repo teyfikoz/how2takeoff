@@ -58,37 +58,56 @@ export default function Dashboard() {
     return scenarios;
   };
 
+  // Filtreleme mantığını güncelle
   const filteredAircraft = useMemo(() => {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // Yolcu kapasitesi kontrolü (±5% tolerans)
-      const passengerTolerance = Math.floor(filterCriteria.passengers * 0.05);
-      const requestedPassengers = filterCriteria.passengers;
+      // 1. Yolcu kapasitesi kontrolü (±5% tolerans)
+      const minAllowed = filterCriteria.passengers * 0.95; // -5%
+      const maxAllowed = filterCriteria.passengers * 1.05; // +5%
       const hasValidCapacity =
-        aircraft.capacity.min <= (requestedPassengers + passengerTolerance) &&
-        aircraft.capacity.max >= (requestedPassengers - passengerTolerance);
+        aircraft.capacity.min >= minAllowed &&
+        aircraft.capacity.max <= maxAllowed;
 
-      // Kargo kapasitesi kontrolü (minimum gereksinim)
+      // 2. Kargo kapasitesi kontrolü (minimum değer)
       const hasValidCargo = aircraft.cargoCapacity >= filterCriteria.cargo;
 
-      // Menzil kontrolü (rüzgar etkisi dahil)
-      const windEffect = Math.cos((filterCriteria.windDirection * Math.PI) / 180) * filterCriteria.windSpeed;
+      // 3. Menzil kontrolü (rüzgar etkisi dahil)
+      const windRadians = (filterCriteria.windDirection * Math.PI) / 180;
+      const windEffect = Math.cos(windRadians) * filterCriteria.windSpeed;
       const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
       const hasValidRange = effectiveRange >= filterCriteria.range;
 
-      // Alternatif menzil kontrolü
+      // 4. Alternatif menzil kontrolü
       const hasValidAlternateRange = effectiveRange >= filterCriteria.alternateRange;
 
+      // Debug bilgilerini logla
       console.log(`Aircraft ${aircraft.name} validation:`, {
-        capacity: hasValidCapacity,
-        cargo: hasValidCargo,
-        range: hasValidRange,
-        alternate: hasValidAlternateRange,
-        details: {
-          passengerRange: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
-          requestedPassengers,
-          tolerance: passengerTolerance
+        capacity: {
+          valid: hasValidCapacity,
+          required: `${minAllowed.toFixed(0)}-${maxAllowed.toFixed(0)}`,
+          actual: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
+          check: `${aircraft.capacity.min} >= ${minAllowed.toFixed(0)} && ${aircraft.capacity.max} <= ${maxAllowed.toFixed(0)}`
+        },
+        cargo: {
+          valid: hasValidCargo,
+          required: filterCriteria.cargo,
+          actual: aircraft.cargoCapacity
+        },
+        range: {
+          valid: hasValidRange,
+          required: filterCriteria.range,
+          effective: effectiveRange.toFixed(0),
+          wind: {
+            effect: windEffect.toFixed(2),
+            direction: filterCriteria.windDirection,
+            speed: filterCriteria.windSpeed
+          }
+        },
+        alternate: {
+          valid: hasValidAlternateRange,
+          required: filterCriteria.alternateRange
         }
       });
 
