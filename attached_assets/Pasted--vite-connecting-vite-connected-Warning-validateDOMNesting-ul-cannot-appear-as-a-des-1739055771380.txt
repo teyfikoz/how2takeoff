@@ -1,0 +1,37 @@
+[vite] connecting...
+[vite] connected.
+Warning: validateDOMNesting(...): <ul> cannot appear as a descendant of &lt;p&gt;.
+    at ul
+    at p
+    at div
+    at _c9 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/components/ui/card.tsx:106:12)
+    at div
+    at _c (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at div
+    at Dashboard (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/Dashboard.tsx:32:47)
+    at Route (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:323:16)
+    at Switch (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:379:17)
+    at div
+    at Router
+    at QueryClientProvider (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ad216234:2805:3)
+    at App
+at ul
+at p
+at div
+at _c9 (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/components/ui/card.tsx:106:12)
+at div
+at _c (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/components/ui/card.tsx:20:11)
+at div
+at div
+at Dashboard (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/src/pages/Dashboard.tsx:32:47)
+at Route (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:323:16)
+at Switch (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=ad216234:379:17)
+at div
+at Router
+at QueryClientProvider (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=ad216234:2805:3)
+at App
+at t.value (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://70d9468c-97c0-4d21-8a43-181e876b0007-00-1xcegcfc877kp.picard.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400

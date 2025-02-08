@@ -62,25 +62,37 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // More precise passenger capacity check with 5% tolerance
-      const passengerTolerance = filterCriteria.passengers * 0.05;
-      const hasEnoughCapacity =
-        aircraft.capacity.min <= (filterCriteria.passengers + passengerTolerance) &&
-        aircraft.capacity.max >= filterCriteria.passengers;
+      // Yolcu kapasitesi kontrolü (±5% tolerans)
+      const passengerTolerance = Math.floor(filterCriteria.passengers * 0.05);
+      const requestedPassengers = filterCriteria.passengers;
+      const hasValidCapacity =
+        aircraft.capacity.min <= (requestedPassengers + passengerTolerance) &&
+        aircraft.capacity.max >= (requestedPassengers - passengerTolerance);
 
-      // More flexible cargo capacity check with 10% tolerance
-      const cargoTolerance = filterCriteria.cargo * 0.1;
-      const hasEnoughCargoCapacity = aircraft.cargoCapacity >= (filterCriteria.cargo - cargoTolerance);
+      // Kargo kapasitesi kontrolü (minimum gereksinim)
+      const hasValidCargo = aircraft.cargoCapacity >= filterCriteria.cargo;
 
-      // Range check (with wind effect)
+      // Menzil kontrolü (rüzgar etkisi dahil)
       const windEffect = Math.cos((filterCriteria.windDirection * Math.PI) / 180) * filterCriteria.windSpeed;
       const effectiveRange = aircraft.maxRange * (1 - (windEffect / aircraft.cruiseSpeed));
-      const hasEnoughRange = effectiveRange >= filterCriteria.range;
+      const hasValidRange = effectiveRange >= filterCriteria.range;
 
-      // Alternate range check
-      const hasEnoughAlternateRange = effectiveRange >= filterCriteria.alternateRange;
+      // Alternatif menzil kontrolü
+      const hasValidAlternateRange = effectiveRange >= filterCriteria.alternateRange;
 
-      return hasEnoughCapacity && hasEnoughCargoCapacity && hasEnoughRange && hasEnoughAlternateRange;
+      console.log(`Aircraft ${aircraft.name} validation:`, {
+        capacity: hasValidCapacity,
+        cargo: hasValidCargo,
+        range: hasValidRange,
+        alternate: hasValidAlternateRange,
+        details: {
+          passengerRange: `${aircraft.capacity.min}-${aircraft.capacity.max}`,
+          requestedPassengers,
+          tolerance: passengerTolerance
+        }
+      });
+
+      return hasValidCapacity && hasValidCargo && hasValidRange && hasValidAlternateRange;
     });
   }, [aircraftData, filterCriteria]);
 
@@ -223,14 +235,16 @@ export default function Dashboard() {
         {filterCriteria && filteredAircraft.length === 0 && (
           <Card>
             <CardContent className="p-6">
-              <p className="text-center text-gray-500">
-                Belirtilen kriterlere uygun uçak bulunamadı. Lütfen şu kriterleri gözden geçirin:
-                <ul className="mt-4 text-left list-disc pl-6">
-                  <li>Yolcu Sayısı: {filterCriteria.passengers} (±%5 tolerans)</li>
-                  <li>Kargo Kapasitesi: {filterCriteria.cargo} kg (minimum)</li>
-                  <li>Menzil: {filterCriteria.range} km</li>
-                </ul>
-              </p>
+              <div className="text-center text-gray-500">
+                <p>Belirtilen kriterlere uygun uçak bulunamadı. Lütfen şu kriterleri gözden geçirin:</p>
+                <div className="mt-4 text-left">
+                  <ul className="list-disc pl-6">
+                    <li>Yolcu Sayısı: {filterCriteria.passengers} (±%5 tolerans)</li>
+                    <li>Kargo Kapasitesi: {filterCriteria.cargo} kg (minimum)</li>
+                    <li>Menzil: {filterCriteria.range} km</li>
+                  </ul>
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
