@@ -26,12 +26,6 @@ interface FilterCriteria {
   windDirection: number;
 }
 
-interface WindScenario {
-  label: string;
-  speed: number;
-  effectiveRange: number;
-}
-
 export default function Dashboard() {
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria | null>(null);
 
@@ -54,17 +48,16 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // 1. Yolcu kapasitesi kontrolü
+      // 1. Yolcu kapasitesi kontrolü - sadece maksimum kapasiteyi kontrol et
       const passengerCheck = {
-        valid: filterCriteria.passengers >= aircraft.capacity.min && 
-               filterCriteria.passengers <= aircraft.capacity.max,
-        message: `Passengers ${filterCriteria.passengers} should be between ${aircraft.capacity.min} and ${aircraft.capacity.max}`
+        valid: filterCriteria.passengers <= aircraft.maxPassengers,
+        message: `Required passengers (${filterCriteria.passengers}) exceeds maximum capacity (${aircraft.maxPassengers})`
       };
 
-      // 2. Kargo kapasitesi kontrolü
+      // 2. Kargo kapasitesi kontrolü - maksimum kapasiteyi kontrol et
       const cargoCheck = {
         valid: filterCriteria.cargo <= aircraft.cargoCapacity,
-        message: `Cargo ${filterCriteria.cargo}kg should not exceed ${aircraft.cargoCapacity}kg`
+        message: `Required cargo (${filterCriteria.cargo}kg) exceeds maximum capacity (${aircraft.cargoCapacity}kg)`
       };
 
       // 3. Menzil kontrolü
@@ -76,17 +69,18 @@ export default function Dashboard() {
 
       const rangeCheck = {
         valid: filterCriteria.range <= effectiveRange,
-        message: `Range ${filterCriteria.range}km should not exceed effective range ${Math.round(effectiveRange)}km`
+        message: `Required range (${filterCriteria.range}km) exceeds effective range (${Math.round(effectiveRange)}km)`
       };
 
       // 4. Alternatif menzil kontrolü
       const alternateRangeCheck = {
         valid: filterCriteria.alternateRange <= effectiveRange,
-        message: `Alternate range ${filterCriteria.alternateRange}km should not exceed effective range ${Math.round(effectiveRange)}km`
+        message: `Alternate range (${filterCriteria.alternateRange}km) exceeds effective range (${Math.round(effectiveRange)}km)`
       };
 
       // Debug log
       console.log(`Aircraft ${aircraft.name} validation:`, {
+        name: aircraft.name,
         checks: {
           passengers: passengerCheck,
           cargo: cargoCheck,
@@ -142,7 +136,7 @@ export default function Dashboard() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
-                          <p>Passenger Capacity: {aircraft.capacity.min}-{aircraft.capacity.max}</p>
+                          <p>Maximum Passengers: {aircraft.maxPassengers}</p>
                           <p>Cargo Capacity: {aircraft.cargoCapacity.toLocaleString()} kg</p>
                           <p>Range: {aircraft.maxRange.toLocaleString()} km</p>
                           <p>Fuel Efficiency: {(aircraft.fuelEfficiency * 100).toFixed(1)}%</p>

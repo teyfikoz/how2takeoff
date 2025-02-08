@@ -1,23 +1,18 @@
-import { pgTable, text, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, real, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const aircraftTypes = pgTable("aircraft_types", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  capacity: jsonb("capacity").$type<{ min: number; max: number }>().notNull(),
+  maxPassengers: integer("max_passengers").notNull(),
   cargoCapacity: real("cargo_capacity").notNull(),
   maxRange: integer("max_range").notNull(),
   cruiseSpeed: real("cruise_speed").notNull(),
   fuelEfficiency: real("fuel_efficiency").notNull()
 });
 
-export const insertAircraftSchema = createInsertSchema(aircraftTypes, {
-  capacity: z.object({
-    min: z.number(),
-    max: z.number()
-  })
-});
+export const insertAircraftSchema = createInsertSchema(aircraftTypes);
 
 export type InsertAircraft = z.infer<typeof insertAircraftSchema>;
 export type Aircraft = typeof aircraftTypes.$inferSelect;
@@ -58,7 +53,6 @@ export const profileClicks = pgTable("profile_clicks", {
 export const insertUserSchema = createInsertSchema(users).pick({
   email: true,
   password: true,
-  isAdmin: true,
   country: true,
   city: true,
   userAgent: true
@@ -69,14 +63,12 @@ export const insertAnalyticsSchema = createInsertSchema(userAnalytics).pick({
   path: true,
   duration: true,
   deviceType: true,
-  browser: true,
-  isAuthenticated: true
+  browser: true
 });
 
 export const insertProfileClickSchema = createInsertSchema(profileClicks).pick({
   userId: true,
-  clickType: true,
-  isAuthenticated: true
+  clickType: true
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
