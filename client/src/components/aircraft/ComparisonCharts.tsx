@@ -13,32 +13,36 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Fuel efficiency comparison
   const fuelEfficiencyData = aircraftData.map(aircraft => ({
     name: aircraft.name,
-    'Efficiency Score': (aircraft.maxRange * aircraft.maxPayload) /
-               (aircraft.fuelCapacity * 1000),
-    'Fuel per NM': aircraft.baseFuelFlow / aircraft.cruiseSpeed
+    'Efficiency Score': aircraft.fuelEfficiency,
+    'Fuel per NM': aircraft.co2Factor / aircraft.cruiseSpeed
   }));
 
-  // Payload efficiency impact analysis with 10% intervals
-  const payloadEfficiencyData = aircraftData.map(aircraft => {
-    return Array.from({ length: 11 }, (_, i) => i * 10).map(loadFactor => ({
-      name: aircraft.name,
-      loadFactor: loadFactor,
-      fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1))
-    }));
-  }).flat();
+  // Payload efficiency impact analysis with fixed intervals
+  const payloadEfficiencyData = [];
+  const loadFactors = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+
+  aircraftData.forEach(aircraft => {
+    loadFactors.forEach(loadFactor => {
+      payloadEfficiencyData.push({
+        name: aircraft.name,
+        loadFactor,
+        fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1))
+      });
+    });
+  });
 
   // Range and payload comparison
   const rangeComparisonData = aircraftData.map(aircraft => ({
     name: aircraft.name,
     'Max Range': aircraft.maxRange,
-    'Max Payload': aircraft.maxPayload / 1000, // Convert to tons for better visualization
+    'Max Payload': aircraft.cargoCapacity / 1000 // Convert to tons
   }));
 
   // Emissions data
   const emissionsData = aircraftData.map(aircraft => ({
     name: aircraft.name,
-    'CO2': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 3.16,
-    'NOx': aircraft.baseFuelFlow * aircraft.fuelEfficiency * 0.014
+    'CO2': aircraft.co2Factor * aircraft.fuelEfficiency,
+    'NOx': (aircraft.co2Factor * aircraft.fuelEfficiency) * 0.004 // NOx factor
   }));
 
   return (
@@ -79,19 +83,22 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 style: { fontSize: 12 }
               }}
               tick={{ fontSize: 12 }}
+              type="number"
+              domain={[0, 100]}
+              ticks={loadFactors}
             />
             <YAxis 
               label={{ 
                 value: 'Fuel Efficiency', 
                 angle: -90, 
                 position: 'insideLeft',
-                offset: -35,
+                offset: -5,
                 style: { fontSize: 12 }
               }}
               tick={{ fontSize: 12 }}
             />
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
             {aircraftData.map((aircraft, index) => (
               <Line
                 key={aircraft.id}
@@ -101,6 +108,8 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 name={aircraft.name}
                 stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
                 strokeWidth={2}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
               />
             ))}
           </LineChart>
@@ -110,7 +119,10 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Range and Payload Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={rangeComparisonData}>
+          <BarChart 
+            data={rangeComparisonData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="name" 
@@ -120,12 +132,12 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               interval={0}
               tick={{fontSize: 12}}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{fontSize: 12}} />
+            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{fontSize: 12}} />
             <Tooltip />
-            <Legend />
-            <Bar yAxisId="left" dataKey="Max Range" fill="#8884d8" />
-            <Bar yAxisId="right" dataKey="Max Payload" fill="#82ca9d" />
+            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
+            <Bar yAxisId="left" dataKey="Max Range" fill="#8884d8" name="Max Range (km)" />
+            <Bar yAxisId="right" dataKey="Max Payload" fill="#82ca9d" name="Max Payload (tons)" />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -133,7 +145,10 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       <div className="bg-white p-6 rounded-lg shadow">
         <h3 className="text-xl font-bold mb-4">Emissions Comparison</h3>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={emissionsData}>
+          <BarChart 
+            data={emissionsData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
               dataKey="name" 
@@ -143,11 +158,11 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               interval={0}
               tick={{fontSize: 12}}
             />
-            <YAxis />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
-            <Legend />
-            <Bar dataKey="CO2" fill="#ff7300" />
-            <Bar dataKey="NOx" fill="#387908" />
+            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
+            <Bar dataKey="CO2" fill="#ff7300" name="CO2 Emissions" />
+            <Bar dataKey="NOx" fill="#387908" name="NOx Emissions" />
           </BarChart>
         </ResponsiveContainer>
       </div>
