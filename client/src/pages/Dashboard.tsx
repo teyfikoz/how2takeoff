@@ -9,7 +9,7 @@ import FilterForm from '@/components/aircraft/FilterForm';
 import ComparisonCharts from '@/components/aircraft/ComparisonCharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Aircraft } from '@shared/schema';
-import { ArrowRight, Wind } from 'lucide-react';
+import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 
 interface FilterCriteria {
   passengers: number;
@@ -33,6 +33,12 @@ export default function Dashboard() {
     const effectiveSpeed = aircraft.cruiseSpeed - windEffect;
     return aircraft.maxRange * (effectiveSpeed / aircraft.cruiseSpeed);
   };
+
+  const calculateWindScenario = (baseWindSpeed: number, factor: number) => {
+    return baseWindSpeed * (1 + factor);
+  };
+
+  const windScenarios = [0.1, 0.2, 0.4, 0.5]; // 10%, 20%, 40%, 50% increase scenarios
 
   const filteredAircraft = useMemo(() => {
     if (!filterCriteria || !aircraftData) return [];
@@ -118,42 +124,83 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Performance Analysis</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Wind className="h-5 w-5 text-blue-500" />
+                  Wind Impact Analysis
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <ComparisonCharts aircraftData={filteredAircraft} />
+                {filteredAircraft.map((aircraft: Aircraft) => (
+                  <div key={aircraft.id} className="mb-8">
+                    <h3 className="text-lg font-semibold mb-4">{aircraft.name}</h3>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="bg-white p-6 rounded-lg shadow">
+                        <h4 className="font-medium mb-4">Current Wind Conditions</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <Wind className="h-4 w-4 text-blue-500" />
+                            <span>Wind Speed: {filterCriteria?.windSpeed} knots</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <ArrowUpRight 
+                              className="h-4 w-4 text-blue-500"
+                              style={{ 
+                                transform: `rotate(${filterCriteria?.windDirection}deg)`
+                              }}
+                            />
+                            <span>Wind Direction: {filterCriteria?.windDirection}°</span>
+                          </div>
+                          <div className="mt-4">
+                            <p className="font-medium">Effective Range:</p>
+                            <p className="text-2xl font-bold text-blue-600">
+                              {calculateEffectiveRange(
+                                aircraft,
+                                filterCriteria?.windSpeed || 0,
+                                filterCriteria?.windDirection || 0
+                              ).toLocaleString()} km
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-6 rounded-lg shadow">
+                        <h4 className="font-medium mb-4">Wind Intensity Scenarios</h4>
+                        <div className="space-y-4">
+                          {windScenarios.map(factor => (
+                            <div key={factor} className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <ArrowRightIcon 
+                                  className="h-4 w-4 text-blue-500"
+                                  style={{
+                                    transform: `rotate(${filterCriteria?.windDirection}deg)`
+                                  }}
+                                />
+                                <span>+{factor * 100}% Wind Speed</span>
+                              </div>
+                              <span className="font-medium">
+                                {calculateEffectiveRange(
+                                  aircraft,
+                                  calculateWindScenario(filterCriteria?.windSpeed || 0, factor),
+                                  filterCriteria?.windDirection || 0
+                                ).toLocaleString()} km
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Wind Impact Analysis</CardTitle>
+                <CardTitle>Performance Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                {filteredAircraft.map((aircraft: Aircraft) => (
-                  <div key={aircraft.id} className="mb-6">
-                    <h3 className="text-lg font-semibold mb-2">{aircraft.name}</h3>
-                    <div className="bg-white p-4 rounded-lg shadow">
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>Base Range: {aircraft.maxRange.toLocaleString()} km</div>
-                        <div>Cruise Speed: {aircraft.cruiseSpeed} knots</div>
-                      </div>
-
-                      {filterCriteria && (
-                        <div>
-                          <h4 className="font-medium mb-2">Effective Range with Current Wind:</h4>
-                          <div className="bg-gray-50 p-3 rounded">
-                            {calculateEffectiveRange(
-                              aircraft,
-                              filterCriteria.windSpeed,
-                              filterCriteria.windDirection
-                            ).toLocaleString()} km
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                <ComparisonCharts aircraftData={filteredAircraft} />
               </CardContent>
             </Card>
           </>
