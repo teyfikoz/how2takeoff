@@ -10,12 +10,6 @@ import ComparisonCharts from '@/components/aircraft/ComparisonCharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind } from 'lucide-react';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface FilterCriteria {
   passengers: number;
@@ -29,18 +23,14 @@ interface FilterCriteria {
 export default function Dashboard() {
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria | null>(null);
 
-  const { data: aircraftData } = useQuery({
+  const { data: aircraftData = [] } = useQuery<Aircraft[]>({
     queryKey: ['/api/aircraft'],
   });
 
   const calculateEffectiveRange = (aircraft: Aircraft, windSpeed: number, windDirection: number) => {
-    // Rüzgar yönünü radyana çevir
     const windRadians = (windDirection * Math.PI) / 180;
-    // Rüzgar etkisini hesapla (cos ile rüzgarın uçuş yönündeki bileşenini al)
     const windEffect = Math.cos(windRadians) * windSpeed;
-    // Rüzgar etkisi ile efektif hızı hesapla
     const effectiveSpeed = aircraft.cruiseSpeed - windEffect;
-    // Efektif menzili hesapla
     return aircraft.maxRange * (effectiveSpeed / aircraft.cruiseSpeed);
   };
 
@@ -48,19 +38,16 @@ export default function Dashboard() {
     if (!filterCriteria || !aircraftData) return [];
 
     return aircraftData.filter((aircraft: Aircraft) => {
-      // 1. Yolcu kapasitesi kontrolü - sadece maksimum kapasiteyi kontrol et
       const passengerCheck = {
         valid: filterCriteria.passengers <= aircraft.maxPassengers,
         message: `Required passengers (${filterCriteria.passengers}) exceeds maximum capacity (${aircraft.maxPassengers})`
       };
 
-      // 2. Kargo kapasitesi kontrolü - maksimum kapasiteyi kontrol et
       const cargoCheck = {
         valid: filterCriteria.cargo <= aircraft.cargoCapacity,
         message: `Required cargo (${filterCriteria.cargo}kg) exceeds maximum capacity (${aircraft.cargoCapacity}kg)`
       };
 
-      // 3. Menzil kontrolü
       const effectiveRange = calculateEffectiveRange(
         aircraft,
         filterCriteria.windSpeed,
@@ -72,29 +59,10 @@ export default function Dashboard() {
         message: `Required range (${filterCriteria.range}km) exceeds effective range (${Math.round(effectiveRange)}km)`
       };
 
-      // 4. Alternatif menzil kontrolü
       const alternateRangeCheck = {
         valid: filterCriteria.alternateRange <= effectiveRange,
         message: `Alternate range (${filterCriteria.alternateRange}km) exceeds effective range (${Math.round(effectiveRange)}km)`
       };
-
-      // Debug log
-      console.log(`Aircraft ${aircraft.name} validation:`, {
-        name: aircraft.name,
-        checks: {
-          passengers: passengerCheck,
-          cargo: cargoCheck,
-          range: rangeCheck,
-          alternateRange: alternateRangeCheck
-        },
-        details: {
-          wind: {
-            speed: filterCriteria.windSpeed,
-            direction: filterCriteria.windDirection,
-            effectiveRange: Math.round(effectiveRange)
-          }
-        }
-      });
 
       return passengerCheck.valid && 
              cargoCheck.valid && 
@@ -150,10 +118,19 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
+                <CardTitle>Performance Analysis</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ComparisonCharts aircraftData={filteredAircraft} />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle>Wind Impact Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                {filteredAircraft.map((aircraft) => (
+                {filteredAircraft.map((aircraft: Aircraft) => (
                   <div key={aircraft.id} className="mb-6">
                     <h3 className="text-lg font-semibold mb-2">{aircraft.name}</h3>
                     <div className="bg-white p-4 rounded-lg shadow">
