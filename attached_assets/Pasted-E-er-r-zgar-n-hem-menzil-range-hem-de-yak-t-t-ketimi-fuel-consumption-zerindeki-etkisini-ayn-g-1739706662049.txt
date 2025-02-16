@@ -1,0 +1,49 @@
+Eğer rüzgarın hem menzil (range) hem de yakıt tüketimi (fuel consumption) üzerindeki etkisini aynı grafikte görmek istiyorsan, aşağıdaki gibi bir çift eksenli (dual-axis) line chart (çizgi grafik) kullanabilirsin.
+
+Geliştirilmiş Prompt: Wind Impact Analysis with Fuel Consumption
+
+	1.	Grafik Başlığı:
+	•	Wind Impact Analysis: Range & Fuel Consumption
+	2.	Konum:
+	•	Performance Analysis grafiklerinin hemen üstü, tam genişlikte olacak şekilde.
+	3.	Grafik Türü:
+	•	Çift eksenli çizgi grafiği (Dual-axis Line Chart)
+	•	Sol Y Ekseni: Effective Range (km)
+	•	Sağ Y Ekseni: Fuel Consumption (kg per NM - Nautical Mile)
+	•	X Ekseni: Wind Speed (kt) (-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50)
+	4.	Veri Serileri:
+	•	Tailwind (+ Rüzgar):
+	•	Range (mavi çizgi - sol eksen)
+	•	Fuel Consumption (yeşil çizgi - sağ eksen)
+	•	Headwind (- Rüzgar):
+	•	Range (kırmızı çizgi - sol eksen)
+	•	Fuel Consumption (turuncu çizgi - sağ eksen)
+	5.	Renk Kodları:
+	•	Range (Menzil) - Tailwind: Mavi (#3498db)
+	•	Range (Menzil) - Headwind: Kırmızı (#e74c3c)
+	•	Fuel Consumption - Tailwind: Yeşil (#2ecc71)
+	•	Fuel Consumption - Headwind: Turuncu (#f39c12)
+	6.	Etkileşimli Özellikler:
+	•	Tooltip: Kullanıcı fareyi üzerine getirdiğinde:
+	•	“Wind Speed: X knots, Effective Range: Y km, Fuel Consumption: Z kg/NM”
+	•	Legend (Açıklamalar):
+	•	Tailwind & Headwind için ayrı etiketler.
+	7.	Matematiksel Hesaplama:
+	•	Effective Range = Base Range ± (Wind Factor × Aircraft Efficiency)
+	•	Fuel Consumption = Base Fuel Rate ± (Wind Factor × Fuel Efficiency Adjustment)
+	•	Wind Factor = (Wind Speed ÷ 100) × 5% (Yakıt tüketimine etkisi)
+	•	Tailwind için:
+	•	Base Range + Wind Factor
+	•	Base Fuel Rate - Wind Factor
+	•	Headwind için:
+	•	Base Range - Wind Factor
+	•	Base Fuel Rate + Wind Factor
+	8.	Teknik Uygulama İçin Öneri:
+	•	Recharts (React için) veya Chart.js (Vanilla JS için) kullanarak grafiği oluştur.
+	•	React State / Hooks veya JavaScript DOM ile veri girişine göre dinamik olarak hesaplamalar yap.
+
+Özet:
+
+Bu geliştirilmiş prompt ile rüzgarın hem menzil hem de yakıt tüketimi üzerindeki etkisini aynı grafikte gösteren bir analiz ekleyebilirsin.
+
+🚀 Eğer kod örneği istiyorsan, hangi framework’ü (React, Next.js, Vanilla JS) kullandığını söyle, doğrudan implementasyon kodunu yazayım!
