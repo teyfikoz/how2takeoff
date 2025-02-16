@@ -34,9 +34,9 @@ export default function FilterForm({ onFilter }: Props) {
   const form = useForm<FilterFormData>({
     resolver: zodResolver(filterSchema),
     defaultValues: {
-      passengers: 150,
+      passengers: 300,
       cargo: 15000,
-      range: 5000,
+      range: 10000,
       alternateRange: 1000,
       windSpeed: 20,
       windDirection: 0
@@ -65,7 +65,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Number of Passengers</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -79,7 +87,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Cargo Weight (kg)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -93,7 +109,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Range (km)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,7 +131,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Alternate Range (km)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,7 +153,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Wind Speed (kt)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -135,7 +175,15 @@ export default function FilterForm({ onFilter }: Props) {
                   <FormItem>
                     <FormLabel>Wind Direction (degrees)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      <Input 
+                        type="number" 
+                        {...field} 
+                        value={field.value || ''} 
+                        onChange={e => {
+                          const value = e.target.value === '' ? 0 : Number(e.target.value);
+                          field.onChange(value);
+                        }} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
