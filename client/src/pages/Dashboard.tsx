@@ -60,20 +60,15 @@ export default function Dashboard() {
         filterCriteria.windDirection
       );
 
+      const maxRequiredRange = Math.max(filterCriteria.range, filterCriteria.alternateRange);
       const rangeCheck = {
-        valid: filterCriteria.range <= effectiveRange,
-        message: `Required range (${filterCriteria.range}km) exceeds effective range (${Math.round(effectiveRange)}km)`
-      };
-
-      const alternateRangeCheck = {
-        valid: filterCriteria.alternateRange <= effectiveRange,
-        message: `Alternate range (${filterCriteria.alternateRange}km) exceeds effective range (${Math.round(effectiveRange)}km)`
+        valid: maxRequiredRange <= effectiveRange,
+        message: `Maximum required range (${maxRequiredRange}km) exceeds effective range (${Math.round(effectiveRange)}km)`
       };
 
       return passengerCheck.valid && 
              cargoCheck.valid && 
-             rangeCheck.valid && 
-             alternateRangeCheck.valid;
+             rangeCheck.valid;
     });
   }, [aircraftData, filterCriteria]);
 

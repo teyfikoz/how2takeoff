@@ -37,7 +37,7 @@ export default function FilterForm({ onFilter }: Props) {
       passengers: 300,
       cargo: 15000,
       range: 10000,
-      alternateRange: 1000,
+      alternateRange: 11000,
       windSpeed: 20,
       windDirection: 0
     }
