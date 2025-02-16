@@ -122,13 +122,11 @@ export default function Dashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Wind className="h-5 w-5 text-blue-500" />
-                  Wind Impact Analysis Charts
+                  Wind Impact Analysis
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-8">
-                {filteredAircraft.map((aircraft: Aircraft) => (
-                  <WindImpactChart key={aircraft.id} aircraft={aircraft} filterCriteria={filterCriteria} />
-                ))}
+              <CardContent>
+                <WindImpactChart aircraftData={filteredAircraft} />
               </CardContent>
             </Card>
 
