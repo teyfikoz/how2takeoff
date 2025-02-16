@@ -1,0 +1,85 @@
+İhtiyaçlarını adım adım ele alalım:
+
+1. Dashboard ekranında varsayılan menzil olarak 10,000 km seçili olarak gelsin
+
+Bu işlemi yapmak için, menzil (Range (km)) giriş alanına varsayılan bir değer atanması gerekiyor. Eğer React veya Vanilla JavaScript kullanıyorsan, şu şekilde ayarlayabilirsin:
+
+React için:
+
+<input
+  type="number"
+  value={range}
+  onChange={(e) => setRange(e.target.value)}
+  placeholder="10000"
+/>
+
+Başlangıç değerini useState ile belirleyebilirsin:
+
+const [range, setRange] = useState(10000);
+
+HTML & JavaScript için:
+
+Eğer düz HTML ve JS kullanıyorsan:
+
+<input type="number" id="rangeInput" value="10000">
+
+2. Flight Requirements alanında herhangi bir veriyi sildiğimde yerine sıfır ‘0’ getiriyor ve yeni bir şey yazmaya kalktığımda bunu nasıl düzeltebilirim?
+
+Bu durum, giriş alanının boş kalmasına izin verilmemesi nedeniyle oluşuyor. Kullanıcının boş bırakmasına izin verip, sıfır (0) yerine boş string ("") gösterebilirsin.
+
+React için:
+
+<input
+  type="number"
+  value={range === 0 ? "" : range}
+  onChange={(e) => {
+    const value = e.target.value === "" ? 0 : parseInt(e.target.value, 10);
+    setRange(value);
+  }}
+/>
+
+JavaScript & HTML için:
+
+<input type="number" id="rangeInput" oninput="handleInput(this)">
+<script>
+  function handleInput(element) {
+    if (element.value === "") {
+      element.value = "";
+    }
+  }
+</script>
+
+Bu kod, kullanıcı tüm içeriği silerse kutunun boş kalmasını sağlar.
+
+3. Rüzgar Şiddetinin Yakıt Tüketimine ve Uçuş Süresine Etkisini Gösterme
+
+Rüzgarın uçuş süresine etkisini hesaplamak için aşağıdaki formülleri kullanabiliriz:
+	•	Zaman Etkisi:
+￼
+(Eğer rüzgar arkadan esiyorsa hız artar, önden esiyorsa azalır.)
+	•	Yakıt Etkisi:
+￼
+Uçuş süresi arttıkça yakıt tüketimi de artar.
+
+React için Prompt:
+
+	“Bir fonksiyon yaz. Kullanıcının girdiği rüzgar hızına göre uçuş süresi ve yakıt tüketimini hesaplasın. Eğer rüzgar arkadan esiyorsa uçuş süresi kısalsın ve yakıt tasarrufu sağlansın, önden esiyorsa süre uzasın ve yakıt tüketimi artsın. Sonuçları ekranda göster.”
+
+JavaScript Kodu:
+
+function calculateFlightEffect(windSpeed, cruiseSpeed, fuelBurnRate, distance) {
+    let actualSpeed = cruiseSpeed + windSpeed;  // Rüzgar yönüne göre hız etkisi
+    let flightTime = distance / actualSpeed;    // Uçuş süresi
+    let fuelConsumption = flightTime * fuelBurnRate; // Yakıt tüketimi
+
+    return { flightTime, fuelConsumption };
+}
+
+// Örnek kullanım
+let result = calculateFlightEffect(20, 850, 2.5, 5000);
+console.log(`Uçuş Süresi: ${result.flightTime.toFixed(2)} saat`);
+console.log(`Yakıt Tüketimi: ${result.fuelConsumption.toFixed(2)} ton`);
+
+Bu hesaplamayı UI tarafında kullanıcı girdilerine bağlı olarak otomatik olarak yapabilirsin.
+
+Eğer Replit üzerinde kullanıyorsan, React veya Vanilla JS kullanarak bu hesaplamaları bir butona basıldığında gösterecek şekilde düzenleyebilirsin.
