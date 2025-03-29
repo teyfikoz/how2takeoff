@@ -1,4 +1,4 @@
-import { Switch, Route, Link } from "wouter";
+import { Switch, Route, Link, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,51 +12,116 @@ import CarrierTypes from "@/pages/CarrierTypes";
 import TicketingDistribution from "@/pages/TicketingDistribution";
 import AirlineCRM from "@/pages/AirlineCRM";
 import AboutMe from "@/pages/AboutMe";
-import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User } from "lucide-react";
+import Articles from "@/pages/Articles";
+import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [location] = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  const menuItems = [
+    { path: "/", icon: <Home className="h-5 w-5 mr-2" />, label: "Dashboard" },
+    { path: "/basic-aviation-passenger", icon: <BookOpen className="h-5 w-5 mr-2" />, label: "Basic Aviation Passenger" },
+    { path: "/revenue-management", icon: <TrendingUp className="h-5 w-5 mr-2" />, label: "Revenue Management & Route Opt." },
+    { path: "/ticketing-distribution", icon: <Globe className="h-5 w-5 mr-2" />, label: "Ticketing & Distribution" },
+    { path: "/airline-crm", icon: <Users className="h-5 w-5 mr-2" />, label: "Airline CRM" },
+    { path: "/basic-aviation-cargo", icon: <BookOpen className="h-5 w-5 mr-2" />, label: "Basic Aviation Cargo" },
+    { path: "/carrier-types", icon: <Plane className="h-5 w-5 mr-2" />, label: "Carrier Types" },
+    { path: "/database", icon: <Database className="h-5 w-5 mr-2" />, label: "Aircraft Database" },
+    { path: "/articles", icon: <BookText className="h-5 w-5 mr-2" />, label: "Articles" },
+    { path: "/about", icon: <User className="h-5 w-5 mr-2" />, label: "About Me" },
+  ];
+
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-white shadow-sm border-b" ref={navRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex space-x-4">
-            <Link href="/" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Home className="h-5 w-5 mr-2" />
-              Dashboard
-            </Link>
-            <Link href="/basic-aviation-passenger" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <BookOpen className="h-5 w-5 mr-2" />
-              Basic Aviation Passenger
-            </Link>
-            <Link href="/revenue-management" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <TrendingUp className="h-5 w-5 mr-2" />
-              Revenue Management & Route Opt.
-            </Link>
-            <Link href="/ticketing-distribution" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Globe className="h-5 w-5 mr-2" />
-              Ticketing & Distribution
-            </Link>
-            <Link href="/airline-crm" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Users className="h-5 w-5 mr-2" />
-              Airline CRM
-            </Link>
-            <Link href="/basic-aviation-cargo" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <BookOpen className="h-5 w-5 mr-2" />
-              Basic Aviation Cargo
-            </Link>
-            <Link href="/carrier-types" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Plane className="h-5 w-5 mr-2" />
-              Carrier Types
-            </Link>
-            <Link href="/database" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <Database className="h-5 w-5 mr-2" />
-              Aircraft Database
-            </Link>
-            <Link href="/about" className="flex items-center px-4 text-gray-700 hover:text-gray-900">
-              <User className="h-5 w-5 mr-2" />
-              About Me
+          {/* Logo/Brand section */}
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center px-2 text-gray-900 font-bold hover:text-blue-600">
+              <Plane className="h-6 w-6 mr-2 text-blue-600" />
+              <span className="text-lg">How2Takeoff</span>
             </Link>
           </div>
+          
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-1 overflow-x-auto">
+            {menuItems.map((item) => (
+              <Link 
+                key={item.path}
+                href={item.path} 
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  location === item.path 
+                    ? "text-blue-600 bg-blue-50" 
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+          
+          {/* Mobile Menu Button */}
+          <div className="flex items-center md:hidden">
+            <button
+              onClick={toggleMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              aria-expanded="false"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <X className="block h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
+        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
+                location === item.path
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
         </div>
       </div>
     </nav>
@@ -76,6 +141,7 @@ function Router() {
         <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
         <Route path="/carrier-types" component={CarrierTypes} />
         <Route path="/database" component={AircraftDatabase} />
+        <Route path="/articles" component={Articles} />
         <Route path="/about" component={AboutMe} />
         <Route component={NotFound} />
       </Switch>
