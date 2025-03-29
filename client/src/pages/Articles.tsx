@@ -315,7 +315,7 @@ export default function Articles() {
                             }}
                           />
                           <Tooltip 
-                            formatter={(value) => [`${value}`, 'Emission Index']}
+                            formatter={(value: number) => [`${value}`, 'Emission Index']}
                             labelFormatter={(label) => `Year: ${label}`}
                           />
                           <Legend />
@@ -450,7 +450,7 @@ export default function Articles() {
                             }}
                           />
                           <Tooltip 
-                            formatter={(value) => [`${value.toFixed(1)} billion`, 'Passengers']}
+                            formatter={(value: number) => [`${value.toFixed(1)} billion`, 'Passengers']}
                             labelFormatter={(label) => `Year: ${label}`}
                           />
                           <Legend />
@@ -588,8 +588,8 @@ export default function Articles() {
                             }}
                           />
                           <Tooltip 
-                            formatter={(value, name) => {
-                              if (name.includes('Saving')) {
+                            formatter={(value: number, name: string) => {
+                              if (name && typeof name === 'string' && name.includes('Saving')) {
                                 return [`${value.toFixed(1)}%`, name];
                               }
                               return [`${value.toFixed(1)} sec`, name];
@@ -737,7 +737,7 @@ export default function Articles() {
                             }}
                           />
                           <Tooltip 
-                            formatter={(value) => [`${value.toFixed(1)}`, 'Volume Index']}
+                            formatter={(value: number) => [`${value.toFixed(1)}`, 'Volume Index']}
                             labelFormatter={(label) => `Year: ${label}`}
                           />
                           <Legend />

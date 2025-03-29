@@ -70,12 +70,12 @@ function Navbar() {
           </div>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-1 overflow-x-auto">
+          <div className="hidden md:flex space-x-1 overflow-x-auto pb-1 max-w-5xl">
             {menuItems.map((item) => (
               <Link 
                 key={item.path}
                 href={item.path} 
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
                   location === item.path 
                     ? "text-blue-600 bg-blue-50" 
                     : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
