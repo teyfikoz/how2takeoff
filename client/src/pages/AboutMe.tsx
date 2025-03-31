@@ -25,11 +25,15 @@ export default function AboutMe() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="prose prose-lg">
-            <p>Hi! I'm Teyfik ÖZ. I have experience in Airline Revenue Management, CRM, Data Analytics, Reporting, Sales & Marketing, and Corporate Sales. Throughout my career, I've had the opportunity to work on various projects across different industries, which has helped me gain a deeper understanding of business dynamics and develop a broader perspective.</p>
-
-            <p>I completed my undergraduate studies in Physics at Istanbul Kültür University, then pursued a Master's degree in Energy Science and Technology at Istanbul Technical University (ITU). Additionally, I had the opportunity to study at Kungliga Tekniska Högskolan (KTH) in Sweden. My passion for science and analytics has also been reflected in my academic research.</p>
-
-            <p>Outside of work, I love traveling, exploring new places, and experiencing different cultures. Scuba diving, being in nature, and spending time with animals bring me great joy. I also firmly believe in the connection between good food and a good mood, which is why "Good Food, Good Mood" is more than just a phrase to me—it's a way of life.</p>
+            <p>Hi, I'm Teyfik ÖZ. I have experience in Airline Revenue Management, CRM, Data Analytics, Reporting, Sales & Marketing, and Corporate Sales. Over the years, I've contributed to various projects across different industries, which has helped me develop a broader perspective on business and data-driven decision-making.</p>
+            
+            <p>I earned my undergraduate degree in Physics from Istanbul Kültür University and pursued a Master's degree in Energy Science and Technology at Istanbul Technical University (ITU). During my studies, I also had the opportunity to study at KTH Royal Institute of Technology in Sweden. My passion for science and analytics has always shaped my academic work and professional projects.</p>
+            
+            <p>While serving in the Turkish Armed Forces, I became a duty-related disabled veteran due to a health condition. This experience has given me a deeper appreciation for life and a greater sense of purpose in my work and personal journey.</p>
+            
+            <p>Outside of work, I love traveling, discovering new places, and immersing myself in different cultures. Scuba diving is one of my greatest passions. As I advance in this field, I hope to contribute to the preservation of marine life and ecosystems. My love for nature and animals is a central part of who I am.</p>
+            
+            <p>And yes—"Good Food, Good Mood" isn't just a saying to me. It's a lifestyle.</p>
 
             <div className="mt-8">
               <h3 className="text-xl font-semibold mb-4">📌 Contact Information</h3>
