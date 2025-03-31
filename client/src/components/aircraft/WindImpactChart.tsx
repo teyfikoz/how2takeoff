@@ -4,7 +4,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { Aircraft } from '@shared/schema';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowRight, RotateCcw, RotateCw } from 'lucide-react';
 
 interface Props {
   aircraftData: Aircraft[];
@@ -56,12 +56,30 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
           <h3 className="text-xl font-bold mb-2">Wind Impact Analysis</h3>
           <p className="text-gray-600">Effect of Wind on Range & Fuel Consumption Across Aircraft</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <ArrowRight 
-            className="h-6 w-6 text-blue-500" 
-            style={getWindArrowStyles()} 
-          />
-          <span className="text-sm text-gray-600">Wind Direction: {windDirection}°</span>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <button 
+              onClick={() => setWindDirection((prev) => (prev - 45) % 360)}
+              className="p-1 hover:bg-gray-200 rounded-md transition"
+              title="Rotate wind counterclockwise"
+            >
+              <RotateCcw className="h-5 w-5 text-gray-700" />
+            </button>
+            <div className="mx-2 flex items-center space-x-2">
+              <ArrowRight 
+                className="h-6 w-6 text-blue-500" 
+                style={getWindArrowStyles()} 
+              />
+              <span className="text-sm text-gray-600">{windDirection}°</span>
+            </div>
+            <button 
+              onClick={() => setWindDirection((prev) => (prev + 45) % 360)}
+              className="p-1 hover:bg-gray-200 rounded-md transition"
+              title="Rotate wind clockwise"
+            >
+              <RotateCw className="h-5 w-5 text-gray-700" />
+            </button>
+          </div>
         </div>
       </div>
       

@@ -14,6 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { ArrowRight } from "lucide-react";
 
 const filterSchema = z.object({
   passengers: z.number().min(0, "Number of passengers must be greater than 0"),
@@ -150,19 +152,24 @@ export default function FilterForm({ onFilter }: Props) {
                 control={form.control}
                 name="windSpeed"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Wind Speed (kt)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        {...field} 
-                        value={field.value || ''} 
-                        onChange={e => {
-                          const value = e.target.value === '' ? 0 : Number(e.target.value);
-                          field.onChange(value);
-                        }} 
-                      />
-                    </FormControl>
+                  <FormItem className="space-y-4">
+                    <FormLabel>Wind Speed (kt): {field.value}</FormLabel>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500">0</span>
+                      <FormControl>
+                        <Slider
+                          defaultValue={[field.value]}
+                          min={0}
+                          max={100}
+                          step={1}
+                          onValueChange={(values) => {
+                            field.onChange(values[0]);
+                          }}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <span className="text-xs text-gray-500">100</span>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -172,19 +179,29 @@ export default function FilterForm({ onFilter }: Props) {
                 control={form.control}
                 name="windDirection"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Wind Direction (degrees)</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="number" 
-                        {...field} 
-                        value={field.value || ''} 
-                        onChange={e => {
-                          const value = e.target.value === '' ? 0 : Number(e.target.value);
-                          field.onChange(value);
+                  <FormItem className="space-y-4">
+                    <FormLabel>Wind Direction (degrees): {field.value}°</FormLabel>
+                    <div className="flex items-center gap-2">
+                      <ArrowRight 
+                        className="h-5 w-5 text-blue-500" 
+                        style={{ 
+                          transform: `rotate(${field.value}deg)`,
+                          transition: 'transform 0.3s ease-in-out' 
                         }} 
                       />
-                    </FormControl>
+                      <FormControl>
+                        <Slider
+                          defaultValue={[field.value]}
+                          min={0}
+                          max={359}
+                          step={1}
+                          onValueChange={(values) => {
+                            field.onChange(values[0]);
+                          }}
+                          className="w-full"
+                        />
+                      </FormControl>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

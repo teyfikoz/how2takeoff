@@ -1,0 +1,140 @@
+Harika! İşte Replit’te çalıştırabileceğin şekilde “Flight Feasibility, Profitability & Passenger Type Estimator” için güncellenmiş prompt, ardından örnek Python kodu yapısı ve kullanıcıdan alınacak manuel verilerle senaryolu analizleri destekleyen geliştirilmiş sürüm:
+
+⸻
+
+✨ 📌 Replit Prompt (Sekme Açıklaması)
+
+Tab Adı: Flight Feasibility, Profitability & Passenger Type Estimator
+
+⸻
+
+Prompt:
+
+Enter departure and arrival IATA codes along with optional expected parameters (RASK, CASK, Load Factor, aircraft type, etc.) to evaluate flight feasibility, estimate operational profitability, and predict the dominant passenger type (business or leisure).
+
+The system uses the Haversine formula to calculate distance, matches suitable aircraft from a predefined database, evaluates cost vs revenue, and predicts passenger intent using rule-based AI logic. You can adjust values to simulate different operational or strategic scenarios.
+
+⸻
+
+⚙️ Kullanılan Veriler & Fonksiyonlar
+
+1. 📍 Haversine Distance Function
+
+from math import radians, sin, cos, sqrt, atan2
+
+def haversine_distance(lat1, lon1, lat2, lon2):
+    R = 6371
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = sin(dlat/2)**2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon/2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return R * c
+
+
+
+⸻
+
+2. 🗺️ Airport Verisi Kullanımı (airports.csv)
+
+import pandas as pd
+
+airports = pd.read_csv("airports.csv")
+airports = airports[airports['iata_code'].notnull()]
+
+def get_coords(iata_code):
+    airport = airports[airports['iata_code'] == iata_code.upper()]
+    if airport.empty:
+        return None
+    return float(airport['latitude_deg']), float(airport['longitude_deg']), airport['name'].values[0]
+
+
+
+⸻
+
+3. ✈️ Uçak Verisi ve Uygunluk Kontrolü (örnek)
+
+aircraft_data = {
+    "A320": {"range_km": 6100, "fuel_burn_km": 2.5, "min_runway": 2000, "seats": 180},
+    "B737": {"range_km": 5600, "fuel_burn_km": 2.3, "min_runway": 1800, "seats": 160},
+    "A350": {"range_km": 15000, "fuel_burn_km": 6.2, "min_runway": 2500, "seats": 350}
+}
+
+def check_aircraft_suitability(distance_km, runway_len, aircraft_type):
+    a = aircraft_data[aircraft_type]
+    return a["range_km"] >= distance_km and a["min_runway"] <= runway_len
+
+
+
+⸻
+
+4. 💸 Kârlılık Hesabı (ASK, RASK, CASK, Load Factor)
+
+def profitability_analysis(distance_km, aircraft_type, LF, RASK, CASK, fuel_price=1.2):
+    a = aircraft_data[aircraft_type]
+    ASK = distance_km * a["seats"]
+    RPK = ASK * LF
+    revenue = RASK * RPK
+    cost = CASK * ASK + (a["fuel_burn_km"] * fuel_price * distance_km)
+    return revenue, cost, revenue - cost
+
+
+
+⸻
+
+5. 👤 Yolcu Tipi Tahmini (Basit AI Kural Seti)
+
+def predict_passenger_type(day, season, time_of_day, booking_type):
+    if day in ['Monday', 'Tuesday', 'Wednesday'] and time_of_day == 'morning' and booking_type == 'last_minute':
+        return "Business"
+    elif season in ['summer', 'holiday'] and booking_type == 'early':
+        return "Leisure"
+    else:
+        return "Mixed"
+
+
+
+⸻
+
+🔍 Demo Senaryo
+
+# Kullanıcı Girdileri
+origin = "AMM"
+destination = "NRT"
+aircraft_type = "A350"
+LF = 0.75
+RASK = 0.10
+CASK = 0.07
+runway_len = 3000
+
+lat1, lon1, name1 = get_coords(origin)
+lat2, lon2, name2 = get_coords(destination)
+
+if lat1 and lat2:
+    distance = haversine_distance(lat1, lon1, lat2, lon2)
+    print(f"\n✈️ {origin} ➡ {destination} flight distance: {round(distance, 2)} km")
+
+    suitable = check_aircraft_suitability(distance, runway_len, aircraft_type)
+    print(f"✅ Aircraft suitability: {suitable}")
+
+    rev, cost, profit = profitability_analysis(distance, aircraft_type, LF, RASK, CASK)
+    print(f"💰 Revenue: ${rev:,.2f} | Cost: ${cost:,.2f} | Profit: ${profit:,.2f}")
+
+    pax_type = predict_passenger_type("Monday", "summer", "morning", "early")
+    print(f"🧠 Predicted Passenger Type: {pax_type}")
+else:
+    print("❌ Airport data not found.")
+
+
+
+⸻
+
+🧩 Ek Özellikler
+	•	Kullanıcı dostu form: Streamlit / Gradio arayüzü önerilir.
+	•	İleri düzey analiz için: plotly.express kullanarak:
+	•	Profit vs Distance grafiği
+	•	Aircraft Type karşılaştırması
+	•	Yolcu tipi pie chart
+
+⸻
+
+Hazırsan bunu sana tam bir .py dosyası ya da Replit arayüzü olarak da sunabilirim. İster frontend’i de tasarlayalım, ister sade analiz modülüyle başlayalım. Hangisiyle devam edelim istersin?

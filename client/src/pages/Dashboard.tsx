@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import WindImpactChart from '@/components/aircraft/WindImpactChart';
+import DonationBanner from '@/components/DonationBanner';
 
 interface FilterCriteria {
   passengers: number;
@@ -162,6 +163,8 @@ export default function Dashboard() {
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
           <p>Data based on BADA (Base of Aircraft Data) model</p>
           <p className="mt-2">© Aviation Performance Analytics</p>
+          
+          <DonationBanner />
         </footer>
       </div>
     </div>
