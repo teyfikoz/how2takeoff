@@ -12,8 +12,15 @@ import {
 } from 'recharts';
 import {
   Plane, TrendingUp, Calculator, PlaneTakeoff, PlaneLanding,
-  Banknote, Users, Activity, Percent, MoveHorizontal, CalendarClock
+  Banknote, Users, Activity, Percent, MoveHorizontal, CalendarClock,
+  Info, Globe, Building2, ArrowUpFromLine, Map
 } from 'lucide-react';
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Define a simple aircraft database
 const AIRCRAFT_DATA = {
@@ -27,38 +34,38 @@ const AIRCRAFT_DATA = {
   "CRJ900": { range_km: 2876, fuel_burn_km: 1.7, min_runway: 1939, seats: 90, cruise_speed: 829 },
 };
 
-// Mock airport database with selected major airports
+// Enhanced airport database with ICAO codes and additional info
 const AIRPORTS = [
-  { iata: "JFK", name: "John F. Kennedy International Airport", city: "New York", lat: 40.6413, lon: -73.7781 },
-  { iata: "LHR", name: "London Heathrow Airport", city: "London", lat: 51.4700, lon: -0.4543 },
-  { iata: "CDG", name: "Charles de Gaulle Airport", city: "Paris", lat: 49.0097, lon: 2.5479 },
-  { iata: "DXB", name: "Dubai International Airport", city: "Dubai", lat: 25.2528, lon: 55.3644 },
-  { iata: "SIN", name: "Singapore Changi Airport", city: "Singapore", lat: 1.3644, lon: 103.9915 },
-  { iata: "HND", name: "Tokyo Haneda Airport", city: "Tokyo", lat: 35.5494, lon: 139.7798 },
-  { iata: "LAX", name: "Los Angeles International Airport", city: "Los Angeles", lat: 33.9416, lon: -118.4085 },
-  { iata: "ORD", name: "O'Hare International Airport", city: "Chicago", lat: 41.9742, lon: -87.9073 },
-  { iata: "ATL", name: "Hartsfield-Jackson Atlanta International Airport", city: "Atlanta", lat: 33.6407, lon: -84.4277 },
-  { iata: "PEK", name: "Beijing Capital International Airport", city: "Beijing", lat: 40.0799, lon: 116.6031 },
-  { iata: "IST", name: "Istanbul Airport", city: "Istanbul", lat: 41.2608, lon: 28.7419 },
-  { iata: "AMS", name: "Amsterdam Airport Schiphol", city: "Amsterdam", lat: 52.3105, lon: 4.7683 },
-  { iata: "FRA", name: "Frankfurt Airport", city: "Frankfurt", lat: 50.0379, lon: 8.5622 },
-  { iata: "MEX", name: "Mexico City International Airport", city: "Mexico City", lat: 19.4361, lon: -99.0719 },
-  { iata: "SYD", name: "Sydney Airport", city: "Sydney", lat: -33.9399, lon: 151.1753 },
-  { iata: "GRU", name: "São Paulo-Guarulhos International Airport", city: "São Paulo", lat: -23.4356, lon: -46.4731 },
-  { iata: "JNB", name: "O.R. Tambo International Airport", city: "Johannesburg", lat: -26.1392, lon: 28.2460 },
-  { iata: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", lat: 28.5562, lon: 77.1000 },
-  { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", lat: 19.0896, lon: 72.8656 },
-  { iata: "MAD", name: "Adolfo Suárez Madrid–Barajas Airport", city: "Madrid", lat: 40.4983, lon: -3.5676 },
-  { iata: "DME", name: "Domodedovo International Airport", city: "Moscow", lat: 55.4103, lon: 37.9020 },
-  { iata: "CAI", name: "Cairo International Airport", city: "Cairo", lat: 30.1219, lon: 31.4056 },
-  { iata: "CGK", name: "Soekarno-Hatta International Airport", city: "Jakarta", lat: -6.1256, lon: 106.6558 },
-  { iata: "GIG", name: "Rio de Janeiro/Galeão International Airport", city: "Rio de Janeiro", lat: -22.8099, lon: -43.2506 },
-  { iata: "ICN", name: "Incheon International Airport", city: "Seoul", lat: 37.4602, lon: 126.4407 },
-  { iata: "CUN", name: "Cancún International Airport", city: "Cancún", lat: 21.0365, lon: -86.8771 },
-  { iata: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", lat: 22.3080, lon: 113.9185 },
-  { iata: "FCO", name: "Leonardo da Vinci–Fiumicino Airport", city: "Rome", lat: 41.8003, lon: 12.2389 },
-  { iata: "BCN", name: "Josep Tarradellas Barcelona-El Prat Airport", city: "Barcelona", lat: 41.2971, lon: 2.0785 },
-  { iata: "SFO", name: "San Francisco International Airport", city: "San Francisco", lat: 37.6213, lon: -122.3790 },
+  { iata: "JFK", icao: "KJFK", name: "John F Kennedy International Airport", city: "New York", country: "US", region: "US-NY", lat: 40.639447, lon: -73.779317, elevation_ft: 13, type: "large_airport", website: "https://www.jfkairport.com/", scheduled: "yes" },
+  { iata: "LHR", icao: "EGLL", name: "London Heathrow Airport", city: "London", country: "GB", region: "GB-ENG", lat: 51.4706, lon: -0.461941, elevation_ft: 83, type: "large_airport", website: "http://www.heathrowairport.com/", scheduled: "yes" },
+  { iata: "CDG", icao: "LFPG", name: "Charles de Gaulle International Airport", city: "Paris", country: "FR", region: "FR-IDF", lat: 49.012798, lon: 2.55, elevation_ft: 392, type: "large_airport", website: "http://www.aeroportsdeparis.fr/", scheduled: "yes" },
+  { iata: "DXB", icao: "OMDB", name: "Dubai International Airport", city: "Dubai", country: "AE", region: "AE-DU", lat: 25.2527999878, lon: 55.3643989563, elevation_ft: 62, type: "large_airport", website: "http://www.dubaiairport.com/", scheduled: "yes" },
+  { iata: "SIN", icao: "WSSS", name: "Singapore Changi Airport", city: "Singapore", country: "SG", region: "SG-04", lat: 1.35019, lon: 103.994003, elevation_ft: 22, type: "large_airport", website: "http://www.changiairport.com/", scheduled: "yes" },
+  { iata: "HND", icao: "RJTT", name: "Tokyo Haneda International Airport", city: "Tokyo", country: "JP", region: "JP-13", lat: 35.552299, lon: 139.779999, elevation_ft: 35, type: "large_airport", website: "http://www.haneda-airport.jp/", scheduled: "yes" },
+  { iata: "LAX", icao: "KLAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "US", region: "US-CA", lat: 33.942501, lon: -118.407997, elevation_ft: 125, type: "large_airport", website: "https://www.flylax.com/", scheduled: "yes" },
+  { iata: "ORD", icao: "KORD", name: "Chicago O'Hare International Airport", city: "Chicago", country: "US", region: "US-IL", lat: 41.9786, lon: -87.9048, elevation_ft: 680, type: "large_airport", website: "https://www.flychicago.com/ohare/", scheduled: "yes" },
+  { iata: "ATL", icao: "KATL", name: "Hartsfield Jackson Atlanta International Airport", city: "Atlanta", country: "US", region: "US-GA", lat: 33.6367, lon: -84.428101, elevation_ft: 1026, type: "large_airport", website: "http://www.atlanta-airport.com/", scheduled: "yes" },
+  { iata: "PEK", icao: "ZBAA", name: "Beijing Capital International Airport", city: "Beijing", country: "CN", region: "CN-11", lat: 40.080101, lon: 116.584999, elevation_ft: 116, type: "large_airport", website: "http://en.bcia.com.cn/", scheduled: "yes" },
+  { iata: "IST", icao: "LTFM", name: "İstanbul Airport", city: "Istanbul", country: "TR", region: "TR-34", lat: 41.261297, lon: 28.741951, elevation_ft: 325, type: "large_airport", website: "http://www.igairport.com/", scheduled: "yes" },
+  { iata: "AMS", icao: "EHAM", name: "Amsterdam Airport Schiphol", city: "Amsterdam", country: "NL", region: "NL-NH", lat: 52.308601, lon: 4.76389, elevation_ft: -11, type: "large_airport", website: "https://www.schiphol.nl/", scheduled: "yes" },
+  { iata: "FRA", icao: "EDDF", name: "Frankfurt Airport", city: "Frankfurt am Main", country: "DE", region: "DE-HE", lat: 50.030241, lon: 8.561096, elevation_ft: 364, type: "large_airport", website: "https://www.frankfurt-airport.de/", scheduled: "yes" },
+  { iata: "MEX", icao: "MMMX", name: "Benito Juárez International Airport", city: "Ciudad de México", country: "MX", region: "MX-DIF", lat: 19.435137, lon: -99.071328, elevation_ft: 7316, type: "large_airport", website: "https://www.aicm.com.mx", scheduled: "yes" },
+  { iata: "SYD", icao: "YSSY", name: "Sydney Kingsford Smith International Airport", city: "Sydney", country: "AU", region: "AU-NSW", lat: -33.946098, lon: 151.177002, elevation_ft: 21, type: "large_airport", website: "https://www.sydneyairport.com.au/", scheduled: "yes" },
+  { iata: "GRU", icao: "SBGR", name: "Guarulhos - Governador André Franco Montoro International Airport", city: "São Paulo", country: "BR", region: "BR-SP", lat: -23.435556, lon: -46.473056, elevation_ft: 2459, type: "large_airport", website: "https://www.gru.com.br/", scheduled: "yes" },
+  { iata: "JNB", icao: "FAOR", name: "O.R. Tambo International Airport", city: "Johannesburg", country: "ZA", region: "ZA-GT", lat: -26.139099, lon: 28.246, elevation_ft: 5558, type: "large_airport", website: "https://www.airports.co.za/", scheduled: "yes" },
+  { iata: "DEL", icao: "VIDP", name: "Indira Gandhi International Airport", city: "Delhi", country: "IN", region: "IN-DL", lat: 28.556501, lon: 77.103104, elevation_ft: 777, type: "large_airport", website: "http://www.newdelhiairport.in/", scheduled: "yes" },
+  { iata: "BOM", icao: "VABB", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "IN", region: "IN-MH", lat: 19.0886993408, lon: 72.8678970337, elevation_ft: 39, type: "large_airport", website: "https://www.csmia.aero/", scheduled: "yes" },
+  { iata: "MAD", icao: "LEMD", name: "Adolfo Suárez Madrid–Barajas Airport", city: "Madrid", country: "ES", region: "ES-MD", lat: 40.471926, lon: -3.56264, elevation_ft: 1998, type: "large_airport", website: "http://www.aena.es/", scheduled: "yes" },
+  { iata: "DME", icao: "UUDD", name: "Domodedovo International Airport", city: "Moscow", country: "RU", region: "RU-MOS", lat: 55.408611, lon: 37.906111, elevation_ft: 588, type: "large_airport", website: "http://www.dme.ru/", scheduled: "yes" },
+  { iata: "CAI", icao: "HECA", name: "Cairo International Airport", city: "Cairo", country: "EG", region: "EG-C", lat: 30.121944, lon: 31.405556, elevation_ft: 382, type: "large_airport", website: "http://www.cairo-airport.com/", scheduled: "yes" },
+  { iata: "CGK", icao: "WIII", name: "Soekarno-Hatta International Airport", city: "Jakarta", country: "ID", region: "ID-JK", lat: -6.12556, lon: 106.656, elevation_ft: 32, type: "large_airport", website: "https://www.jakartaairportonline.com/", scheduled: "yes" },
+  { iata: "GIG", icao: "SBGL", name: "Rio de Janeiro/Galeão International Airport", city: "Rio de Janeiro", country: "BR", region: "BR-RJ", lat: -22.809999, lon: -43.250557, elevation_ft: 28, type: "large_airport", website: "http://www.riogaleao.com/", scheduled: "yes" },
+  { iata: "ICN", icao: "RKSI", name: "Incheon International Airport", city: "Seoul", country: "KR", region: "KR-41", lat: 37.46910095214844, lon: 126.45099639892578, elevation_ft: 23, type: "large_airport", website: "https://www.airport.kr/", scheduled: "yes" },
+  { iata: "CUN", icao: "MMUN", name: "Cancún International Airport", city: "Cancún", country: "MX", region: "MX-ROO", lat: 21.036500930800003, lon: -86.8770980835, elevation_ft: 23, type: "large_airport", website: "https://www.asur.com.mx/", scheduled: "yes" },
+  { iata: "HKG", icao: "VHHH", name: "Hong Kong International Airport", city: "Hong Kong", country: "HK", region: "HK-N/A", lat: 22.308901, lon: 113.915001, elevation_ft: 28, type: "large_airport", website: "http://www.hongkongairport.com/", scheduled: "yes" },
+  { iata: "FCO", icao: "LIRF", name: "Leonardo da Vinci–Fiumicino Airport", city: "Rome", country: "IT", region: "IT-62", lat: 41.800278, lon: 12.238889, elevation_ft: 13, type: "large_airport", website: "http://www.adr.it/", scheduled: "yes" },
+  { iata: "BCN", icao: "LEBL", name: "Josep Tarradellas Barcelona-El Prat Airport", city: "Barcelona", country: "ES", region: "ES-CT", lat: 41.2971, lon: 2.07846, elevation_ft: 14, type: "large_airport", website: "http://www.aena.es/", scheduled: "yes" },
+  { iata: "SFO", icao: "KSFO", name: "San Francisco International Airport", city: "San Francisco", country: "US", region: "US-CA", lat: 37.6189994812, lon: -122.3750015259, elevation_ft: 13, type: "large_airport", website: "https://www.flysfo.com/", scheduled: "yes" },
 ];
 
 // Function to calculate distance using Haversine formula
@@ -82,14 +89,44 @@ function checkAircraftSuitability(distance: number, runway: number, aircraftType
   return aircraft.range_km >= distance && aircraft.min_runway <= runway;
 }
 
-// Function to analyze profitability
+// Function to analyze profitability and environmental impact
 function analyzeProfit(distance: number, aircraftType: string, loadFactor: number, rask: number, cask: number, fuelPrice: number) {
   const aircraft = AIRCRAFT_DATA[aircraftType as keyof typeof AIRCRAFT_DATA];
   const ASK = distance * aircraft.seats;
   const RPK = ASK * loadFactor;
   const revenue = rask * RPK;
-  const cost = cask * ASK + (aircraft.fuel_burn_km * fuelPrice * distance);
-  return { revenue, cost, profit: revenue - cost };
+  const fuelCost = aircraft.fuel_burn_km * fuelPrice * distance;
+  const operatingCost = cask * ASK;
+  const cost = operatingCost + fuelCost;
+  
+  // Calculate emissions (simplified model: ~3.16kg CO2 per kg fuel, fuel density ~0.8kg/L)
+  const fuelConsumptionLiters = aircraft.fuel_burn_km * distance;
+  const fuelConsumptionKg = fuelConsumptionLiters * 0.8;
+  const totalCO2 = fuelConsumptionKg * 3.16;
+  
+  // Calculate per passenger emissions
+  const passengerCount = aircraft.seats * loadFactor;
+  const co2PerPassenger = totalCO2 / passengerCount;
+  
+  // Calculate environmental score (0-100, 100 is best)
+  // Based on typical efficiency metrics (about 75-150g CO2/passenger-km is good)
+  const co2PerPassengerKm = co2PerPassenger / distance;
+  let environmentalScore = 100 - Math.min(100, co2PerPassengerKm * 100 / 15);
+  environmentalScore = Math.max(0, Math.round(environmentalScore));
+  
+  return { 
+    revenue, 
+    cost, 
+    fuelCost,
+    operatingCost,
+    profit: revenue - cost,
+    emissions: {
+      totalCO2,
+      co2PerPassenger,
+      co2PerPassengerKm,
+      environmentalScore
+    }
+  };
 }
 
 // Function to predict passenger type
@@ -163,7 +200,19 @@ export default function FlightEstimator() {
   const [distance, setDistance] = useState(0);
   const [flightTime, setFlightTime] = useState(0);
   const [suitable, setSuitable] = useState(false);
-  const [profitAnalysis, setProfitAnalysis] = useState({ revenue: 0, cost: 0, profit: 0 });
+  const [profitAnalysis, setProfitAnalysis] = useState({ 
+    revenue: 0, 
+    cost: 0, 
+    fuelCost: 0,
+    operatingCost: 0,
+    profit: 0,
+    emissions: {
+      totalCO2: 0,
+      co2PerPassenger: 0,
+      co2PerPassengerKm: 0,
+      environmentalScore: 0
+    }
+  });
   const [passengerType, setPassengerType] = useState('');
   
   // Profitability data for different load factors
@@ -280,7 +329,40 @@ export default function FlightEstimator() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="origin">Origin (IATA)</Label>
+                    <div className="flex items-center gap-1">
+                      <Label htmlFor="origin">Origin</Label>
+                      <TooltipProvider>
+                        <UITooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="w-80 p-4 bg-white text-gray-800 border border-gray-200">
+                            <h5 className="font-medium text-sm mb-1">Airport Information</h5>
+                            <p className="text-xs mb-2">Showing enhanced airport data including ICAO codes and regional information.</p>
+                            {originIATA && (
+                              <div className="text-xs space-y-1 bg-blue-50 p-2 rounded">
+                                <div className="flex items-center gap-1">
+                                  <Plane className="h-3.5 w-3.5" />
+                                  <span className="font-medium">{AIRPORTS.find(a => a.iata === originIATA)?.name}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Globe className="h-3.5 w-3.5" />
+                                  <span>ICAO: {AIRPORTS.find(a => a.iata === originIATA)?.icao}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Building2 className="h-3.5 w-3.5" />
+                                  <span>Country: {AIRPORTS.find(a => a.iata === originIATA)?.country}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <ArrowUpFromLine className="h-3.5 w-3.5" />
+                                  <span>Elevation: {AIRPORTS.find(a => a.iata === originIATA)?.elevation_ft} ft</span>
+                                </div>
+                              </div>
+                            )}
+                          </TooltipContent>
+                        </UITooltip>
+                      </TooltipProvider>
+                    </div>
                     <Select value={originIATA} onValueChange={setOriginIATA}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select origin" />
@@ -288,14 +370,53 @@ export default function FlightEstimator() {
                       <SelectContent>
                         {AIRPORTS.map(airport => (
                           <SelectItem key={airport.iata} value={airport.iata}>
-                            {airport.iata} - {airport.city}
+                            <div className="flex items-center gap-1">
+                              <span className="font-medium">{airport.iata}</span>
+                              <span className="text-gray-500 text-xs">({airport.icao})</span>
+                              <span className="ml-1">-</span>
+                              <span>{airport.city}</span>
+                              <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="destination">Destination (IATA)</Label>
+                    <div className="flex items-center gap-1">
+                      <Label htmlFor="destination">Destination</Label>
+                      <TooltipProvider>
+                        <UITooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="w-80 p-4 bg-white text-gray-800 border border-gray-200">
+                            <h5 className="font-medium text-sm mb-1">Airport Information</h5>
+                            <p className="text-xs mb-2">Showing enhanced airport data including ICAO codes and regional information.</p>
+                            {destIATA && (
+                              <div className="text-xs space-y-1 bg-blue-50 p-2 rounded">
+                                <div className="flex items-center gap-1">
+                                  <Plane className="h-3.5 w-3.5" />
+                                  <span className="font-medium">{AIRPORTS.find(a => a.iata === destIATA)?.name}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Globe className="h-3.5 w-3.5" />
+                                  <span>ICAO: {AIRPORTS.find(a => a.iata === destIATA)?.icao}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Building2 className="h-3.5 w-3.5" />
+                                  <span>Country: {AIRPORTS.find(a => a.iata === destIATA)?.country}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <ArrowUpFromLine className="h-3.5 w-3.5" />
+                                  <span>Elevation: {AIRPORTS.find(a => a.iata === destIATA)?.elevation_ft} ft</span>
+                                </div>
+                              </div>
+                            )}
+                          </TooltipContent>
+                        </UITooltip>
+                      </TooltipProvider>
+                    </div>
                     <Select value={destIATA} onValueChange={setDestIATA}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select destination" />
@@ -303,7 +424,13 @@ export default function FlightEstimator() {
                       <SelectContent>
                         {AIRPORTS.map(airport => (
                           <SelectItem key={airport.iata} value={airport.iata}>
-                            {airport.iata} - {airport.city}
+                            <div className="flex items-center gap-1">
+                              <span className="font-medium">{airport.iata}</span>
+                              <span className="text-gray-500 text-xs">({airport.icao})</span>
+                              <span className="ml-1">-</span>
+                              <span>{airport.city}</span>
+                              <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -481,11 +608,11 @@ export default function FlightEstimator() {
               <CardHeader>
                 <CardTitle>Flight Analysis Results</CardTitle>
                 <CardDescription>
-                  Analysis for {originIATA} to {destIATA} route using {aircraft}
+                  Analysis for {originIATA} ({AIRPORTS.find(a => a.iata === originIATA)?.icao}) to {destIATA} ({AIRPORTS.find(a => a.iata === destIATA)?.icao}) route using {aircraft}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex justify-between items-start">
                       <div>
@@ -524,6 +651,66 @@ export default function FlightEstimator() {
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
                       Rev: {formatCurrency(profitAnalysis.revenue)}, Cost: {formatCurrency(profitAnalysis.cost)}
+                    </p>
+                  </div>
+
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <TooltipProvider>
+                      <UITooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex justify-between items-start cursor-help">
+                            <div>
+                              <h3 className="text-sm font-medium text-gray-500">Environmental Impact</h3>
+                              <div className="w-full bg-gray-200 rounded-full h-6 mt-2">
+                                <div 
+                                  className={`h-6 rounded-full flex items-center justify-center text-xs font-medium text-white ${
+                                    profitAnalysis.emissions.environmentalScore > 70 ? 'bg-green-500' : 
+                                    profitAnalysis.emissions.environmentalScore > 50 ? 'bg-yellow-500' : 
+                                    profitAnalysis.emissions.environmentalScore > 30 ? 'bg-orange-500' : 'bg-red-500'
+                                  }`}
+                                  style={{ width: `${profitAnalysis.emissions.environmentalScore}%` }}
+                                >
+                                  {profitAnalysis.emissions.environmentalScore}
+                                </div>
+                              </div>
+                            </div>
+                            <Activity className="h-5 w-5 text-blue-500" />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="w-80 p-4 bg-white text-gray-800 border border-gray-200">
+                          <h5 className="font-medium text-sm mb-1">Environmental Impact Details</h5>
+                          <p className="text-xs mb-2">Carbon emissions and efficiency metrics for this flight.</p>
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span>Total CO2 Emissions:</span>
+                              <span className="font-semibold">{Math.round(profitAnalysis.emissions.totalCO2).toLocaleString()} kg</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>CO2 per Passenger:</span>
+                              <span className="font-semibold">{Math.round(profitAnalysis.emissions.co2PerPassenger).toLocaleString()} kg</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>CO2 per Passenger-km:</span>
+                              <span className="font-semibold">{(profitAnalysis.emissions.co2PerPassengerKm).toFixed(2)} kg</span>
+                            </div>
+                            <div className="mt-3 pt-2 border-t border-gray-200">
+                              <span className="block font-medium mb-1">Environmental Score: {profitAnalysis.emissions.environmentalScore}/100</span>
+                              <span className={`text-xs ${
+                                profitAnalysis.emissions.environmentalScore > 70 ? 'text-green-600' : 
+                                profitAnalysis.emissions.environmentalScore > 50 ? 'text-yellow-600' : 
+                                profitAnalysis.emissions.environmentalScore > 30 ? 'text-orange-600' : 'text-red-600'
+                              }`}>
+                                {profitAnalysis.emissions.environmentalScore > 70 ? 'Excellent' : 
+                                profitAnalysis.emissions.environmentalScore > 50 ? 'Good' : 
+                                profitAnalysis.emissions.environmentalScore > 30 ? 'Fair' : 'Poor'} efficiency
+                              </span>
+                            </div>
+                          </div>
+                        </TooltipContent>
+                      </UITooltip>
+                    </TooltipProvider>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {(profitAnalysis.emissions.co2PerPassenger / 1000).toFixed(1)} tonnes CO2 per passenger
                     </p>
                   </div>
                   
