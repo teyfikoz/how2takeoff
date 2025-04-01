@@ -43,35 +43,105 @@ export const AIRCRAFT_EFFICIENCY: Record<string, {
   cruiseSpeed: number; // knots
   maxAltitude: number; // feet
 }> = {
-  'Boeing 737-800': {
-    fuelBurnPer100kmSeat: 2.4,
+  'Boeing 777-200ER': {
+    fuelBurnPer100kmSeat: 2.8,
     co2EmissionFactor: 3.16,
-    noxEmissionRate: 15.2,
-    fuelEfficiency: 0.031,
-    operatingCostPerHour: 3200,
-    turnaroundTime: 35,
-    cruiseSpeed: 470,
-    maxAltitude: 41000
+    noxEmissionRate: 16.0,
+    fuelEfficiency: 0.025,
+    operatingCostPerHour: 7500,
+    turnaroundTime: 60,
+    cruiseSpeed: 490,
+    maxAltitude: 43100
+  },
+  'Boeing 787-8': {
+    fuelBurnPer100kmSeat: 2.3,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 14.5,
+    fuelEfficiency: 0.024,
+    operatingCostPerHour: 7000,
+    turnaroundTime: 50,
+    cruiseSpeed: 488,
+    maxAltitude: 43100
   },
   'Airbus A320': {
     fuelBurnPer100kmSeat: 2.4,
     co2EmissionFactor: 3.16,
     noxEmissionRate: 14.8,
-    fuelEfficiency: 0.029,
+    fuelEfficiency: 0.023,
     operatingCostPerHour: 3000,
     turnaroundTime: 40,
     cruiseSpeed: 450,
     maxAltitude: 39000
   },
-  'Boeing 787-9': {
+  'Airbus A350-900': {
+    fuelBurnPer100kmSeat: 2.2,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 14.0,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 7200,
+    turnaroundTime: 55,
+    cruiseSpeed: 487,
+    maxAltitude: 43100
+  },
+  'Airbus A380': {
+    fuelBurnPer100kmSeat: 3.0,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 16.5,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 9200,
+    turnaroundTime: 90,
+    cruiseSpeed: 490,
+    maxAltitude: 43000
+  },
+  'Boeing 737-800': {
+    fuelBurnPer100kmSeat: 2.4,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 15.2,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 3200,
+    turnaroundTime: 35,
+    cruiseSpeed: 470,
+    maxAltitude: 41000
+  },
+  'Airbus A319': {
+    fuelBurnPer100kmSeat: 2.5,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 14.9,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 2800,
+    turnaroundTime: 35,
+    cruiseSpeed: 450,
+    maxAltitude: 39000
+  },
+  'Airbus A321': {
     fuelBurnPer100kmSeat: 2.3,
     co2EmissionFactor: 3.16,
-    noxEmissionRate: 14.5,
-    fuelEfficiency: 0.025,
-    operatingCostPerHour: 7000,
-    turnaroundTime: 50,
-    cruiseSpeed: 488,
+    noxEmissionRate: 14.7,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 3400,
+    turnaroundTime: 45,
+    cruiseSpeed: 450,
+    maxAltitude: 39000
+  },
+  'Boeing 747-8': {
+    fuelBurnPer100kmSeat: 3.1,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 16.8,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 10000,
+    turnaroundTime: 120,
+    cruiseSpeed: 492,
     maxAltitude: 43100
+  },
+  'Embraer E170': {
+    fuelBurnPer100kmSeat: 2.7,
+    co2EmissionFactor: 3.16,
+    noxEmissionRate: 15.0,
+    fuelEfficiency: 0.023,
+    operatingCostPerHour: 2200,
+    turnaroundTime: 30,
+    cruiseSpeed: 430,
+    maxAltitude: 41000
   }
 };
 

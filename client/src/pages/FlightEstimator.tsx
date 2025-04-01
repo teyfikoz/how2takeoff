@@ -22,16 +22,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Define a simple aircraft database
+// Define a comprehensive aircraft database - aligned with the database entries
 const AIRCRAFT_DATA = {
-  "A320": { range_km: 6100, fuel_burn_km: 2.5, min_runway: 2000, seats: 180, cruise_speed: 840 },
-  "B737": { range_km: 5600, fuel_burn_km: 2.3, min_runway: 1800, seats: 160, cruise_speed: 830 },
-  "A350": { range_km: 15000, fuel_burn_km: 6.2, min_runway: 2500, seats: 350, cruise_speed: 910 },
-  "B777": { range_km: 13649, fuel_burn_km: 7.8, min_runway: 2440, seats: 368, cruise_speed: 905 },
-  "A220": { range_km: 5920, fuel_burn_km: 2.1, min_runway: 1460, seats: 130, cruise_speed: 871 },
-  "B787": { range_km: 14010, fuel_burn_km: 5.6, min_runway: 2600, seats: 290, cruise_speed: 903 },
-  "E190": { range_km: 4537, fuel_burn_km: 1.9, min_runway: 1620, seats: 100, cruise_speed: 829 },
-  "CRJ900": { range_km: 2876, fuel_burn_km: 1.7, min_runway: 1939, seats: 90, cruise_speed: 829 },
+  "Boeing 777-200ER": { range_km: 14800, fuel_burn_km: 7.8, min_runway: 2440, seats: 396, cruise_speed: 905 },
+  "Boeing 787-8": { range_km: 13530, fuel_burn_km: 5.6, min_runway: 2600, seats: 290, cruise_speed: 910 },
+  "Airbus A320": { range_km: 6300, fuel_burn_km: 2.5, min_runway: 2000, seats: 240, cruise_speed: 840 },
+  "Airbus A350-900": { range_km: 16100, fuel_burn_km: 6.4, min_runway: 2500, seats: 350, cruise_speed: 910 },
+  "Airbus A380": { range_km: 15200, fuel_burn_km: 14.5, min_runway: 2900, seats: 853, cruise_speed: 903 },
+  "Boeing 737-800": { range_km: 5665, fuel_burn_km: 2.3, min_runway: 1800, seats: 189, cruise_speed: 842 },
+  "Airbus A319": { range_km: 6950, fuel_burn_km: 2.3, min_runway: 1950, seats: 160, cruise_speed: 840 },
+  "Airbus A321": { range_km: 7400, fuel_burn_km: 2.6, min_runway: 2100, seats: 240, cruise_speed: 840 },
+  "Boeing 747-8": { range_km: 14320, fuel_burn_km: 12.6, min_runway: 3050, seats: 524, cruise_speed: 910 },
+  "Embraer E170": { range_km: 4600, fuel_burn_km: 1.8, min_runway: 1650, seats: 78, cruise_speed: 780 },
 };
 
 // Enhanced airport database with ICAO codes and additional info
@@ -181,7 +183,7 @@ export default function FlightEstimator() {
   // State for basic inputs
   const [originIATA, setOriginIATA] = useState('JFK');
   const [destIATA, setDestIATA] = useState('LHR');
-  const [aircraft, setAircraft] = useState('A320');
+  const [aircraft, setAircraft] = useState('Airbus A320');
   const [runwayLength, setRunwayLength] = useState(3000);
   
   // State for economic inputs
