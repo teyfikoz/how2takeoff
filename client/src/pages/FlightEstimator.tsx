@@ -21,6 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+// Mock veri kullanımı için import
+import { mockAircraftData } from '@/data/mockAircraftData';
 
 // Define a comprehensive aircraft database - aligned with the database entries
 const AIRCRAFT_DATA = {

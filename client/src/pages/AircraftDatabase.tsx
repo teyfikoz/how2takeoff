@@ -13,14 +13,18 @@ import { insertAircraftSchema } from '@shared/schema';
 import { useLocation } from "wouter";
 import { useAuth } from '@/hooks/useAuth';
 import { Aircraft } from '@shared/schema';
+// Mock veriyi içe aktarıyoruz
+import { mockAircraftData } from '@/data/mockAircraftData';
 
 export default function AircraftDatabase() {
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
   const { isAdmin } = useAuth();
 
-  const { data: aircraftData } = useQuery({
+  // Veritabanı bağlantısı sorunu nedeniyle mock veriyi kullanıyoruz
+  const { data: aircraftData = mockAircraftData } = useQuery({
     queryKey: ['/api/aircraft'],
+    initialData: mockAircraftData, // Yedek veri olarak mock veriyi kullan
   });
 
   const form = useForm({

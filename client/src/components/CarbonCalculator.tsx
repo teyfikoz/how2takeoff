@@ -14,6 +14,8 @@ import {
   type CarbonEmissionParams,
   type CarbonOffsetParams
 } from '@/lib/carbon-utils';
+// Mock veri için gerekli import
+import { mockAircraftData } from '@/data/mockAircraftData';
 
 const CarbonCalculator: React.FC = () => {
   const [params, setParams] = useState<CarbonOffsetParams>({

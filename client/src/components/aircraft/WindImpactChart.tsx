@@ -5,9 +5,10 @@ import {
 } from 'recharts';
 import { Aircraft } from '@shared/schema';
 import { ArrowRight, RotateCcw, RotateCw } from 'lucide-react';
+import { mockAircraftData } from '@/data/mockAircraftData';
 
 interface Props {
-  aircraftData: Aircraft[];
+  aircraftData: any[]; // Daha geniş tip desteği için any kullanıyoruz
 }
 
 const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
