@@ -12,6 +12,8 @@ import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import WindImpactChart from '@/components/aircraft/WindImpactChart';
 import DonationBanner from '@/components/DonationBanner';
+// Bağlantı sorunu nedeniyle verilerimizi doğrudan içe aktarıyoruz
+import { mockAircraftData } from '@/data/mockAircraftData';
 
 interface FilterCriteria {
   passengers: number;
@@ -25,8 +27,10 @@ interface FilterCriteria {
 export default function Dashboard() {
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria | null>(null);
 
-  const { data: aircraftData = [] } = useQuery<Aircraft[]>({
+  // Veritabanı bağlantısı sorunu nedeniyle mock veriyi kullanıyoruz
+  const { data: aircraftData = mockAircraftData } = useQuery<typeof mockAircraftData>({
     queryKey: ['/api/aircraft'],
+    initialData: mockAircraftData, // Yedek veri olarak mock veriyi kullan
   });
 
   const calculateEffectiveRange = (aircraft: Aircraft, windSpeed: number, windDirection: number) => {
