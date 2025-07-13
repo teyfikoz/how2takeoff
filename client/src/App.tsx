@@ -14,9 +14,8 @@ import AirlineCRM from "@/pages/AirlineCRM";
 import AboutMe from "@/pages/AboutMe";
 import Articles from "@/pages/Articles";
 import FlightEstimator from "@/pages/FlightEstimator";
-import RealTimeFlightsPage from "@/pages/RealTimeFlights";
 import DonationBanner from "@/components/DonationBanner";
-import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText, Calculator, Radio } from "lucide-react";
+import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText, Calculator } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 function Navbar() {
@@ -50,7 +49,6 @@ function Navbar() {
   const menuItems = [
     { path: "/", icon: <Home className="h-5 w-5 mr-2" />, label: "Dashboard" },
     { path: "/flight-estimator", icon: <Calculator className="h-5 w-5 mr-2" />, label: "Flight Estimator" },
-    { path: "/real-time-flights", icon: <Radio className="h-5 w-5 mr-2" />, label: "Real-Time Flights" },
     { path: "/basic-aviation-passenger", icon: <BookOpen className="h-5 w-5 mr-2" />, label: "Basic Aviation Passenger" },
     { path: "/revenue-management", icon: <TrendingUp className="h-5 w-5 mr-2" />, label: "Revenue Management & Route Opt." },
     { path: "/ticketing-distribution", icon: <Globe className="h-5 w-5 mr-2" />, label: "Ticketing & Distribution" },
@@ -143,7 +141,6 @@ function Router() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/flight-estimator" component={FlightEstimator} />
-        <Route path="/real-time-flights" component={RealTimeFlightsPage} />
         <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
         <Route path="/revenue-management" component={RevenueManagement} />
         <Route path="/ticketing-distribution" component={TicketingDistribution} />
