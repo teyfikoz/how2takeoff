@@ -1,0 +1,97 @@
+\*\*Title: How to Integrate AviationStack API and Cache Data for Your Web App (Replit Friendly)
+
+---
+
+**Objective:**
+To use AviationStack's API to pull live flight data once per month, cache it locally (e.g., in a JSON file), and use it in a lightweight educational/non-commercial aviation web app like how2takeoff.com.
+
+---
+
+**Step 1: Prepare Your API Key**
+
+* Get your free API key from [https://aviationstack.com](https://aviationstack.com)
+* Save it as a secret in Replit with the name: `AVIATIONSTACK_API_KEY`
+
+---
+
+**Step 2: Monthly Fetch Script (monthly\_fetch.py)**
+This script will fetch data and save it to a local JSON file.
+
+```python
+# monthly_fetch.py
+import os
+import requests
+import json
+from datetime import datetime
+
+API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
+BASE_URL = "http://api.aviationstack.com/v1/flights"
+
+def fetch_data():
+    params = {
+        'access_key': API_KEY,
+        'limit': 100  # adjust as needed for your plan
+    }
+
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        data = response.json().get("data", [])
+        with open("flight_data_cache.json", "w") as f:
+            json.dump(data, f, indent=2)
+        print(f"✅ {datetime.now()} - Data saved successfully.")
+    else:
+        print(f"❌ API Error: {response.status_code}")
+
+if __name__ == "__main__":
+    fetch_data()
+```
+
+---
+
+**Step 3: Using Cached Data in Your App (app.py)**
+You can load the cached data directly in your app.
+
+```python
+# app.py
+import json
+
+def load_cached_data():
+    with open("flight_data_cache.json") as f:
+        return json.load(f)
+
+flights = load_cached_data()
+
+for f in flights[:5]:
+    print(f"{f['airline']['name']} - {f['flight']['iata']} - {f['flight_status']}")
+```
+
+---
+
+**Step 4: Automating Monthly Fetch**
+Use Replit's built-in Scheduler or a cron alternative:
+
+* Set up the job to run `monthly_fetch.py` once per month:
+
+```bash
+0 0 1 * * python3 monthly_fetch.py
+```
+
+Or run it manually once a month if usage is low.
+
+---
+
+**Benefits:**
+
+* Zero recurring cost if under free API limits
+* Local access = faster response times
+* Offline use possible
+
+---
+
+**Next Steps (Optional):**
+
+* Convert JSON to SQLite for advanced filtering
+* Visualize flight data with matplotlib or Plotly
+* Add dropdowns for airport selection using the cached data
+
+Let me know if you’d like a SQLite version or interactive visualization support!

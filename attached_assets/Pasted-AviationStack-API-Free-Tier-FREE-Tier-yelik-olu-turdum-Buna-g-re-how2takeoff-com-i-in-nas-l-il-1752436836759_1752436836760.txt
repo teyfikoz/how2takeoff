@@ -1,0 +1,1780 @@
+AviationStack API (Free Tier) , FREE Tier üyelik oluşturdum. Buna göre how2takeoff.com için nasıl ilerlemeliyim? 
+
+Step 1: Your API Access Key
+
+This is your API Access Key, your personal key required to authenticate with the API.
+Keep it safe! You can reset it at any time in your Account Dashboard.
+
+ecc06cb4a106e3d563f1ddaeec905ce4
+Step 2: API Endpoints
+
+There are several API endpoints to choose from:
+
+Flights: Look up historical & real-time flights
+Routes: Look up airline routes
+Airports: Look up global airports
+Airlines: Look up global airlines
+Airplanes: Look up airplanes/aircrafts
+Aircraft Types: Look up aircraft types
+Aviation Taxes: Look up aviation taxes
+Cities: Look up global cities
+Countries: Look up countries
+Flight Schedules: Look up flights scheduled
+Flight Future Schedules: Look up future flights scheduled
+Base URL: API requests start out with the following base URL:
+
+https://api.aviationstack.com/v1/
+
+
+Make API Request: Let's try making a few simple API requests for the flights, historical flights, routes and other aviation data API endpoints. Take a look at the box below and click the API requests to open them in your browser.
+
+Make API Requestrequired and optional
+REAL-TIMEHISTORICALROUTESAIRPORTSAIRLINES
+
+// Real-Time Flights
+
+ https://api.aviationstack.com/v1/flights
+? access_key = YOUR_ACCESS_KEY
+
+    // optional parameters: 
+
+    & limit = 100
+    & offset = 0
+    & callback = MY_CALLBACK
+    // more parameters available 
+    
+    Run Real Time Api Request
+    
+
+To learn more about API requests and parameters, please refer to the API Documentation.
+
+Step 3: Integrate into your application
+
+This was barely scratching the surface of the aviationstack API. For specific integration guides and code examples, please have a look at the API's Documentation.
+
+Should you require assistance of any kind, please contact our support team.
+
+
+API Documentation
+The Aviationstack API was built to provide a simple way of accessing global aviation data for real-time, historical flights, and future flights as well as allow customers to tap into an extensive data set of airline routes and other up-to-date aviation-related information. Requests to the REST API are made using a straightforward HTTP GET URL structure and responses are provided in lightweight JSON format.
+
+The following API documentation can be applied for any major programming language and will present general integration guides and explanations around API endpoints, request parameters and response objects. If any questions remain unanswered for you, simply reach out to the aviationstack support team for assistance.
+
+Run in postman
+Fork collection into your workspace
+
+Getting Started
+API Access Key & Authentication
+After creating an aviationstack account, you will be able to retrieve your unique API access key using your account dashboard. Each aviationstack account can only be assigned one API access key.
+
+To connect to the API, simply attach the access_key parameter to any valid API endpoint URL and set it to your access key. Find an example below, you can click the button on the right side of the code to execute the shown API request.
+
+Run API Requesthttps://api.aviationstack.com/v1/flights
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+Keep your key safe: To prevent unauthorized access to your aviationstack account, please make sure to keep your API access key safe at all times. You can always generate a new key using your account dashboard.
+
+256-bit HTTPS EncryptionAvailable on: All Plans
+Customers registered for the Aviationstack with any plans may connect to the API using industry-standard 256-bit HTTPS (SSL) encryption. You don’t need a paid plan for accessing HTTPS protocol anymore.
+
+Example API Request:
+
+https://api.aviationstack.com
+
+API Errors
+If your request to the aviationstack API does not succeed, the API will return a JSON error response that contains error code and message objects indicating the type of error that occurred. The API also supports HTTP status codes, returning a code of 200 for successful requests, and an error status code (e.g. 404) for failed requests.
+
+If a validation error occurs, hence, an API parameter is used in an invalid way, there will be an additional context object containing multiple sub-objects with the associated API parameter as the key and details about the given validation error(s) further sub-objects. Each instance of a validation error contains key and message objects.
+
+Example Error:
+
+{
+   "error": {
+      "code": "validation_error",
+      "message": "Request failed with validation error",
+      "context": {
+         "flight_date": [
+            {
+               "key": "invalid_flight_date",
+               "message": "The flight date must be a valid date in the format YYYY-MM-DD."
+            }
+         ]
+      }
+   }
+}
+
+Common API Errors:
+
+Code	Type	Description
+401	invalid_access_key	An invalid API access key was supplied.
+401	missing_access_key	No API access key was supplied.
+401	inactive_user	The given user account is inactive.
+403	function_access_restricted	The given API endpoint is not supported on the current subscription plan.
+404	invalid_api_function	The given API endpoint does not exist.
+404	404_not_found	Resource not found.
+429	usage_limit_reached	The given user account has reached its monthly allowed request volume.
+429	rate_limit_reached	The given user account has reached the rate limit.
+500	internal_error	An internal error occurred.
+
+API Endpoints
+Flights
+Real-Time Flights Available on: All plans
+The API is capable of tracking flights and retrieving flight status information in real-time. In order to look up real-time information about one or multiple flights, you can use the API's flights endpoint together with optional parameters to filter your result set.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/flights
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+flight_status	[Optional] Filter your results by flight status. Available values: scheduled, active, landed, cancelled, incident, diverted
+flight_date	[Optional] Filter your results by providing a flight date in the format YYYY-MM-DD. Example: 2019-02-28
+dep_iata	[Optional] Filter your results by departure city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+arr_iata	[Optional] Filter your results by arrival city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+dep_icao	[Optional] Filter your results by departure airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+arr_icao	[Optional] Filter your results by arrival airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+airline_name	[Optional] Filter your results by airline name. You can retrieve airline names using the Airlines API endpoint.
+airline_iata	[Optional] Filter your results by airline IATA code. You can retrieve airline IATA codes using the Airlines API endpoint.
+airline_icao	[Optional] Filter your results by airline ICAO code. You can retrieve airline ICAO codes using the Airlines API endpoint.
+flight_number	[Optional] Filter your results by providing a flight number. Example: 2557
+flight_iata	[Optional] Filter your results by providing a flight IATA code. Example: MU2557
+flight_icao	[Optional] Filter your results by providing a flight ICAO code. Example: CES2557
+min_delay_dep	[Optional] Filter your results by providing a minimum amount of minutes in departure delay. Example: 7 for seven minutes of delay in departure.
+min_delay_arr	[Optional] Filter your results by providing a minimum amount of minutes in arrival delay. Example: 7 for seven minutes of delay in arrival.
+max_delay_dep	[Optional] Filter your results by providing a maximum amount of minutes in departure delay. Example: 60 for one hour of delay in departure.
+max_delay_arr	[Optional] Filter your results by providing a maximum amount of minutes in arrival delay. Example: 60 for one hour of delay in arrival.
+arr_scheduled_time_arr	[Optional] Filter your results by providing a arrival date in the format YYYY-MM-DD. Example: 2019-02-28
+arr_scheduled_time_dep	[Optional] Filter your results by providing a departure date in the format YYYY-MM-DD. Example: 2019-02-28
+
+Example API Response:
+
+{
+    "pagination": {
+        "limit": 100,
+        "offset": 0,
+        "count": 100,
+        "total": 1669022
+    },
+    "data": [
+        {
+            "flight_date": "2019-12-12",
+            "flight_status": "active",
+            "departure": {
+                "airport": "San Francisco International",
+                "timezone": "America/Los_Angeles",
+                "iata": "SFO",
+                "icao": "KSFO",
+                "terminal": "2",
+                "gate": "D11",
+                "delay": 13,
+                "scheduled": "2019-12-12T04:20:00+00:00",
+                "estimated": "2019-12-12T04:20:00+00:00",
+                "actual": "2019-12-12T04:20:13+00:00",
+                "estimated_runway": "2019-12-12T04:20:13+00:00",
+                "actual_runway": "2019-12-12T04:20:13+00:00"
+            },
+            "arrival": {
+                "airport": "Dallas/Fort Worth International",
+                "timezone": "America/Chicago",
+                "iata": "DFW",
+                "icao": "KDFW",
+                "terminal": "A",
+                "gate": "A22",
+                "baggage": "A17",
+                "delay": 0,
+                "scheduled": "2019-12-12T04:20:00+00:00",
+                "estimated": "2019-12-12T04:20:00+00:00",
+                "actual": null,
+                "estimated_runway": null,
+                "actual_runway": null
+            },
+            "airline": {
+                "name": "American Airlines",
+                "iata": "AA",
+                "icao": "AAL"
+            },
+            "flight": {
+                "number": "1004",
+                "iata": "AA1004",
+                "icao": "AAL1004",
+                "codeshared": null
+            },
+            "aircraft": {
+               "registration": "N160AN",
+               "iata": "A321",
+               "icao": "A321",
+               "icao24": "A0F1BB"
+            },
+            "live": {
+                "updated": "2019-12-12T10:00:00+00:00",
+                "latitude": 36.28560000,
+                "longitude": -106.80700000,
+                "altitude": 8846.820,
+                "direction": 114.340,
+                "speed_horizontal": 894.348,
+                "speed_vertical": 1.188,
+                "is_ground": false
+            }
+        },
+        [...]
+    ]
+}
+
+Please note: The API response above has been shortened to show only one flight result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of flights, included objects are explained below.
+flight_date	Returns the date of the flight. Format: YYYY-MM-DD
+flight_status	Returns the flight status. Possible values: scheduled, active, landed, cancelled, incident, diverted
+departure > airport	Returns the name of the departure airport.
+departure > timezone	Returns the departure timezone. Example: America/Los_Angeles
+departure > iata	Returns the IATA code of the departure location/airport.
+departure > icao	Returns the ICAO code of the departure location/airport.
+departure > terminal	Returns the departure terminal.
+departure > gate	Returns the departure gate.
+departure > delay	Returns the delay in departure in minutes.
+departure > scheduled	Returns the scheduled departure date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+departure > estimated	Returns the estimated departure date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+departure > actual	Returns the actual departure date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+departure > estimated_runway	Returns the estimated runway date and time in RFC3339 (ISO8601) format in the departure location/airport. Example: 2019-12-12T04:20:00+00:00
+departure > actual_runway	Returns the actual runway date and time in the departure location/airport in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+arrival > airport	Returns the name of the arrival airport.
+arrival > timezone	Returns the arrival timezone. Example: America/Los_Angeles
+arrival > iata	Returns the IATA code of the arrival location/airport.
+arrival > icao	Returns the ICAO code of the arrival location/airport.
+arrival > terminal	Returns the arrival terminal.
+arrival > gate	Returns the arrival gate.
+arrival > baggage	Returns the baggage claim gate at the arrival airport.
+arrival > delay	Returns the delay in arrival in minutes.
+arrival > scheduled	Returns the scheduled arrival date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+arrival > estimated	Returns the actual arrival date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+arrival > actual	Returns the actual arrival date and time in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+arrival > estimated_runway	Returns the estimated runway date and time in the arrival location/airport in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+arrival > actual_runway	Returns the actual runway date and time in the arrival location/airport in RFC3339 (ISO8601) format. Example: 2019-12-12T04:20:00+00:00
+airline > name	Returns the name of the airline. Example: American Airlines
+airline > iata	Returns the IATA code of the airline. Example: AA
+airline > icao	Returns the ICAO code of the airline. Example: AAL
+flight > number	Returns the flight number. Example: 1004
+flight > iata	Returns the IATA number of the flight. Example: AA1004
+flight > icao	Returns the ICAO number of the flight. Example: AAL1004
+flight > codeshared	Returns one or more sub-objects detailing the operating airline and flight in a codeshare agreement (e.g., a Qantas flight operated by LATAM), or null if no codeshare exists.
+live > updated	Returns the exact date and time the live data was collected in RFC3339 (ISO8601) format.
+live > latitude	Returns the latitude coordinate associated with the aircraft location.
+live > longitude	Returns the longitude coordinate associated with the aircraft location.
+live > altitude	Returns the altitude (in meters) of the aircraft at the given time.
+live > direction	Returns the direction (in degrees) of the aircraft at the given time.
+live > speed_horizontal	Returns the horizontal speed (in kilometers per hour) of the aircraft at the given time.
+live > speed_vertical	Returns the vertical speed (in kilometers per hour) of the aircraft at the given time.
+live > is_ground	Returns true or false depending on whether or not the aircraft is on the ground at the given time.
+live > aircraft > registration	Returns the registration number of the aircraft. Example: N160AN
+live > aircraft > iata	Returns the IATA code of the aircraft. Example: A321
+live > aircraft > icao	Returns the ICAO code of the aircraft. Example: A321
+live > aircraft > icao24	Returns the ICAO24 code of the aircraft. Example: A0F1BB
+Using Flight endpoint, you can track Flight in real time and get flight status information.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/flights?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Historical Flights Available on: Basic Plan and higher
+Apart from providing data about real-time flight, the API's flights endpoint is also capable of looking up data about historical flights. In order to request data about one or more past flights, simply attach the flight_date parameter to your API request URL and set it to a date of your choice.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/flights
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+    & flight_date = 2025-06-13
+Note: Aviationstack provides historical data for the last 3 months only.
+
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+flight_date	[Required] Specify your historical flight date in the format YYYY-MM-DD. Example: 2019-02-28
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+flight_status	[Optional] Filter your results by flight status. Available values: scheduled, active, landed, cancelled, incident, diverted
+dep_iata	[Optional] Filter your results by departure city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+arr_iata	[Optional] Filter your results by arrival city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+dep_icao	[Optional] Filter your results by departure airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+arr_icao	[Optional] Filter your results by arrival airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+airline_name	[Optional] Filter your results by airline name. You can retrieve airline names using the Airlines API endpoint.
+airline_iata	[Optional] Filter your results by airline IATA code. You can retrieve airline IATA codes using the Airlines API endpoint.
+airline_icao	[Optional] Filter your results by airline ICAO code. You can retrieve airline ICAO codes using the Airlines API endpoint.
+flight_number	[Optional] Filter your results by providing a flight number. Example: 2557
+flight_iata	[Optional] Filter your results by providing a flight IATA code. Example: MU2557
+flight_icao	[Optional] Filter your results by providing a flight ICAO code. Example: CES2557
+min_delay_dep	[Optional] Filter your results by providing a minimum amount of minutes in departure delay. Example: 7 for seven minutes of delay in departure.
+min_delay_arr	[Optional] Filter your results by providing a minimum amount of minutes in arrival delay. Example: 7 for seven minutes of delay in arrival.
+max_delay_dep	[Optional] Filter your results by providing a maximum amount of minutes in departure delay. Example: 60 for one hour of delay in departure.
+max_delay_arr	[Optional] Filter your results by providing a maximum amount of minutes in arrival delay. Example: 60 for one hour of delay in arrival.
+arr_scheduled_time_arr	[Optional] Filter your results by providing a arrival date in the format YYYY-MM-DD. Example: 2019-02-28
+arr_scheduled_time_dep	[Optional] Filter your results by providing a departure date in the format YYYY-MM-DD. Example: 2019-02-28
+
+Using Flight endpoint, you can also get the historical flight data. Use flight_date parameter this YYYY-MM-DD format.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/flights?access_key={PASTE_YOUR_API_KEY_HERE}&flight_date=2019-12-11";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Example API Response:
+
+Important: The API response returned for historical flights is identical to the API response returned for real-time flight data. To see the API response, please jump to the Real-Time Flights section.
+
+Airline RoutesAvailable on: Basic Plan and higher
+The aviationstack API is capable of providing data about airline routes, updated every 24 hours. In order to get airline route data, use the API's routes endpoint along with a series of optional parameters to filter results.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/routes
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+flight_number	[Optional] Filter your results by providing a flight number. Example: 2557
+dep_iata	[Optional] Filter your results by departure city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+arr_iata	[Optional] Filter your results by arrival city or airport using an IATA code. You can retrieve IATA codes using the Airports or Cities API endpoints.
+dep_icao	[Optional] Filter your results by departure airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+arr_icao	[Optional] Filter your results by arrival airport using an ICAO code. You can retrieve ICAO codes using the Airports API endpoint.
+airline_iata	[Optional] Filter your results by airline IATA code. You can retrieve airline IATA codes using the Airlines API endpoint.
+airline_icao	[Optional] Filter your results by airline ICAO code. You can retrieve airline ICAO codes using the Airlines API endpoint.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 208033
+   },
+   "data": [
+      {
+         "departure": {
+            "airport": "Brussels Airport",
+            "timezone": "Europe/Brussels",
+            "iata": "BRU",
+            "icao": "EBBR",
+            "terminal": null,
+            "time": "06:10:00"
+         },
+         "arrival": {
+            "airport": "Girona-Costa Brava",
+            "timezone": "Europe/Madrid",
+            "iata": "GRO",
+            "icao": "LEGE",
+            "terminal": "1",
+            "time": "07:55:00"
+         },
+         "airline": {
+            "name": "Brussels Airlines",
+            "callsign": "B-LINE",
+            "iata": "SN",
+            "icao": "BEL"
+         },
+         "flight": {
+            "number": "3683"
+         }
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one flight result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of flights, included objects are explained below.
+departure > airport	Returns the name of the departure airport.
+departure > timezone	Returns the departure timezone. Example: America/Los_Angeles
+departure > iata	Returns the IATA code of the departure location/airport.
+departure > icao	Returns the ICAO code of the departure location/airport.
+departure > terminal	Returns the departure terminal.
+departure > time	Returns the departure time.
+arrival > airport	Returns the name of the arrival airport.
+arrival > timezone	Returns the arrival timezone. Example: America/Los_Angeles
+arrival > iata	Returns the IATA code of the arrival location/airport.
+arrival > icao	Returns the ICAO code of the arrival location/airport.
+arrival > terminal	Returns the arrival terminal.
+arrival > time	Returns the departure time.
+airline > name	Returns the name of the airline. Example: American Airlines
+airline > callsign	Returns the ICAO callsign of the airline.
+airline > iata	Returns the IATA code of the airline. Example: AA
+airline > icao	Returns the ICAO code of the airline. Example: AAL
+flight > number	Returns the flight number. Example: 1004
+Using Routes endpoint, you can get the data about airlines routes and it is updated every 24 hours.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/routes?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+AirportsAvailable on: All plans
+To get data about global airports, you can use the API's airports endpoint. Customers subscribed to the Basic Plan or higher may also make use of the search request parameter to get airport autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/airports
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for airports by specifying any search term as a string. This feature is only available on the Basic Plan and higher.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 6471
+   },
+   "data": [
+      {
+         "airport_name": "Anaa",
+         "iata_code": "AAA",
+         "icao_code": "NTGA",
+         "latitude": "-17.05",
+         "longitude": "-145.41667",
+         "geoname_id": "6947726",
+         "timezone": "Pacific/Tahiti",
+         "gmt": "-10",
+         "phone_number": null,
+         "country_name": "French Polynesia",
+         "country_iso2": "PF",
+         "city_iata_code": "AAA"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one airport result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+airport_name	Returns the full name of the airport.
+iata_code	Returns the IATA code associated with the airport.
+icao_code	Returns the ICAO code associated with the airport.
+latitude	Returns the latitude coordinate associated with the airport location.
+longitude	Returns the longitude coordinate associated with the airport location.
+geoname_id	Returns the GeoNames ID of the airport.
+timezone	Returns the timezone the airport is in. Example: America/Los_Angeles
+gmt	Returns the GMT offset in hours.
+phone_number	Returns the phone number of the airport.
+country_name	Returns the name of the country the airport is in.
+country_iso2	Returns the ISO code of the country the airport is in.
+city_iata_code	Returns the IATA code of the city the airport is in.
+Using Airports endpoint, you can get the list of Airports with information like location, IATA code, etc.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/airports?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+AirlinesAvailable on: All plans
+To get data about different airlines, you can use the API's airlines endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/airlines
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for airlines by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 13131
+   },
+   "data": [
+      {
+        "id": "4071780",
+        "fleet_average_age": "10.9",
+        "airline_id": "1",
+        "callsign": "AMERICAN",
+        "hub_code": "DFW",
+        "iata_code": "AA",
+        "icao_code": "AAL",
+        "country_iso2": "US",
+        "date_founded": "1934",
+        "iata_prefix_accounting": "1",
+        "airline_name": "American Airlines",
+        "country_name": "United States",
+        "fleet_size": "963",
+        "status": "active",
+        "type": "scheduled"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one airline result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+airline_name	Returns the full name of the airline.
+iata_code	Returns the IATA code of the airline.
+iata_prefix_accounting	Returns the IATA prefix or accounting code of the airline.
+icao_code	Returns the ICAO code of the airline.
+callsign	Returns the ICAO callsign of the airline.
+type	Returns the type of airline.
+status	Returns the current status of the airline.
+fleet_size	Returns the fleet size of the airline.
+fleet_average_age	Returns the average aircraft age of the fleet.
+date_founded	Returns the founding year of the airline.
+hub_code	Returns the hub code associated with the airline.
+country_name	Returns the name of the origin country of the airline.
+country_iso2	Returns the 2-letter ISO code of the origin country of the airline.
+Using Airlines endpoint, you can get the data of Airlines like IATA code, callsign, status, etc.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/airlines?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+AirplanesAvailable on: All plans
+To get data about different airplanes/aircrafts, you can use the API's airplanes endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/airplanes
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for airplanes by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 19052
+   },
+   "data": [
+      {
+        "id": "5919451",
+        "iata_type": "B737-300",
+        "airplane_id": "1",
+        "airline_iata_code": "0B",
+        "iata_code_long": "B733",
+        "iata_code_short": "733",
+        "airline_icao_code": null,
+        "construction_number": "23653",
+        "delivery_date": "1986-08-21T22:00:00.000Z",
+        "engines_count": "2",
+        "engines_type": "JET",
+        "first_flight_date": "1986-08-02T22:00:00.000Z",
+        "icao_code_hex": "4A0823",
+        "line_number": "1260",
+        "model_code": "B737-377",
+        "registration_number": "YR-BAC",
+        "test_registration_number": null,
+        "plane_age": "31",
+        "plane_class": null,
+        "model_name": "737",
+        "plane_owner": "Airwork Flight Operations Ltd",
+        "plane_series": "377",
+        "plane_status": "active",
+        "production_line": "Boeing 737 Classic",
+        "registration_date": "0000-00-00",
+        "rollout_date": null
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one airplane result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+registration_number	Returns the registration number of the airplane.
+production_line	Returns the production line identifier of the airplane.
+iata_type	Returns the IATA type of the airplane.
+model_name	Returns the model name of the airplane.
+model_code	Returns the model code of the airplane.
+icao_code_hex	Returns the HEX ICAO code of the airplane.
+iata_code_short	Returns the short IATA code of the airplane.
+construction_number	Returns the construction number of the airplane.
+test_registration_number	Returns the test registration number of the airplane.
+rollout_date	Returns the rollout date of the airplane.
+first_flight_date	Returns the first flight date of the airplane.
+delivery_date	Returns the initial delivery date of the airplane.
+registration_date	Returns the initial registration date of the airplane.
+line_number	Returns the production line number of the airplane.
+plane_series	Returns the airplane series.
+airline_iata_code	Returns the IATA code of the airplane.
+airline_icao_code	Returns the ICAO code of the airplane.
+plane_owner	Returns the owner name of the airplane.
+engines_count	Returns the number of engines on the airplane.
+engines_type	Returns the type of engines on the airplane.
+plane_age	Returns the age of the airplane in years.
+plane_status	Returns the current status of the airplane.
+plane_class	Returns one or multiple sub-objects containing information about the types of classes (e.g. Economy Class, Business Class) are available ont the given airplane as well as details about the number of seats available, beds, cabin width, and more.
+Using Airplanes endpoint, you can get the information about Airplanes like Registration number, Production line, etc.
+
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/airplanes?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Aircraft TypesAvailable on: All plans
+To get data about different aircraft types, you can use the API's aircraft_types endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/aircraft_types
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for airplanes by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 310
+   },
+   "data": [
+      {
+        "id": "22228",
+        "iata_code": "100",
+        "aircraft_name": "Fokker 100",
+        "plane_type_id": "1"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one aircraft type result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+aircraft_name	Returns the aircraft name associated with the aircraft type.
+iata_code	Returns the IATA code associated with the aircraft type.
+Using Aircraft Types endpoint, you can get Aircraft name and IATA code.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+cconst url = "https://api.aviationstack.com/v1/aircraft_types?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Aviation TaxesAvailable on: All plans
+To get data about different aviation taxes, you can use the API's taxes endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/taxes
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for aviation taxes by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 521
+   },
+   "data": [
+      {
+        "id": "36992",
+        "tax_id": "1",
+        "tax_name": "Government Tax",
+        "iata_code": "AB"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one aviation tax result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+tax_name	Returns the name of the aviation tax.
+iata_code	Returns the IATA code associated with the aviation tax.
+Using Taxes endpoint, you can get the data about different aviation taxes.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/taxes?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+CitiesAvailable on: All plans
+To get data about different cities, you can use the API's cities endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/cities
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for cities by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 9368
+   },
+   "data": [
+      {
+        "id": "2895475",
+        "gmt": "-10",
+        "city_id": "1",
+        "iata_code": "AAA",
+        "country_iso2": "PF",
+        "geoname_id": null,
+        "latitude": "-17.05",
+        "longitude": "-145.41667",
+        "city_name": "Anaa",
+        "timezone": "Pacific/Tahiti"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one city result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+city_name	Returns the name of the city.
+iata_code	Returns the IATA code of the city.
+country_iso2	Returns the 2-letter ISO code of the city.
+latitude	Returns the latitude coordinate associated with the city.
+longitude	Returns the longitude coordinate associated with the city.
+timezone	Returns the timezone the city is in.
+gmt	Returns the GMT offset in hours.
+geoname_id	Returns the GeoName ID associated with the city.
+Using Cities endpoint, you can look up at destination cities.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/cities?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+CountriesAvailable on: All plans
+To get data about different countries, you can use the API's countries endpoint. Both free and paid plan subscribers can also use the search request parameter to receive airplane autocomplete suggestions.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/countries
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+callback	[Optional] Use this parameter to specify a JSONP callback function name to wrap your API response in. Learn more about JSONP Callbacks.
+limit	[Optional] Specify a limit of results to return in your API response. Maximum allowed value is 100 below Professional Plan and 1000 on and above Professional Plan. Default value is 100.
+offset	[Optional] Specify an offset for pagination. Example: Specifying an offset of 10 in combination with a limit of 10 will show results 10-20. Default offset value is 0, starting with the first available result.
+search	[Optional] Use this parameter to get autocomplete suggestions for countries by specifying any search term as a string. Both free and paid plan subscribers can use this feature.
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 252
+   },
+   "data": [
+      {
+        "id": "76861",
+        "capital": "Andorra la Vella",
+        "currency_code": "EUR",
+        "fips_code": "AN",
+        "country_iso2": "AD",
+        "country_iso3": "AND",
+        "continent": "EU",
+        "country_id": "1",
+        "country_name": "Andorra",
+        "currency_name": "Euro",
+        "country_iso_numeric": "20",
+        "phone_prefix": "376",
+        "population": "84000"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one country result for readability purposes.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+country_name	Returns the name of the country.
+country_iso2	Returns the 2-letter ISO code of the country.
+country_iso3	Returns the 3-letter ISO code of the country.
+country_iso_numeric	Returns the numeric ISO code of the country.
+population	Returns the population of the country.
+capital	Returns the capital of the country.
+continent	Returns the continent the country is located in.
+currency_name	Returns the name of the currency associated with the country.
+currency_code	Returns the code of the currency associated with the country.
+fips_code	Returns the FIPS code of the country.
+phone_prefix	Returns the phone prefix associated with the country.
+Using Countries endpoint, you can look up at destination countries.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url = "https://api.aviationstack.com/v1/countries?access_key={PASTE_YOUR_API_KEY_HERE}";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Flight SchedulesAvailable on: Basic Plan and higher
+The Flight Schedules API endpoint is for retrieving real-time timetable information for flights on the current day. This endpoint is designed to give users detailed and up-to-date information about flight schedules, including departures and arrivals.
+
+Simply attach the iataCode and type parameters to your API request URL.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/timetable
+    ? iataCode = DXB
+    & type = departure
+    & access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+iataCode	[Required] The IATA code of the airport you'd like to request data from. Example: JFK,DXB.
+type	[Required] Airport schedule type. Available values: departure or arrival.
+status	[Optional] The status of the flight. Available values: landed, scheduled, cancelled, active, incident, diverted, redirected, unknown.
+dep_terminal	[Optional] The terminal at the departure airport Example1 ,2,3,4,5 etc .
+dep_delay	[Optional] The delay in minutes at departure. Example 10, 20, 45, etc it is not possible to set a delay range.
+dep_schTime	[Optional] The scheduled flight's departure in the following format:YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+dep_estTime	[Optional] The estimated departure time in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+dep_actTime	[Optional] The actual flight departure time in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+dep_estRunway	[Optional] The estimated departure time at runway in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+dep_actRunway	[Optional] The actual departure time at runway in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+arr_terminal	[Optional] The terminal at the arrival airport. Example: 1,2,3,4,etc
+arr_delay	[Optional] The delay in minutes at arrival. Example : 10, 20, 45, etc ,It is not possible to set a delay
+arr_schTime	[Optional] The scheduled flight's arrival in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+arr_estTime	[Optional] The estimated arrival time in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+arr_actTime	[Optional] The actual flight arrival time in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+arr_estRunway	[Optional] The estimated arrival time at runway in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+arr_actRunway	[Optional] The actual arrival time at runway in the following format: YYYY-MM-DDT00:00:00.000 Example: 2023-06-07T05:00:00.000
+airline_name	[Optional] The name of the airline. Example : Air France, American Airlines, Delta Air Lines, etc(may need air%20france, american%20airlines, delta%20air%20lines)
+airline_iata	[Optional] IATA code of an airline. Example : GB
+airline_icao	[Optional] ICAO code of an airline. Example : EIN
+flight_num	[Optional] The flight number based on 1 to 4 digits, Example: 171
+flight_iata	[Optional] The flight iata number consisting of digits and letters, usually of the airline iata code. Example : AA171
+flight_icao	[Optional] The flight icao number consisting of digits and letters, usually the airline icao code. Example: 171
+lang	[Optional] Translations are available of the airport names, city names and country names to 43 different languages. See details below for the available languages. Read More
+Example API Response:
+
+    {
+        "pagination": {
+            "limit": 10,
+            "offset": 0,
+            "count": 10,
+            "total": 176
+        },
+        "data": [
+            {
+                "airline": {
+                    "iataCode": "AV",
+                    "icaoCode": "AVA",
+                    "name": "SA AVIANCA"
+                },
+                "arrival": {
+                    "actualRunway": null,
+                    "actualTime": null,
+                    "baggage": null,
+                    "delay": "65",
+                    "estimatedRunway": null,
+                    "estimatedTime": "2024-06-18T23:10:00.000",
+                    "gate": "3",
+                    "iataCode": "JFK",
+                    "icaoCode": "KJFK",
+                    "scheduledTime": "2024-06-18T22:05:00.000",
+                    "terminal": "1"
+                },
+                "codeshared": {
+                    "airline": {
+                        "iataCode": "br",
+                        "icaoCode": "eva",
+                        "name": "eva air"
+                    },
+                    "flight": {
+                        "iataNumber": "br32",
+                        "icaoNumber": "eva32",
+                        "number": "32"
+                    }
+                },
+                "departure": {
+                    "actualRunway": "2024-06-18T20:46:00.000",
+                    "actualTime": "2024-06-18T20:46:00.000",
+                    "baggage": null,
+                    "delay": "97",
+                    "estimatedRunway": "2024-06-18T20:46:00.000",
+                    "estimatedTime": "2024-06-18T19:10:00.000",
+                    "gate": "C4",
+                    "iataCode": "TPE",
+                    "icaoCode": "RCTP",
+                    "scheduledTime": "2024-06-18T19:10:00.000",
+                    "terminal": "2"
+                },
+                "flight": {
+                    "iataNumber": "AV4511",
+                    "icaoNumber": "AVA4511",
+                    "number": "4511"
+                },
+                "status": "scheduled",
+                "type": "arrival"
+            },
+            [...]
+        ]
+      }
+    
+
+Please note: The API response above has been shortened to show only one data result for readability purposes. To ensure fair usage and optimal performance of our API, we have enforced a rate limitation on this endpoint. Each user is allowed to make one API call per minute. Exceeding this limit will result in temporary access restrictions.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified limit of results per pagination page.
+pagination > offset	Returns the specified pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of results, included objects are explained below.
+airline > iataCode	Returns the IATA code of the airline DL
+airline > icaoCode	Returns the ICAO code of the airline DAL
+airline > name	Returns the full name of the airline. Delta Air Lines
+arrival > actualRunway	Returns the actual runway time of arrival
+arrival > actualTime	Returns the actual arrival time
+arrival > baggage	Returns the baggage claim information
+arrival > delay	Returns the arrival delay in minutes
+arrival > estimatedRunway	Returns the estimated runway time of arrival
+arrival > estimatedTime	Returns the estimated arrival time
+arrival > gate	Returns the arrival gate
+arrival > iataCode	Returns the IATA code of the arrival airport MSP
+arrival > icaoCode	Returns the ICAO code of the arrival airport KJFK
+arrival > scheduledTime	Returns the scheduled arrival time
+arrival > terminal	Returns the arrival terminal
+departure > actualRunway	Returns the actual runway time of departure
+departure > actualTime	Returns the actual departure time
+departure > baggage	Returns the baggage claim information
+departure > delay	Returns the departure delay in minutes
+departure > estimatedRunway	Returns the estimated runway time of departure
+departure > estimatedTime	Returns the estimated departure time
+departure > gate	Returns the departure gate
+departure > iataCode	Returns the IATA code of the departure airport MSP
+departure > icaoCode	Returns the ICAO code of the departure airport KJFK
+departure > scheduledTime	Returns the scheduled departure time
+departure > terminal	Returns the departure terminal
+codeshared > airline > iataCode	Returns the IATA code of the airline operating the codeshare flight
+codeshared > airline > icaoCode	Returns the IATA code of the ICAO code of the airline operating the codeshare flight
+codeshared > airline > name	Returns the full name of the airline operating the codeshare flight
+codeshared > flight > iataNumber	Returns the IATA flight number assigned by the codeshare airline
+codeshared > flight > icaoNumber	Returns the ICAO flight number assigned by the codeshare airline
+codeshared > flight > number	Returns the flight number without the airline code
+status	Returns the current status of the flight. Possible values: scheduled, active, landed, cancelled, incident, diverted
+type	Returns the type of flight.
+Using Flight Schedules endpoint, you can get the data about flight schedule on the current date.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url =
+    "https://api.aviationstack.com/v1/timetable?access_key={PASTE_YOUR_API_KEY_HERE}&iataCode=JFK&type=departure";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Flight Future SchedulesAvailable on: Basic Plan and higher
+The Flight Future Schedules API endpoint is for retrieving future information for flights. This endpoint is designed to give users detailed and future information about flight schedules, including departures and arrivals.
+
+Simply attach the iataCode, type, date parameters to your API request URL. Set any date to future in `YYYY-MM-DD` format.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/flightsFuture
+  ? iataCode = JFK
+  & type = arrival
+  & date = 2024-11-02
+  & access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+
+Please note: We don’t cover airports with very small traffic like around 10 or fewer flights per day, CDT being one of these with only a few flights per day. So CDT is not included in our feeds.
+
+HTTP GET Request Parameters:
+
+Object	Description
+access_key	[Required] Your API access key, which can be found in your acccount dashboard.
+iataCode	[Required] The IATA code of the airport you'd like to request data from. Example: JFK,DXB.
+type	[Required] Airport schedule type. Available values: departure or arrival.
+date	[Required] Filter your results by providing a flight date in the format YYYY-MM-DD. Example: 2019-02-28.
+airline_iata	[Optional] Filter your results by airline IATA code. You can retrieve airline IATA codes using the Airlines API endpoint.
+airline_icao	[Optional] Filter your results by airline ICAO code. You can retrieve airline ICAO codes using the Airlines API endpoint.
+flight_number	[Optional] Filter your results by providing a flight number. Example: AF1135
+Example API Response:
+
+  {
+      "pagination": {
+          "limit": 100,
+          "offset": 0,
+          "count": 100,
+          "total": 294
+      },
+      "data": [
+          {
+              "weekday": "7",
+              "departure": {
+                  "iataCode": "ber",
+                  "icaoCode": "eddb",
+                  "terminal": "1",
+                  "gate": "b17",
+                  "scheduledTime": "06:15"
+              },
+              "arrival": {
+                  "iataCode": "cdg",
+                  "icaoCode": "lfpg",
+                  "terminal": "2f",
+                  "gate": "",
+                  "scheduledTime": "08:05"
+              },
+              "aircraft": {
+                  "modelCode": "bcs3",
+                  "modelText": "airbus a220-300"
+              },
+              "airline": {
+                  "name": "",
+                  "iataCode": "am",
+                  "icaoCode": "am"
+              },
+              "flight": {
+                  "number": "5748",
+                  "iataNumber": "am5748",
+                  "icaoNumber": "am5748"
+              },
+              "codeshared": {
+                  "airline": {
+                      "name": "air france",
+                      "iataCode": "af",
+                      "icaoCode": "afr"
+                  },
+                  "flight": {
+                      "number": "1135",
+                      "iataNumber": "af1135",
+                      "icaoNumber": "afr1135"
+                  }
+              }
+          },
+          [...]
+      ]
+  }
+
+Please note: The API response above has been shortened to show only one data result for readability purposes. To ensure fair usage and optimal performance of our API, we have enforced a rate limitation on this endpoint. Each user is allowed to make one API call per minute. Exceeding this limit will result in temporary access restrictions.
+
+API Response Objects:
+
+Response Object	Description
+pagination > limit	Returns the specified or default limit of results per pagination page.
+pagination > offset	Returns the specified or default pagination offset.
+pagination > count	Returns the number of results found on the current pagination page.
+pagination > total	Returns the total number of results found for your API request.
+results	Returns an array of flights, included objects are explained below.
+weekday	Returns the weekday. Example: 3
+departure > iataCode	Returns the IATA code of the departure location/airport
+departure > terminal	Returns the departure terminal.
+departure > gate	Returns the departure gate.
+departure > scheduledTime	Returns the scheduled departure time. Example: 06:00
+arrival > iataCode	Returns the IATA code of the arrival location/airport.
+arrival > icaoCode	Returns the ICAO code of the arrival location/airport.
+arrival > terminal	Returns the arrival terminal.
+arrival > gate	Returns the arrival gate.
+arrival > scheduledTime	Returns the scheduled departure time. Example: 07:25
+aircraft > modelCode	Returns the model code of the aircraft. Example: b738
+aircraft > modelText	Returns the model code of the aircraft. Example: boeing 737-8k2
+airline > name	Returns the name of the airline.
+airline > iataCode	Returns the IATA code of the airline. Example: am
+airline > icaoCode	Returns the ICAO code of the airline. Example: am
+flight > number	Returns the flight number. Example: 6258
+flight > iataNumber	Returns the IATA number of the flight. Example: am6258
+flight > icaoNumber	Returns the ICAO number of the flight. Example: am6258
+codeshared > airline > name	Returns the name of the airline in codeshared. Example: klm
+codeshared > airline > iataCode	Returns the IATA code of the airline in codeshared. Example: kl
+codeshared > airline > icaoCode	Returns the ICAO code of the airline in codeshared. Example: klm
+codeshared > flight > number	Returns the number of the flight in codeshared. Example: 1818
+codeshared > flight > iataNumber	Returns the IATA number of the flight in codeshared. Example: kl1818
+codeshared > flight > icaoNumber	Returns the IACO number of the flight in codeshared. Example: klm1818
+Note: flight blocks within a codeshared block take precedence over those outside it for filtering purposes. So, if there is a flight block inside codeshared, then it will search the query param to match in this codeshared>flight>iataNumber. If codeshared block is not present then it will refer to the flight>iataNumber.
+
+Using Flight Future Schedules endpoint, you can get the data about future flight schedule.
+
+JavaScript FetchJavaScript AxiosPython RequestsPython Http.client
+                                    
+
+const url =
+    "https://api.aviationstack.com/v1/flightsFuture?access_key={PASTE_YOUR_API_KEY_HERE}&iataCode=JFK&type=departure&date=2024-08-17";
+const options = {
+    method: "GET",
+};
+
+try {
+    const response = await fetch(url, options);
+    const result = await response.text();
+    console.log(result);
+} catch (error) {
+    console.error(error);
+}
+
+                                    
+                                
+
+
+Code Examples
+A number of code examples in different programming languages were prepared for you to get up and running with the aviationstack API as quickly as possible. You will find them below in PHP, Python, Node.js., jQuery, Go and Ruby.
+
+Code Example - PHP
+$queryString = http_build_query([
+  'access_key' => 'ecc06cb4a106e3d563f1ddaeec905ce4'
+]);
+
+$ch = curl_init(sprintf('%s?%s', 'https://api.aviationstack.com/v1/flights', $queryString));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$json = curl_exec($ch);
+curl_close($ch);
+
+$api_result = json_decode($json, true);
+
+foreach ($api_result['results'] as $flight) {
+    if (!$flight['live']['is_ground']) {
+        echo sprintf("%s flight %s from %s (%s) to %s (%s) is in the air.",
+            $flight['airline']['name'],
+            $flight['flight']['iata'],
+            $flight['departure']['airport'],
+            $flight['departure']['iata'],
+            $flight['arrival']['airport'],
+            $flight['arrival']['iata']
+            ), PHP_EOL;
+    }
+}
+
+Code Example - Python
+import requests
+
+params = {
+  'access_key': 'ecc06cb4a106e3d563f1ddaeec905ce4'
+}
+
+api_result = requests.get('https://api.aviationstack.com/v1/flights', params)
+
+api_response = api_result.json()
+
+for flight in api_response['results']:
+    if (flight['live']['is_ground'] is False):
+        print(u'%s flight %s from %s (%s) to %s (%s) is in the air.' % (
+            flight['airline']['name'],
+            flight['flight']['iata'],
+            flight['departure']['airport'],
+            flight['departure']['iata'],
+            flight['arrival']['airport'],
+            flight['arrival']['iata']))
+
+Code Example - Nodejs
+const axios = require('axios');
+const params = {
+  access_key: 'ecc06cb4a106e3d563f1ddaeec905ce4'
+}
+
+axios.get('https://api.aviationstack.com/v1/flights', {params})
+  .then(response => {
+    const apiResponse = response.data;
+    if (Array.isArray(apiResponse['results'])) {
+        apiResponse['results'].forEach(flight => {
+            if (!flight['live']['is_ground']) {
+                console.log(`${flight['airline']['name']} flight ${flight['flight']['iata']}`,
+                    `from ${flight['departure']['airport']} (${flight['departure']['iata']})`,
+                    `to ${flight['arrival']['airport']} (${flight['arrival']['iata']}) is in the air.`);
+            }
+        });
+    }
+  }).catch(error => {
+    console.log(error);
+  });
+
+Code Example - jQuery
+$.ajax({
+  url: 'https://api.aviationstack.com/v1/flights',
+  data: {
+    access_key: 'ecc06cb4a106e3d563f1ddaeec905ce4'
+  },
+  dataType: 'json',
+  success: function(apiResponse) {
+    if (Array.isArray(apiResponse['results'])) {
+      apiResponse['results'].forEach(flight => {
+        if (!flight['live']['is_ground']) {
+          console.log(`${flight['airline']['name']} flight ${flight['flight']['iata']}`,
+              `from ${flight['departure']['airport']} (${flight['departure']['iata']})`,
+              `to ${flight['arrival']['airport']} (${flight['arrival']['iata']}) is in the air.`);
+        }
+      });
+    }
+  }
+});
+
+Code Example - Go
+package main
+
+import (
+  "encoding/json"
+  "fmt"
+  "net/http"
+)
+
+type Airline struct {
+  Name string `json:"name"`
+}
+
+type FlightInfo struct {
+  IATACode string `json:"iata"`
+}
+
+type Destination struct {
+  Airport string `json:"airport"`
+  IATACode string `json:"iata"`
+}
+
+type LiveData struct {
+  IsGround bool `json:"is_ground"`
+}
+
+type Flight struct {
+    Airline Airline `json:"airline"`
+    FlightInfo FlightInfo `json:"flight"`
+    Departure Destination `json:"departure"`
+    Arrival Destination `json:"arrival"`
+    Live LiveData `json:"live"`
+}
+
+type Response struct {
+	Flights []Flight `json:"results"`
+}
+
+func main() {
+  httpClient := http.Client{}
+
+  req, err := http.NewRequest("GET", "https://api.aviationstack.com/v1/flights", nil)
+  if err != nil {
+    panic(err)
+  }
+
+  q := req.URL.Query()
+  q.Add("access_key", "ecc06cb4a106e3d563f1ddaeec905ce4")
+  req.URL.RawQuery = q.Encode()
+
+  res, err := httpClient.Do(req)
+  if err != nil {
+    panic(err)
+  }
+  defer res.Body.Close()
+
+  var apiResponse Response
+  json.NewDecoder(res.Body).Decode(&apiResponse)
+
+  for _, flight := range apiResponse.Flights {
+    if (!flight.Live.IsGround) {
+        fmt.Println(fmt.Sprintf("%s flight %s from %s (%s) to %s (%s) is in the air.",
+            flight.Airline.Name,
+            flight.FlightInfo.IATACode,
+            flight.Departure.Airport,
+            flight.Departure.IATACode,
+            flight.Arrival.Airport,
+            flight.Arrival.IATACode))
+    }
+  }
+}
+
+Code Example - Ruby
+require 'net/http'
+require 'json'
+
+params = {
+  :access_key => "ecc06cb4a106e3d563f1ddaeec905ce4"
+}
+uri = URI('https://api.aviationstack.com/v1/flights')
+uri.query = URI.encode_www_form(params)
+json = Net::HTTP.get(uri)
+api_response = JSON.parse(json)
+
+for flight in api_response['results']
+    unless flight['live']['is_ground']
+        puts sprintf("%s flight %s from %s (%s) to %s (%s) is in the air.",
+            flight['airline']['name'],
+            flight['flight']['iata'],
+            flight['departure']['airport'],
+            flight['departure']['iata'],
+            flight['arrival']['airport'],
+            flight['arrival']['iata']
+        )
+    end
+end
+
+AutocompleteAvailable on: Basic Plan and higher
+As outlined for some API endpoints, the aviationstack API is capable of providing result suggestions based on a search term that can be used for autocomplete features in your application. To get autocomplete suggestions, simply attach the search parameter to the API request URL of any supported API endpoint and set it to a search term of your choice.
+
+Supported API Endpoints:
+
+Airports Endpoint: /airports
+Airlines Endpoint: /airlines
+Airplanes Endpoint: /airplanes
+Aircraft Types Endpoint: /aircraft_types
+Aviation Tax Endpoint: /taxes
+Cities Endpoint: /cities
+Countries Endpoint: /countries
+
+Example API Request: In the following example we search for suggestions for airlines based on the term "american".
+
+Run API Requesthttps://api.aviationstack.com/v1/airlines
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+    & search = american
+
+Example API Response:
+
+{
+   "pagination": {
+       "limit": 100,
+       "offset": 0,
+       "count": 100,
+       "total": 1
+   },
+   "data": [
+      {
+         "airline_name": "American Airlines",
+         "iata_code": "AA",
+         "iata_prefix_accounting": "1",
+         "icao_code": "AAL",
+         "callsign": "AMERICAN",
+         "type": "scheduled",
+         "status": "active",
+         "fleet_size": "963",
+         "fleet_average_age": "10.9",
+         "date_founded": "1934",
+         "hub_code": "DFW",
+         "country_name": "United States",
+         "country_iso2": "US"
+      },
+      [...]
+   ]
+}
+
+Please note: The API response above has been shortened to show only one country result for readability purposes. To learn more about API response objects of this particular API endpoint, please jump to the Airlines API endpoint.
+
+JSONP Callbacks
+The aviationstack API supports JSONP Callbacks. To use the JSONP functionality, simply append the callback parameter to your API endpoint URL and set it to a function name of your choice. If a function name is provided, the API will return your API response wrapped inside the tags of the function you specified.
+
+Example API Request:
+
+Run API Requesthttps://api.aviationstack.com/v1/flights
+    ? access_key = ecc06cb4a106e3d563f1ddaeec905ce4
+    & callback = MY_FUNCTION
+
+Example API Response:
+
+MY_FUNCTION ({
+   {
+   [...]
+   }
+})
+
+Please note: The API also supports Access-Control (CORS) headers.
+
+lang
+Using the translations function in the API with &lang= will slow down the API calls they involve a lot of translations of airports, cities, and countries. Therefore it is recommended to use it in combination with other filters to reduce the amount of data you receive in the response
+
+Available languages
+Code	Language
+fr	French
+ar	Arabic
+fa	Persian
+ru	Russian
+zh_hans	Chinese Simplified
+zh_hant	Chinese Traditional
+es	Spanish
+hi	Hindi
+pt	Portuguese
+ja	Japanese
+de	German
+jv	Javanese
+ko	Korean
+tr	Turkish
+vi	Vietnamese
+it	Italian
+ur	Urdu
+pl	Polish
+uk	Ukrainian
+ro	Romanian
+az	Azerbaijani
+ha	Hausa
+my	Burmese
+th	Thai
+nl	Dutch
+yo	Yoruba
+id	Indonesian
+sv	Swedish
+no	Norwegian
+he	Hebrew
+da	Danish
+ms	Malay
+fl	Filipino
+fi	Finnish
+cs	Czech
+sk	Slovak
+hy	Armenian
+bg	Bulgarian
+ka	Georgian
+el	Greek
+hr	Croatian
+hu	Hungarian
+lt	Lithuanian
+lv	Latvian
+mk	Macedonian
+Business Continuity - API Overages
+Ensuring our customers achieve success is paramount to what we do at APILayer. For this reason, we will be rolling out our Business Continuity plan guaranteeing your end users will never see a drop in coverage. Every plan has a certain amount of API calls that you can make in the given month. However, we would never want to cut your traffic or impact user experience negatively for your website or application in case you get more traffic.
+
+What is an overage?
+An overage occurs when you go over a quota for your API plan. When you reach your API calls limit, we will charge you a small amount for each new API call so we can make sure there will be no disruption in the service we provide to you and your website or application can continue running smoothly.
+
+Prices for additional API calls will vary based on your plan. See table below for prices per call and example of an overage billing.
+
+Plan Name	Monthly Price	Number of Calls	Overage Price per call	Overage	Total price
+Basic	$49.99	10,000	0.009998	2,000	$69.99
+Professional	$149.99	50,000	0.0059996	10,000	$209.99
+Business	$499.99	250,000	0.00399992	50,000	$699.99
+Why does APILayer have overage fees?
+Overage fees allow developers to continue using an API once a quota limit is reached and give them time to upgrade their plan based on projected future use while ensuring API providers get paid for higher usage.
+
+How do I know if I will be charged for overages?
+When you are close to reaching your API calls limit for the month, you will receive an automatic notification (at 75%, 90% and 100% of your monthly quota). However, it is your responsibility to review and monitor for the plan’s usage limitations. You are required to keep track of your quota usage to prevent overages. You can do this by tracking the number of API calls you make and checking the dashboard for up-to-date usage statistics.
+
+How will I be charged for my API subscription?
+You will be charged for your monthly subscription plan, plus any overage fees applied. Your credit card will be billed after the billing period has ended.
+
+What happens if I don’t have any overage fees?
+In this case, there will be no change to your monthly invoice. Only billing cycles that incur overages will see any difference in monthly charges. The Business Continuity plan is an insurance plan to be used only if needed and guarantees your end users never see a drop in coverage from you.
+
+What if I consistently have more API calls than my plan allows?
+If your site consistently surpasses the set limits each month, you may face additional charges for the excess usage. Nevertheless, as your monthly usage reaches a certain threshold, it becomes more practical to consider upgrading to the next plan. By doing so, you ensure a smoother and more accommodating experience for your growing customer base.
+
+I would like to upgrade my plan. How can I do that?
+You can easily upgrade your plan by going to your Dashboard and selecting the new plan that would be more suitable for your business needs. Additionally, you may contact your Account Manager to discuss a custom plan if you expect a continuous increase in usage.
+
+
+Introducing Platinum Support - Enterprise-grade support for APILayer
+Upgrade your APIlayer subscription with our exclusive Platinum Support, an exceptional offering designed to enhance your business’ API management journey. With Platinum Support, you gain access to a host of premium features that take your support experience to a whole new level.
+
+What does Platinum Support include?
+Standard Support	Platinum Support
+General review on the issue	Correct Icon	Correct Icon
+Access to knowledge base articles	Correct Icon	Correct Icon
+Email support communication	Correct Icon	Correct Icon
+Regular products updates and fixes	Correct Icon	Correct Icon
+Dedicated account team	Remove Icon	Correct Icon
+Priority Email Support with unlimited communication	Remove Icon	Correct Icon
+Priority bug and review updates	Remove Icon	Correct Icon
+Option for quarterly briefing call with product Management	Remove Icon	Correct Icon
+Features requests as priority roadmap input into product	Remove Icon	Correct Icon
+
+Priority Email Support: Experience unrivaled responsiveness with our priority email support. Rest assured that your inquiries receive top-priority attention, ensuring swift resolutions to any issues.
+
+Unlimited Communication: Communication is key, and with Platinum Support, you enjoy unlimited access to our support team. No matter how complex your challenges are, our experts are here to assist you every step of the way.
+
+Priority Bug Review and Fixes: Bugs can be a headache, but not with Platinum Support. Benefit from accelerated bug review and fixes, minimizing disruptions and maximizing your API performance.
+
+Dedicated Account Team: We understand the value of personalized attention. That's why Platinum Support grants you a dedicated account team, ready to cater to your specific needs and provide tailored solutions.
+
+Quarterly Briefing Call with Product Team: Stay in the loop with the latest updates and insights from our Product team. Engage in a quarterly briefing call to discuss new features, enhancements, and upcoming developments.
+
+Priority Roadmap Input: Your input matters! As a Platinum Support subscriber, your feature requests receive top priority, shaping our product roadmap to align with your evolving requirements.
+
+Don't settle for the standard when you can experience the exceptional. Upgrade to Platinum Support today and supercharge your APIlayer experience!

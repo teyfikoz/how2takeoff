@@ -1,0 +1,80 @@
+İşte Replit üzerinde AviationStack API kullanarak uçuş verilerini çeken ve analiz edebileceğin şekilde tasarlanmış örnek bir prompt, ardından da tam çalışan Python kodu:
+
+⸻
+
+✅ 📢 Replit Prompt (Kullanıcıya Gösterilecek Arayüz Açıklaması)
+
+✈️ Flight Data Viewer using AviationStack API
+
+Enter the IATA codes of departure and arrival airports to fetch real-time or scheduled flight information. This tool uses the AviationStack API to retrieve details such as departure time, arrival time, airline, aircraft type, and flight status.
+
+🔒 Your API key is securely stored in the environment and never exposed to the user.
+
+
+⸻
+
+🧪 API ile Çalışan Python Kodu (app.py)
+
+import os
+import requests
+
+# API Key (Replit'te Secrets kısmında API_KEY olarak tanımlanmalı)
+API_KEY = os.getenv("AVIATIONSTACK_API_KEY")
+BASE_URL = "http://api.aviationstack.com/v1/flights"
+
+def get_flight_data(dep_iata, arr_iata):
+    params = {
+        'access_key': API_KEY,
+        'dep_iata': dep_iata,
+        'arr_iata': arr_iata,
+        'limit': 5  # az trafik için 5 uçuş yeterli
+    }
+
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        return data.get('data', [])
+    else:
+        print("API Error:", response.status_code)
+        return []
+
+# Örnek çalıştırma
+if __name__ == "__main__":
+    dep = input("Enter departure IATA code (e.g., IST): ").strip().upper()
+    arr = input("Enter arrival IATA code (e.g., JFK): ").strip().upper()
+    flights = get_flight_data(dep, arr)
+
+    if flights:
+        print(f"\n📋 Showing {len(flights)} flight(s) from {dep} to {arr}:\n")
+        for f in flights:
+            print(f"✈️ Airline: {f['airline']['name']}")
+            print(f"Flight: {f['flight']['iata']}")
+            print(f"Departure: {f['departure']['airport']} at {f['departure']['scheduled']}")
+            print(f"Arrival: {f['arrival']['airport']} at {f['arrival']['scheduled']}")
+            print(f"Status: {f['flight_status']}\n")
+    else:
+        print("No flight data found.")
+
+
+⸻
+
+🔐 Replit Ortam Değişkeni (Secrets)
+
+Replit içinde şuraya git:
+	•	Sol tarafta 🔒 Secrets / Environment Variables kısmına tıkla.
+	•	Şöyle tanımla:
+
+Name	Value
+AVIATIONSTACK_API_KEY	senin_aviationstack_apikey
+
+
+⸻
+
+📈 Geliştirme Önerileri
+	•	✅ Daha sonra kullanıcıya uçuş frekansı, gecikme oranı, uçak tipi bazında analiz sunabilirsin.
+	•	✅ Gelen veriyi JSON olarak kaydedip ileride offline analiz de yapabilirsin.
+	•	✅ Bu yapıyı how2takeoff.com içinde iframe ya da API proxy ile de bağlayabilirsin.
+
+⸻
+
+Hazırsan, bunu grafikleştirmek veya segment bazlı tahminleme ile birleştirmek için devam edebiliriz. İstersen bir sonraki adım olarak tahmini yolcu sayısı ve uçak tipi uyumluluğunu da entegre edelim.

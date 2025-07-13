@@ -12,6 +12,7 @@ import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import WindImpactChart from '@/components/aircraft/WindImpactChart';
 import DonationBanner from '@/components/DonationBanner';
+import ApiIntegrationDashboard from '@/components/ApiIntegrationDashboard';
 // Bağlantı sorunu nedeniyle verilerimizi doğrudan içe aktarıyoruz
 import { mockAircraftData } from '@/data/mockAircraftData';
 
@@ -163,6 +164,11 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         )}
+
+        {/* API Integration Dashboard */}
+        <div className="mt-8">
+          <ApiIntegrationDashboard />
+        </div>
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
           <p>Data based on BADA (Base of Aircraft Data) model</p>
