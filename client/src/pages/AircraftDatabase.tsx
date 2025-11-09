@@ -13,10 +13,17 @@ import { insertAircraftSchema } from '@shared/schema';
 import { useLocation } from "wouter";
 import { useAuth } from '@/hooks/useAuth';
 import { Aircraft } from '@shared/schema';
+import { useSEO } from '@/hooks/useSEO';
 // Mock veriyi içe aktarıyoruz
 import { mockAircraftData } from '@/data/mockAircraftData';
 
 export default function AircraftDatabase() {
+  useSEO({
+    title: 'Aircraft Database - Complete Aircraft Specifications - How2TakeOff',
+    description: 'Comprehensive aircraft database with detailed specifications including passenger capacity, cargo capacity, range, fuel efficiency, and CO2 emissions for major commercial aircraft.',
+    keywords: 'aircraft database, aircraft specifications, airplane specs, aircraft performance, commercial aircraft, aircraft comparison',
+    canonical: 'https://how2takeoff.com/database'
+  });
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
   const { isAdmin } = useAuth();

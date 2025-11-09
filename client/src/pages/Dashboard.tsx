@@ -12,6 +12,8 @@ import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import WindImpactChart from '@/components/aircraft/WindImpactChart';
 import DonationBanner from '@/components/DonationBanner';
+import { HeaderAd, InContentAd, FooterAd, SidebarAd } from '@/components/AdSense';
+import { useSEO } from '@/hooks/useSEO';
 // Bağlantı sorunu nedeniyle verilerimizi doğrudan içe aktarıyoruz
 import { mockAircraftData } from '@/data/mockAircraftData';
 
@@ -26,6 +28,13 @@ interface FilterCriteria {
 
 export default function Dashboard() {
   const [filterCriteria, setFilterCriteria] = useState<FilterCriteria | null>(null);
+
+  useSEO({
+    title: 'Aviation Analysis Dashboard - How2TakeOff',
+    description: 'Find the most suitable aircraft types based on your flight requirements and analyze detailed comparisons. Advanced wind impact analysis and performance metrics.',
+    keywords: 'aviation dashboard, aircraft comparison, flight planning, wind impact analysis, aviation analytics',
+    canonical: 'https://how2takeoff.com/'
+  });
 
   // Veritabanı bağlantısı sorunu nedeniyle mock veriyi kullanıyoruz
   const { data: aircraftData = mockAircraftData } = useQuery<typeof mockAircraftData>({
@@ -84,7 +93,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6 space-y-8">
+      <div className="max-w-7xl mx-auto p-6">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             Aviation Analysis Dashboard
@@ -94,7 +103,12 @@ export default function Dashboard() {
           </p>
         </header>
 
-        <FilterForm onFilter={handleFilter} />
+        <HeaderAd />
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Main Content */}
+          <div className="flex-1 space-y-8">
+            <FilterForm onFilter={handleFilter} />
 
         {filteredAircraft.length > 0 ? (
           <>
@@ -135,6 +149,8 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
+            <InContentAd />
+
             <Card>
               <CardHeader>
                 <CardTitle>Performance Analysis</CardTitle>
@@ -163,6 +179,25 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         )}
+          </div>
+
+          {/* Sidebar */}
+          <aside className="hidden lg:block lg:w-80 space-y-4">
+            <SidebarAd />
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Quick Tips</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm space-y-2">
+                <p className="text-gray-600">• Use alternateRange for safety margin</p>
+                <p className="text-gray-600">• Consider wind impact on fuel consumption</p>
+                <p className="text-gray-600">• Compare multiple aircraft for best efficiency</p>
+              </CardContent>
+            </Card>
+          </aside>
+        </div>
+
+        <FooterAd />
 
         <footer className="mt-12 text-center text-gray-500 text-sm border-t pt-6">
           <p>Data based on BADA (Base of Aircraft Data) model</p>

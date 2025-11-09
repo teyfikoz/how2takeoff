@@ -3,8 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PassengerMetricsCalculator from "@/components/PassengerMetricsCalculator";
 import CarbonCalculator from "@/components/CarbonCalculator";
+import { useSEO } from '@/hooks/useSEO';
 
 export default function BasicAviationPassenger() {
+  useSEO({
+    title: 'Basic Aviation Passenger Concepts - How2TakeOff',
+    description: 'Understanding fundamental passenger aviation concepts including no-shows, overbooking, load factors, aviation metrics, and carbon credits. Interactive calculators included.',
+    keywords: 'passenger aviation, airline metrics, load factor, overbooking, no-shows, carbon credits, aviation fundamentals',
+    canonical: 'https://how2takeoff.com/basic-aviation-passenger'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">

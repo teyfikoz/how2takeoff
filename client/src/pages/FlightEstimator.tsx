@@ -21,6 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSEO } from '@/hooks/useSEO';
+import { HeaderAd, InContentAd } from '@/components/AdSense';
 // Mock veri kullanımı için import
 import { mockAircraftData } from '@/data/mockAircraftData';
 
@@ -182,6 +184,13 @@ function predictPassengerType(day: string, season: string, timeOfDay: string, bo
 }
 
 export default function FlightEstimator() {
+  useSEO({
+    title: 'Flight Estimator - Route Profitability & Feasibility Analysis - How2TakeOff',
+    description: 'Comprehensive flight estimator tool for analyzing route profitability, aircraft feasibility, passenger demand, and environmental impact. Calculate revenue, costs, and emissions for any route.',
+    keywords: 'flight estimator, route profitability, flight feasibility, aircraft analysis, aviation calculator, flight planning tool, aviation revenue management',
+    canonical: 'https://how2takeoff.com/flight-estimator'
+  });
+
   // State for basic inputs
   const [originIATA, setOriginIATA] = useState('JFK');
   const [destIATA, setDestIATA] = useState('LHR');

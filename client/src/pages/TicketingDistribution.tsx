@@ -2,8 +2,16 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiAirchina } from "react-icons/si";
 import { Plane, GitBranch, Ticket, DollarSign, Network, Building2, Globe } from "lucide-react";
+import { useSEO } from '@/hooks/useSEO';
 
 export default function TicketingDistribution() {
+  useSEO({
+    title: 'Ticketing & Distribution Systems - How2TakeOff',
+    description: 'Learn about airline ticketing systems, GDS, NDC, direct distribution channels, and modern distribution strategies for airlines.',
+    keywords: 'airline ticketing, GDS, NDC, airline distribution, travel agency, airline direct booking, ticketing systems',
+    canonical: 'https://how2takeoff.com/ticketing-distribution'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">

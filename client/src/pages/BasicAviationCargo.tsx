@@ -2,8 +2,16 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CargoCalculator from "@/components/CargoCalculator";
+import { useSEO } from '@/hooks/useSEO';
 
 export default function BasicAviationCargo() {
+  useSEO({
+    title: 'Basic Aviation Cargo Concepts - How2TakeOff',
+    description: 'Understanding fundamental cargo aviation concepts including payload capacity, cargo metrics, weight & balance, and cargo optimization with interactive calculators.',
+    keywords: 'aviation cargo, air freight, cargo capacity, payload, weight and balance, cargo optimization, air cargo metrics',
+    canonical: 'https://how2takeoff.com/basic-aviation-cargo'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">

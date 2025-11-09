@@ -5,8 +5,16 @@ import { SiAirchina } from "react-icons/si";
 import { Users, TrendingUp, Calculator, Target, UserCheck, DollarSign, Brain, Sparkles, History, 
          Plane, CheckCircle, XCircle } from "lucide-react";
 import CRMCalculator from "@/components/CRMCalculator";
+import { useSEO } from '@/hooks/useSEO';
 
 export default function AirlineCRM() {
+  useSEO({
+    title: 'Airline CRM Analytics & Customer Journey - How2TakeOff',
+    description: 'Comprehensive airline CRM system covering customer journey, loyalty programs, CLV calculation, segmentation strategies, and marketing automation for airlines.',
+    keywords: 'airline CRM, customer relationship management, airline loyalty programs, CLV, customer segmentation, airline marketing',
+    canonical: 'https://how2takeoff.com/airline-crm'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">

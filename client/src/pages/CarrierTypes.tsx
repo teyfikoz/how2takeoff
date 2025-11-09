@@ -2,8 +2,16 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SiAirchina } from "react-icons/si";
 import { Plane, GitBranch, TrendingUp, DollarSign, Box } from "lucide-react";
+import { useSEO } from '@/hooks/useSEO';
 
 export default function CarrierTypes() {
+  useSEO({
+    title: 'Carrier Types in Aviation - LCC, FSC, ULCC - How2TakeOff',
+    description: 'Exploring different airline business models including Low-Cost Carriers (LCC), Full-Service Carriers (FSC), Ultra-Low-Cost Carriers (ULCC), and Regional Carriers.',
+    keywords: 'airline types, LCC, low-cost carrier, full-service carrier, ULCC, regional carriers, airline business models',
+    canonical: 'https://how2takeoff.com/carrier-types'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">

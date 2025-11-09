@@ -9,9 +9,16 @@ import { SiAirchina } from "react-icons/si";
 import { Plane, GitBranch, Ticket, DollarSign, Network, Globe, TrendingUp } from "lucide-react";
 import RouteOptimization from "@/components/RouteOptimization";
 import { Calculator } from "lucide-react";
-
+import { useSEO } from '@/hooks/useSEO';
 
 export default function RevenueManagement() {
+  useSEO({
+    title: 'Revenue Management & Route Optimization - How2TakeOff',
+    description: 'Comprehensive guide to airline revenue management techniques, dynamic pricing, yield management, route optimization strategies, and network planning for airlines.',
+    keywords: 'revenue management, airline pricing, yield management, route optimization, network planning, airline revenue strategies',
+    canonical: 'https://how2takeoff.com/revenue-management'
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">

@@ -5,9 +5,18 @@ import { SiLinkedin } from "react-icons/si";
 import { Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useSEO } from '@/hooks/useSEO';
+import { HeaderAd } from '@/components/AdSense';
 
 export default function AboutMe() {
   const { toast } = useToast();
+
+  useSEO({
+    title: 'About Me - Teyfik ÖZ | Aviation Business Expert - How2TakeOff',
+    description: 'Hi, I\'m Teyfik ÖZ. I have experience in Airline Revenue Management, CRM, Data Analytics, Reporting, Sales & Marketing. Learn more about my background and expertise.',
+    keywords: 'Teyfik ÖZ, aviation revenue management, airline CRM, data analytics, aviation expert, aviation career',
+    canonical: 'https://how2takeoff.com/about'
+  });
 
   const trackProfileClick = async (type: 'linkedin' | 'email') => {
     try {
@@ -19,6 +28,7 @@ export default function AboutMe() {
 
   return (
     <div className="container mx-auto p-6">
+      <HeaderAd />
       <Card className="max-w-3xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold">About Me</CardTitle>

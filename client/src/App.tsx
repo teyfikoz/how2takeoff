@@ -2,6 +2,7 @@ import { Switch, Route, Link, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/Dashboard";
 import AircraftDatabase from "@/pages/AircraftDatabase";
@@ -60,50 +61,74 @@ function Navbar() {
     { path: "/about", icon: <User className="h-5 w-5 mr-2" />, label: "About Me" },
   ];
 
+  const menuRow1 = menuItems.slice(0, 5);
+  const menuRow2 = menuItems.slice(5);
+
   return (
     <nav className="bg-white shadow-sm border-b" ref={navRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex flex-col md:flex-row justify-between md:min-h-[120px]">
           {/* Logo/Brand section */}
-          <div className="flex items-center">
+          <div className="flex items-center justify-between h-16 md:h-auto md:pt-4">
             <Link href="/" className="flex items-center px-2 text-gray-900 font-bold hover:text-blue-600">
               <Plane className="h-6 w-6 mr-2 text-blue-600" />
               <span className="text-lg">How2Takeoff</span>
             </Link>
-          </div>
-          
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-1 overflow-x-auto pb-1 max-w-5xl">
-            {menuItems.map((item) => (
-              <Link 
-                key={item.path}
-                href={item.path} 
-                className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                  location === item.path 
-                    ? "text-blue-600 bg-blue-50" 
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                }`}
+            
+            {/* Mobile Menu Button */}
+            <div className="flex items-center md:hidden">
+              <button
+                onClick={toggleMenu}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                aria-expanded={isOpen}
               >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            ))}
+                <span className="sr-only">Open main menu</span>
+                {isOpen ? (
+                  <X className="block h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <Menu className="block h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
           
-          {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
+          {/* Desktop Menu - 2 Rows with wrapping support */}
+          <div className="hidden md:flex md:flex-col md:justify-center md:gap-2 md:py-2 md:flex-1">
+            {/* First Row - 5 items */}
+            <div className="flex flex-wrap gap-1 justify-end">
+              {menuRow1.map((item) => (
+                <Link 
+                  key={item.path}
+                  href={item.path} 
+                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                    location === item.path 
+                      ? "text-blue-600 bg-blue-50" 
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.icon}
+                  <span className="hidden lg:inline">{item.label}</span>
+                </Link>
+              ))}
+            </div>
+            
+            {/* Second Row - 6 items */}
+            <div className="flex flex-wrap gap-1 justify-end">
+              {menuRow2.map((item) => (
+                <Link 
+                  key={item.path}
+                  href={item.path} 
+                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                    location === item.path 
+                      ? "text-blue-600 bg-blue-50" 
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.icon}
+                  <span className="hidden lg:inline">{item.label}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -133,12 +158,15 @@ function Navbar() {
 
 function Router() {
   return (
-    <div>
-      <Navbar />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-4">
-        <DonationBanner />
-      </div>
-      <Switch>
+    <>
+      <OrganizationSchema />
+      <WebsiteSchema />
+      <div>
+        <Navbar />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-4">
+          <DonationBanner />
+        </div>
+        <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/flight-estimator" component={FlightEstimator} />
         <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
@@ -153,6 +181,7 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     </div>
+    </>
   );
 }
 

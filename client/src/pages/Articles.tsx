@@ -10,6 +10,9 @@ import {
   ResponsiveContainer, AreaChart, Area, BarChart, Bar
 } from 'recharts';
 import { ExternalLink, Zap, Plane, BarChart3 } from 'lucide-react';
+import { useSEO } from '@/hooks/useSEO';
+import { HeaderAd, InContentAd } from '@/components/AdSense';
+import { ArticleSchema } from '@/components/StructuredData';
 
 // Define data for carbon emissions chart
 const baseEmissionData = [
@@ -92,6 +95,13 @@ const baseCargoData = [
 ];
 
 export default function Articles() {
+  useSEO({
+    title: 'Aviation Industry Articles & Future Trends - How2TakeOff',
+    description: 'Explore in-depth aviation industry articles covering carbon emissions, AI in aviation, quantum computing, cargo drone delivery, and future aviation trends with interactive scenarios.',
+    keywords: 'aviation articles, aviation industry trends, carbon emissions aviation, AI aviation, quantum computing aviation, cargo drones, aviation future',
+    canonical: 'https://how2takeoff.com/articles'
+  });
+
   // State for modifying emissions scenario
   const [emissionScenario, setEmissionScenario] = useState('green');
   const [emissionReduction, setEmissionReduction] = useState(30);
