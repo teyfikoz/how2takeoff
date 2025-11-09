@@ -317,33 +317,33 @@ export default function FlightEstimator() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
   
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+    <div className="min-h-screen bg-gray-50 py-10">
+      <div className="max-w-[1800px] mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">
             Flight Feasibility, Profitability & Passenger Type Estimator
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-lg text-gray-600">
             Analyze route profitability, aircraft suitability, and predict passenger demographics
           </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           {/* Input Column */}
           <div className="lg:col-span-1 space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PlaneTakeoff className="h-5 w-5 text-blue-500" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <PlaneTakeoff className="h-6 w-6 text-blue-500" />
                   Flight Details
                 </CardTitle>
-                <CardDescription>Enter route details and aircraft information</CardDescription>
+                <CardDescription className="text-base mt-2">Enter route details and aircraft information</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="origin">Origin</Label>
+                      <Label htmlFor="origin" className="text-sm font-medium">Origin</Label>
                       <TooltipProvider>
                         <UITooltip>
                           <TooltipTrigger asChild>
@@ -377,7 +377,7 @@ export default function FlightEstimator() {
                       </TooltipProvider>
                     </div>
                     <Select value={originIATA} onValueChange={setOriginIATA}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 text-base">
                         <SelectValue placeholder="Select origin" />
                       </SelectTrigger>
                       <SelectContent>
@@ -397,7 +397,7 @@ export default function FlightEstimator() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="destination">Destination</Label>
+                      <Label htmlFor="destination" className="text-sm font-medium">Destination</Label>
                       <TooltipProvider>
                         <UITooltip>
                           <TooltipTrigger asChild>
@@ -431,7 +431,7 @@ export default function FlightEstimator() {
                       </TooltipProvider>
                     </div>
                     <Select value={destIATA} onValueChange={setDestIATA}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 text-base">
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
                       <SelectContent>
@@ -451,9 +451,9 @@ export default function FlightEstimator() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="aircraft">Aircraft Type</Label>
+                  <Label htmlFor="aircraft" className="text-sm font-medium">Aircraft Type</Label>
                   <Select value={aircraft} onValueChange={setAircraft}>
-                    <SelectTrigger>
+                    <SelectTrigger className="h-11 text-base">
                       <SelectValue placeholder="Select aircraft" />
                     </SelectTrigger>
                     <SelectContent>
@@ -466,7 +466,7 @@ export default function FlightEstimator() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="runway">Minimum Runway Length (m)</Label>
+                  <Label htmlFor="runway" className="text-sm font-medium">Minimum Runway Length (m)</Label>
                   <Input
                     id="runway"
                     type="number"
@@ -474,23 +474,24 @@ export default function FlightEstimator() {
                     onChange={e => setRunwayLength(Number(e.target.value))}
                     min={1000}
                     max={5000}
+                    className="h-11 text-base"
                   />
                 </div>
               </CardContent>
             </Card>
             
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Banknote className="h-5 w-5 text-green-500" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Banknote className="h-6 w-6 text-green-500" />
                   Economic Parameters
                 </CardTitle>
-                <CardDescription>Set economic and operational parameters</CardDescription>
+                <CardDescription className="text-base mt-2">Set economic and operational parameters</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-5">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <Label htmlFor="loadFactor">Load Factor ({Math.round(loadFactor * 100)}%)</Label>
+                    <Label htmlFor="loadFactor" className="text-sm font-medium">Load Factor ({Math.round(loadFactor * 100)}%)</Label>
                   </div>
                   <Slider
                     id="loadFactor"
@@ -502,7 +503,7 @@ export default function FlightEstimator() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="rask">RASK (Revenue per Available Seat-Kilometer)</Label>
+                  <Label htmlFor="rask" className="text-sm font-medium">RASK (Revenue per Available Seat-Kilometer)</Label>
                   <Input
                     id="rask"
                     type="number"
@@ -511,10 +512,11 @@ export default function FlightEstimator() {
                     min={0.01}
                     max={0.5}
                     step={0.01}
+                    className="h-11 text-base"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="cask">CASK (Cost per Available Seat-Kilometer)</Label>
+                  <Label htmlFor="cask" className="text-sm font-medium">CASK (Cost per Available Seat-Kilometer)</Label>
                   <Input
                     id="cask"
                     type="number"
@@ -523,10 +525,11 @@ export default function FlightEstimator() {
                     min={0.01}
                     max={0.5}
                     step={0.01}
+                    className="h-11 text-base"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="fuelPrice">Fuel Price ($ per liter)</Label>
+                  <Label htmlFor="fuelPrice" className="text-sm font-medium">Fuel Price ($ per liter)</Label>
                   <Input
                     id="fuelPrice"
                     type="number"
@@ -535,32 +538,33 @@ export default function FlightEstimator() {
                     min={0.5}
                     max={5}
                     step={0.1}
+                    className="h-11 text-base"
                   />
                 </div>
               </CardContent>
             </Card>
             
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-purple-500" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Users className="h-6 w-6 text-purple-500" />
                   Passenger Demographics
                 </CardTitle>
-                <CardDescription>Factors affecting passenger type prediction</CardDescription>
+                <CardDescription className="text-base mt-2">Factors affecting passenger type prediction</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                   {/* Temporal Factors Card */}
-                  <div className="space-y-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                    <h4 className="text-sm font-semibold flex items-center gap-2 text-blue-900">
-                      <CalendarClock className="h-4 w-4 text-blue-600" />
+                  <div className="space-y-4 p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
+                    <h4 className="text-base font-semibold flex items-center gap-2 text-blue-900">
+                      <CalendarClock className="h-5 w-5 text-blue-600" />
                       Temporal Factors
                     </h4>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="dayOfWeek" className="text-xs text-gray-700">Day of Week</Label>
+                        <Label htmlFor="dayOfWeek" className="text-sm font-medium text-gray-700">Day of Week</Label>
                         <Select value={dayOfWeek} onValueChange={setDayOfWeek}>
-                          <SelectTrigger className="bg-white">
+                          <SelectTrigger className="bg-white h-11 text-base">
                             <SelectValue placeholder="Select day" />
                           </SelectTrigger>
                           <SelectContent>
@@ -573,9 +577,9 @@ export default function FlightEstimator() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="season" className="text-xs text-gray-700">Season</Label>
+                        <Label htmlFor="season" className="text-sm font-medium text-gray-700">Season</Label>
                         <Select value={seasonType} onValueChange={setSeasonType}>
-                          <SelectTrigger className="bg-white">
+                          <SelectTrigger className="bg-white h-11 text-base">
                             <SelectValue placeholder="Select season" />
                           </SelectTrigger>
                           <SelectContent>
@@ -588,9 +592,9 @@ export default function FlightEstimator() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="timeOfDay" className="text-xs text-gray-700">Time of Day</Label>
+                        <Label htmlFor="timeOfDay" className="text-sm font-medium text-gray-700">Time of Day</Label>
                         <Select value={timeOfDay} onValueChange={setTimeOfDay}>
-                          <SelectTrigger className="bg-white">
+                          <SelectTrigger className="bg-white h-11 text-base">
                             <SelectValue placeholder="Select time" />
                           </SelectTrigger>
                           <SelectContent>
@@ -603,19 +607,19 @@ export default function FlightEstimator() {
                         </Select>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-600 italic">Weekday mornings/evenings favor business travelers</p>
+                    <p className="text-sm text-gray-600 italic bg-blue-100/50 p-3 rounded-lg">💡 Weekday mornings/evenings favor business travelers</p>
                   </div>
                   
                   {/* Booking Behavior Card */}
-                  <div className="space-y-3 p-4 bg-purple-50 rounded-lg border border-purple-100">
-                    <h4 className="text-sm font-semibold flex items-center gap-2 text-purple-900">
-                      <Ticket className="h-4 w-4 text-purple-600" />
+                  <div className="space-y-4 p-5 bg-purple-50 rounded-xl border border-purple-200 shadow-sm">
+                    <h4 className="text-base font-semibold flex items-center gap-2 text-purple-900">
+                      <Ticket className="h-5 w-5 text-purple-600" />
                       Booking Behavior
                     </h4>
                     <div className="space-y-2">
-                      <Label htmlFor="bookingType" className="text-xs text-gray-700">Booking Window</Label>
+                      <Label htmlFor="bookingType" className="text-sm font-medium text-gray-700">Booking Window</Label>
                       <Select value={bookingType} onValueChange={setBookingType}>
-                        <SelectTrigger className="bg-white">
+                        <SelectTrigger className="bg-white h-11 text-base">
                           <SelectValue placeholder="Select booking type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -629,12 +633,21 @@ export default function FlightEstimator() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div className="bg-white p-3 rounded-md border border-purple-200">
-                      <h5 className="text-xs font-medium mb-1 text-purple-900">Booking Pattern Indicators</h5>
-                      <ul className="text-xs text-gray-600 space-y-1">
-                        <li>• <strong>Early:</strong> Leisure travelers, price-sensitive</li>
-                        <li>• <strong>Regular:</strong> Mixed business and leisure</li>
-                        <li>• <strong>Last Minute:</strong> Business or urgent travel</li>
+                    <div className="bg-white p-4 rounded-lg border border-purple-200 shadow-sm">
+                      <h5 className="text-sm font-semibold mb-2.5 text-purple-900">📊 Booking Pattern Indicators</h5>
+                      <ul className="text-sm text-gray-700 space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">•</span>
+                          <span><strong className="text-purple-800">Early ({'>'}30 days):</strong> Leisure travelers, price-sensitive</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">•</span>
+                          <span><strong className="text-purple-800">Regular (7-30 days):</strong> Mixed business and leisure</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">•</span>
+                          <span><strong className="text-purple-800">Last Minute ({'<'}7 days):</strong> Business or urgent travel</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -646,65 +659,65 @@ export default function FlightEstimator() {
           {/* Results Column */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>Flight Analysis Results</CardTitle>
-                <CardDescription>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">Flight Analysis Results</CardTitle>
+                <CardDescription className="text-base mt-2">
                   Analysis for {originIATA} ({AIRPORTS.find(a => a.iata === originIATA)?.icao}) to {destIATA} ({AIRPORTS.find(a => a.iata === destIATA)?.icao}) route using {aircraft}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                  <div className="bg-gradient-to-br from-blue-50 to-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="text-sm font-medium text-gray-500">Distance</h3>
-                        <p className="text-2xl font-bold">{distance.toLocaleString()} km</p>
+                        <h3 className="text-sm font-semibold text-gray-600 mb-1">Distance</h3>
+                        <p className="text-3xl font-bold text-gray-900">{distance.toLocaleString()} km</p>
                       </div>
-                      <MoveHorizontal className="h-5 w-5 text-blue-500" />
+                      <MoveHorizontal className="h-6 w-6 text-blue-500" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">Flight Time: ~{Math.floor(flightTime)} hr {Math.round((flightTime - Math.floor(flightTime)) * 60)} min</p>
+                    <p className="text-sm text-gray-600">Flight Time: ~{Math.floor(flightTime)} hr {Math.round((flightTime - Math.floor(flightTime)) * 60)} min</p>
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start">
+                  <div className={`bg-gradient-to-br ${suitable ? 'from-green-50' : 'from-red-50'} to-white p-5 rounded-xl border ${suitable ? 'border-green-100' : 'border-red-100'} shadow-sm`}>
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="text-sm font-medium text-gray-500">Aircraft Suitability</h3>
-                        <p className="text-2xl font-bold text-blue-600">{suitable ? "Suitable" : "Not Suitable"}</p>
+                        <h3 className="text-sm font-semibold text-gray-600 mb-1">Aircraft Suitability</h3>
+                        <p className={`text-3xl font-bold ${suitable ? 'text-green-600' : 'text-red-600'}`}>{suitable ? "Suitable" : "Not Suitable"}</p>
                       </div>
-                      <Plane className={`h-5 w-5 ${suitable ? 'text-green-500' : 'text-red-500'}`} />
+                      <Plane className={`h-6 w-6 ${suitable ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600">
                       {suitable 
                         ? `${aircraft} can operate this route` 
                         : `${aircraft} cannot operate this route`}
                     </p>
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start">
+                  <div className={`bg-gradient-to-br ${profitAnalysis.profit > 0 ? 'from-green-50' : 'from-red-50'} to-white p-5 rounded-xl border ${profitAnalysis.profit > 0 ? 'border-green-100' : 'border-red-100'} shadow-sm`}>
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="text-sm font-medium text-gray-500">Profit Estimation</h3>
-                        <p className={`text-2xl font-bold ${profitAnalysis.profit > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        <h3 className="text-sm font-semibold text-gray-600 mb-1">Profit Estimation</h3>
+                        <p className={`text-3xl font-bold ${profitAnalysis.profit > 0 ? 'text-green-600' : 'text-red-600'}`}>
                           {formatCurrency(profitAnalysis.profit)}
                         </p>
                       </div>
-                      <TrendingUp className={`h-5 w-5 ${profitAnalysis.profit > 0 ? 'text-green-500' : 'text-red-500'}`} />
+                      <TrendingUp className={`h-6 w-6 ${profitAnalysis.profit > 0 ? 'text-green-500' : 'text-red-500'}`} />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600">
                       Rev: {formatCurrency(profitAnalysis.revenue)}, Cost: {formatCurrency(profitAnalysis.cost)}
                     </p>
                   </div>
 
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gradient-to-br from-teal-50 to-white p-5 rounded-xl border border-teal-100 shadow-sm">
                     <TooltipProvider>
                       <UITooltip>
                         <TooltipTrigger asChild>
                           <div className="flex justify-between items-start cursor-help">
-                            <div>
-                              <h3 className="text-sm font-medium text-gray-500">Environmental Impact</h3>
-                              <div className="w-full bg-gray-200 rounded-full h-6 mt-2">
+                            <div className="flex-1">
+                              <h3 className="text-sm font-semibold text-gray-600 mb-2">Environmental Impact</h3>
+                              <div className="w-full bg-gray-200 rounded-full h-7 mt-2">
                                 <div 
-                                  className={`h-6 rounded-full flex items-center justify-center text-xs font-medium text-white ${
+                                  className={`h-7 rounded-full flex items-center justify-center text-sm font-semibold text-white ${
                                     profitAnalysis.emissions.environmentalScore > 70 ? 'bg-green-500' : 
                                     profitAnalysis.emissions.environmentalScore > 50 ? 'bg-yellow-500' : 
                                     profitAnalysis.emissions.environmentalScore > 30 ? 'bg-orange-500' : 'bg-red-500'
@@ -715,7 +728,7 @@ export default function FlightEstimator() {
                                 </div>
                               </div>
                             </div>
-                            <Activity className="h-5 w-5 text-blue-500" />
+                            <Activity className="h-6 w-6 text-teal-500 ml-2" />
                           </div>
                         </TooltipTrigger>
                         <TooltipContent className="w-80 p-4 bg-white text-gray-800 border border-gray-200">
@@ -750,20 +763,20 @@ export default function FlightEstimator() {
                         </TooltipContent>
                       </UITooltip>
                     </TooltipProvider>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600 mt-2">
                       {(profitAnalysis.emissions.co2PerPassenger / 1000).toFixed(1)} tonnes CO2 per passenger
                     </p>
                   </div>
                   
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-start">
+                  <div className="bg-gradient-to-br from-purple-50 to-white p-5 rounded-xl border border-purple-100 shadow-sm">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="text-sm font-medium text-gray-500">Passenger Type</h3>
-                        <p className="text-2xl font-bold text-purple-600">{passengerType}</p>
+                        <h3 className="text-sm font-semibold text-gray-600 mb-1">Passenger Type</h3>
+                        <p className="text-3xl font-bold text-purple-600">{passengerType}</p>
                       </div>
-                      <Users className="h-5 w-5 text-purple-500" />
+                      <Users className="h-6 w-6 text-purple-500" />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600">
                       Based on seasonality and booking patterns
                     </p>
                   </div>
@@ -772,25 +785,25 @@ export default function FlightEstimator() {
             </Card>
             
             <Tabs defaultValue="profitability">
-              <TabsList className="grid grid-cols-3 mb-6">
-                <TabsTrigger value="profitability" className="flex items-center gap-2">
-                  <Banknote className="h-4 w-4" />
+              <TabsList className="grid grid-cols-3 mb-6 h-12">
+                <TabsTrigger value="profitability" className="flex items-center gap-2 text-base">
+                  <Banknote className="h-5 w-5" />
                   <span>Load Factor Impact</span>
                 </TabsTrigger>
-                <TabsTrigger value="aircraft" className="flex items-center gap-2">
-                  <Plane className="h-4 w-4" />
+                <TabsTrigger value="aircraft" className="flex items-center gap-2 text-base">
+                  <Plane className="h-5 w-5" />
                   <span>Aircraft Comparison</span>
                 </TabsTrigger>
-                <TabsTrigger value="passenger" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
+                <TabsTrigger value="passenger" className="flex items-center gap-2 text-base">
+                  <Users className="h-5 w-5" />
                   <span>Passenger Analysis</span>
                 </TabsTrigger>
               </TabsList>
               
               <TabsContent value="profitability">
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-2 text-xl">
                       Load Factor Impact on Profitability
                       <TooltipProvider>
                         <UITooltip>
