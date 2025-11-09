@@ -13,7 +13,7 @@ import {
 import {
   Plane, TrendingUp, Calculator, PlaneTakeoff, PlaneLanding,
   Banknote, Users, Activity, Percent, MoveHorizontal, CalendarClock,
-  Info, Globe, Building2, ArrowUpFromLine, Map
+  Info, Globe, Building2, ArrowUpFromLine, Map, Ticket, DollarSign
 } from 'lucide-react';
 import {
   Tooltip as UITooltip,
@@ -546,70 +546,98 @@ export default function FlightEstimator() {
                   <Users className="h-5 w-5 text-purple-500" />
                   Passenger Demographics
                 </CardTitle>
-                <CardDescription>Predict passenger type and booking patterns</CardDescription>
+                <CardDescription>Factors affecting passenger type prediction</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="dayOfWeek">Day of Week</Label>
-                  <Select value={dayOfWeek} onValueChange={setDayOfWeek}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select day" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {daysOfWeek.map(day => (
-                        <SelectItem key={day} value={day}>
-                          {day}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="season">Season</Label>
-                  <Select value={seasonType} onValueChange={setSeasonType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select season" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {seasons.map(season => (
-                        <SelectItem key={season} value={season}>
-                          {season.charAt(0).toUpperCase() + season.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="timeOfDay">Time of Day</Label>
-                  <Select value={timeOfDay} onValueChange={setTimeOfDay}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {timesOfDay.map(time => (
-                        <SelectItem key={time} value={time}>
-                          {time.charAt(0).toUpperCase() + time.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="bookingType">Booking Type</Label>
-                  <Select value={bookingType} onValueChange={setBookingType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select booking type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {bookingTypes.map(type => (
-                        <SelectItem key={type} value={type}>
-                          {type === 'early' ? 'Early (>30 days)' : 
-                           type === 'regular' ? 'Regular (7-30 days)' : 
-                           'Last Minute (<7 days)'}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Temporal Factors Card */}
+                  <div className="space-y-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <h4 className="text-sm font-semibold flex items-center gap-2 text-blue-900">
+                      <CalendarClock className="h-4 w-4 text-blue-600" />
+                      Temporal Factors
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="dayOfWeek" className="text-xs text-gray-700">Day of Week</Label>
+                        <Select value={dayOfWeek} onValueChange={setDayOfWeek}>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Select day" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {daysOfWeek.map(day => (
+                              <SelectItem key={day} value={day}>
+                                {day}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="season" className="text-xs text-gray-700">Season</Label>
+                        <Select value={seasonType} onValueChange={setSeasonType}>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Select season" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {seasons.map(season => (
+                              <SelectItem key={season} value={season}>
+                                {season.charAt(0).toUpperCase() + season.slice(1)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="timeOfDay" className="text-xs text-gray-700">Time of Day</Label>
+                        <Select value={timeOfDay} onValueChange={setTimeOfDay}>
+                          <SelectTrigger className="bg-white">
+                            <SelectValue placeholder="Select time" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timesOfDay.map(time => (
+                              <SelectItem key={time} value={time}>
+                                {time.charAt(0).toUpperCase() + time.slice(1)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 italic">Weekday mornings/evenings favor business travelers</p>
+                  </div>
+                  
+                  {/* Booking Behavior Card */}
+                  <div className="space-y-3 p-4 bg-purple-50 rounded-lg border border-purple-100">
+                    <h4 className="text-sm font-semibold flex items-center gap-2 text-purple-900">
+                      <Ticket className="h-4 w-4 text-purple-600" />
+                      Booking Behavior
+                    </h4>
+                    <div className="space-y-2">
+                      <Label htmlFor="bookingType" className="text-xs text-gray-700">Booking Window</Label>
+                      <Select value={bookingType} onValueChange={setBookingType}>
+                        <SelectTrigger className="bg-white">
+                          <SelectValue placeholder="Select booking type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {bookingTypes.map(type => (
+                            <SelectItem key={type} value={type}>
+                              {type === 'early' ? 'Early (>30 days)' : 
+                               type === 'regular' ? 'Regular (7-30 days)' : 
+                               'Last Minute (<7 days)'}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="bg-white p-3 rounded-md border border-purple-200">
+                      <h5 className="text-xs font-medium mb-1 text-purple-900">Booking Pattern Indicators</h5>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        <li>• <strong>Early:</strong> Leisure travelers, price-sensitive</li>
+                        <li>• <strong>Regular:</strong> Mixed business and leisure</li>
+                        <li>• <strong>Last Minute:</strong> Business or urgent travel</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -762,7 +790,23 @@ export default function FlightEstimator() {
               <TabsContent value="profitability">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Load Factor Impact on Profitability</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                      Load Factor Impact on Profitability
+                      <TooltipProvider>
+                        <UITooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-4 w-4 text-gray-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-sm">
+                            <div className="space-y-2 text-xs">
+                              <p><strong>Revenue</strong> = RASK × RPK (Revenue per Available Seat-Kilometer × Revenue Passenger-Kilometers)</p>
+                              <p><strong>Cost</strong> = Operating Cost + Fuel Cost</p>
+                              <p><strong>Profit</strong> = Revenue - Cost</p>
+                            </div>
+                          </TooltipContent>
+                        </UITooltip>
+                      </TooltipProvider>
+                    </CardTitle>
                     <CardDescription>
                       See how profit changes as load factor increases
                     </CardDescription>
@@ -770,20 +814,36 @@ export default function FlightEstimator() {
                   <CardContent>
                     <div className="h-80">
                       <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={profitData}>
-                          <CartesianGrid strokeDasharray="3 3" />
+                        <LineChart data={profitData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                           <XAxis 
                             dataKey="loadFactor" 
-                            label={{ value: 'Load Factor (%)', position: 'bottom', offset: 0 }} 
+                            label={{ value: 'Load Factor (%)', position: 'insideBottom', offset: -10, style: { fontSize: 14, fontWeight: 600 } }}
+                            tick={{ fontSize: 12 }}
+                            tickFormatter={(value) => `${value}%`}
                           />
                           <YAxis 
-                            label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft', offset: -5 }} 
+                            label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft', offset: 10, style: { fontSize: 14, fontWeight: 600 } }}
+                            tick={{ fontSize: 12 }}
+                            tickFormatter={(value) => {
+                              const absValue = Math.abs(value);
+                              if (absValue >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+                              if (absValue >= 1000) return `$${(value / 1000).toFixed(0)}k`;
+                              return `$${value}`;
+                            }}
+                            width={80}
                           />
-                          <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                          <Legend />
-                          <Line type="monotone" dataKey="revenue" stroke="#4ade80" name="Revenue" strokeWidth={2} />
-                          <Line type="monotone" dataKey="cost" stroke="#f87171" name="Cost" strokeWidth={2} />
-                          <Line type="monotone" dataKey="profit" stroke="#60a5fa" name="Profit" strokeWidth={2} />
+                          <Tooltip 
+                            formatter={(value) => formatCurrency(Number(value))}
+                            contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }}
+                          />
+                          <Legend 
+                            wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }}
+                            iconType="line"
+                          />
+                          <Line type="monotone" dataKey="revenue" stroke="#4ade80" name="Revenue" strokeWidth={2.5} dot={{ r: 3 }} />
+                          <Line type="monotone" dataKey="cost" stroke="#f87171" name="Cost" strokeWidth={2.5} dot={{ r: 3 }} />
+                          <Line type="monotone" dataKey="profit" stroke="#60a5fa" name="Profit" strokeWidth={2.5} dot={{ r: 3 }} />
                         </LineChart>
                       </ResponsiveContainer>
                     </div>
@@ -895,78 +955,113 @@ export default function FlightEstimator() {
                   <CardHeader>
                     <CardTitle>Passenger Demographics Analysis</CardTitle>
                     <CardDescription>
-                      Passenger type prediction and implications
+                      Predicted passenger type and strategic implications
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
+                      {/* Passenger Mix Visualization */}
                       <div>
-                        <h3 className="text-sm font-medium mb-4">Predicted Passenger Mix</h3>
-                        <div className="h-64">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={[
-                                  { name: 'Business', value: passengerType === 'Business' ? 70 : passengerType === 'Mixed' ? 40 : 20 },
-                                  { name: 'Leisure', value: passengerType === 'Leisure' ? 70 : passengerType === 'Mixed' ? 40 : 20 },
-                                  { name: 'Other', value: 10 }
-                                ]}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                                outerRadius={80}
-                                fill="#8884d8"
-                                dataKey="value"
+                        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                          <Users className="h-4 w-4 text-blue-600" />
+                          Predicted Passenger Mix
+                        </h3>
+                        <div className="space-y-4">
+                          <div className="bg-gray-100 rounded-full h-10 overflow-hidden shadow-inner">
+                            <div className="flex h-full">
+                              <div 
+                                style={{ width: `${passengerType === 'Business' ? 70 : passengerType === 'Mixed' ? 40 : 20}%` }}
+                                className="bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-semibold transition-all duration-300"
                               >
-                                {[
-                                  { name: 'Business', value: passengerType === 'Business' ? 70 : passengerType === 'Mixed' ? 40 : 20 },
-                                  { name: 'Leisure', value: passengerType === 'Leisure' ? 70 : passengerType === 'Mixed' ? 40 : 20 },
-                                  { name: 'Other', value: 10 }
-                                ].map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                              </Pie>
-                              <Tooltip formatter={(value) => `${value}%`} />
-                            </PieChart>
-                          </ResponsiveContainer>
+                                {passengerType === 'Business' ? 70 : passengerType === 'Mixed' ? 40 : 20}%
+                              </div>
+                              <div 
+                                style={{ width: `${passengerType === 'Leisure' ? 70 : passengerType === 'Mixed' ? 40 : 20}%` }}
+                                className="bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center text-white text-xs font-semibold transition-all duration-300"
+                              >
+                                {passengerType === 'Leisure' ? 70 : passengerType === 'Mixed' ? 40 : 20}%
+                              </div>
+                              <div 
+                                style={{ width: '10%' }}
+                                className="bg-gradient-to-r from-gray-400 to-gray-500 flex items-center justify-center text-white text-xs font-semibold"
+                              >
+                                10%
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-3 gap-3 text-center">
+                            <div className="flex flex-col items-center gap-1">
+                              <div className="w-4 h-4 bg-blue-500 rounded-full" />
+                              <span className="text-xs font-medium">Business</span>
+                              <span className="text-xs text-gray-500">{passengerType === 'Business' ? 70 : passengerType === 'Mixed' ? 40 : 20}%</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-1">
+                              <div className="w-4 h-4 bg-green-500 rounded-full" />
+                              <span className="text-xs font-medium">Leisure</span>
+                              <span className="text-xs text-gray-500">{passengerType === 'Leisure' ? 70 : passengerType === 'Mixed' ? 40 : 20}%</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-1">
+                              <div className="w-4 h-4 bg-gray-400 rounded-full" />
+                              <span className="text-xs font-medium">Other</span>
+                              <span className="text-xs text-gray-500">10%</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       
+                      {/* Business Implications */}
                       <div>
-                        <h3 className="text-sm font-medium mb-4">Business Implications</h3>
-                        <div className="space-y-4">
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <h4 className="font-medium text-sm mb-1">Pricing Strategy</h4>
-                            <p className="text-sm text-gray-600">
-                              {passengerType === 'Business' 
-                                ? 'Focus on premium pricing, flexible tickets, and business class seats.' 
-                                : passengerType === 'Leisure' 
-                                ? 'Competitive economy pricing, advance purchase discounts, and promotional fares.'
-                                : 'Balanced pricing across cabins with moderate flexibility options.'}
-                            </p>
+                        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4 text-green-600" />
+                          Strategic Business Implications
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-lg border border-blue-200">
+                            <div className="flex items-start gap-3">
+                              <DollarSign className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <h4 className="font-semibold text-sm mb-1.5 text-blue-900">Pricing Strategy</h4>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  {passengerType === 'Business' 
+                                    ? 'Focus on premium pricing, flexible tickets, and business class seats.' 
+                                    : passengerType === 'Leisure' 
+                                    ? 'Competitive economy pricing, advance purchase discounts, and promotional fares.'
+                                    : 'Balanced pricing across cabins with moderate flexibility options.'}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <h4 className="font-medium text-sm mb-1">Scheduling</h4>
-                            <p className="text-sm text-gray-600">
-                              {passengerType === 'Business' 
-                                ? 'Early morning and evening departures, high frequency, consistent schedule.' 
-                                : passengerType === 'Leisure' 
-                                ? 'Mid-day and weekend departures, adjusted for seasonal demand.'
-                                : 'Mixed schedule with both business and leisure-friendly departure times.'}
-                            </p>
+                          <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-lg border border-purple-200">
+                            <div className="flex items-start gap-3">
+                              <CalendarClock className="h-5 w-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <h4 className="font-semibold text-sm mb-1.5 text-purple-900">Scheduling</h4>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  {passengerType === 'Business' 
+                                    ? 'Early morning and evening departures, high frequency, consistent schedule.' 
+                                    : passengerType === 'Leisure' 
+                                    ? 'Mid-day and weekend departures, adjusted for seasonal demand.'
+                                    : 'Mixed schedule with both business and leisure-friendly departure times.'}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <h4 className="font-medium text-sm mb-1">Revenue Optimization</h4>
-                            <p className="text-sm text-gray-600">
-                              {passengerType === 'Business' 
-                                ? 'Focus on business class and premium economy upgrades, corporate agreements.' 
-                                : passengerType === 'Leisure' 
-                                ? 'Ancillary revenue (bags, seats, onboard sales), package deals with hotels.'
-                                : 'Balanced approach with both corporate agreements and leisure packaging.'}
-                            </p>
+                          <div className="bg-gradient-to-br from-green-50 to-white p-4 rounded-lg border border-green-200">
+                            <div className="flex items-start gap-3">
+                              <TrendingUp className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <h4 className="font-semibold text-sm mb-1.5 text-green-900">Revenue Optimization</h4>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  {passengerType === 'Business' 
+                                    ? 'Focus on business class and premium economy upgrades, corporate agreements.' 
+                                    : passengerType === 'Leisure' 
+                                    ? 'Ancillary revenue (bags, seats, onboard sales), package deals with hotels.'
+                                    : 'Balanced approach with both corporate agreements and leisure packaging.'}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
