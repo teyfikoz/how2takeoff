@@ -12,7 +12,7 @@ import { Aircraft } from '@shared/schema';
 import { ArrowRight, Wind, ArrowUpRight, ArrowRight as ArrowRightIcon } from 'lucide-react';
 import WindImpactChart from '@/components/aircraft/WindImpactChart';
 import DonationBanner from '@/components/DonationBanner';
-import { HeaderAd, InContentAd, FooterAd, SidebarAd } from '@/components/AdSense';
+import { InContentAd, FooterAd, SidebarAd } from '@/components/AdSense';
 import { useSEO } from '@/hooks/useSEO';
 // Bağlantı sorunu nedeniyle verilerimizi doğrudan içe aktarıyoruz
 import { mockAircraftData } from '@/data/mockAircraftData';
@@ -102,8 +102,6 @@ export default function Dashboard() {
             Find the most suitable aircraft types based on your flight requirements and analyze detailed comparisons.
           </p>
         </header>
-
-        <HeaderAd />
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Main Content */}
