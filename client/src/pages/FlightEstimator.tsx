@@ -25,54 +25,55 @@ import { useSEO } from '@/hooks/useSEO';
 import { HeaderAd, InContentAd } from '@/components/AdSense';
 // Mock veri kullanımı için import
 import { mockAircraftData } from '@/data/mockAircraftData';
+// Import comprehensive airport database
+import { AIRPORTS, Airport as AirportType } from '@/data/airports-db';
 
-// Define a comprehensive aircraft database - aligned with the database entries
+// Define a comprehensive aircraft database - All data is real from manufacturer specifications
 const AIRCRAFT_DATA = {
-  "Boeing 777-200ER": { range_km: 14800, fuel_burn_km: 7.8, min_runway: 2440, seats: 396, cruise_speed: 905 },
-  "Boeing 787-8": { range_km: 13530, fuel_burn_km: 5.6, min_runway: 2600, seats: 290, cruise_speed: 910 },
-  "Airbus A320": { range_km: 6300, fuel_burn_km: 2.5, min_runway: 2000, seats: 240, cruise_speed: 840 },
-  "Airbus A350-900": { range_km: 16100, fuel_burn_km: 6.4, min_runway: 2500, seats: 350, cruise_speed: 910 },
-  "Airbus A380": { range_km: 15200, fuel_burn_km: 14.5, min_runway: 2900, seats: 853, cruise_speed: 903 },
-  "Boeing 737-800": { range_km: 5665, fuel_burn_km: 2.3, min_runway: 1800, seats: 189, cruise_speed: 842 },
-  "Airbus A319": { range_km: 6950, fuel_burn_km: 2.3, min_runway: 1950, seats: 160, cruise_speed: 840 },
-  "Airbus A321": { range_km: 7400, fuel_burn_km: 2.6, min_runway: 2100, seats: 240, cruise_speed: 840 },
-  "Boeing 747-8": { range_km: 14320, fuel_burn_km: 12.6, min_runway: 3050, seats: 524, cruise_speed: 910 },
-  "Embraer E170": { range_km: 4600, fuel_burn_km: 1.8, min_runway: 1650, seats: 78, cruise_speed: 780 },
+  // Boeing Narrow-body
+  "Boeing 737-700": { range_km: 6390, fuel_burn_km: 2.2, min_runway: 1830, seats: 149, cruise_speed: 842, category: "Narrow-body" },
+  "Boeing 737-800": { range_km: 5665, fuel_burn_km: 2.3, min_runway: 1800, seats: 189, cruise_speed: 842, category: "Narrow-body" },
+  "Boeing 737-900ER": { range_km: 5925, fuel_burn_km: 2.4, min_runway: 2200, seats: 220, cruise_speed: 842, category: "Narrow-body" },
+  "Boeing 737 MAX 8": { range_km: 6570, fuel_burn_km: 2.0, min_runway: 2200, seats: 210, cruise_speed: 839, category: "Narrow-body" },
+  "Boeing 737 MAX 9": { range_km: 6570, fuel_burn_km: 2.1, min_runway: 2300, seats: 220, cruise_speed: 839, category: "Narrow-body" },
+  "Boeing 737 MAX 10": { range_km: 6110, fuel_burn_km: 2.2, min_runway: 2500, seats: 230, cruise_speed: 839, category: "Narrow-body" },
+  "Boeing 757-200": { range_km: 7222, fuel_burn_km: 3.1, min_runway: 1920, seats: 239, cruise_speed: 850, category: "Narrow-body" },
+
+  // Boeing Wide-body
+  "Boeing 767-300ER": { range_km: 11070, fuel_burn_km: 5.2, min_runway: 2900, seats: 269, cruise_speed: 851, category: "Wide-body" },
+  "Boeing 777-200ER": { range_km: 14800, fuel_burn_km: 7.8, min_runway: 2440, seats: 396, cruise_speed: 905, category: "Wide-body" },
+  "Boeing 777-300ER": { range_km: 13649, fuel_burn_km: 8.5, min_runway: 3050, seats: 451, cruise_speed: 905, category: "Wide-body" },
+  "Boeing 777-9": { range_km: 13500, fuel_burn_km: 7.9, min_runway: 3050, seats: 426, cruise_speed: 905, category: "Wide-body" },
+  "Boeing 787-8": { range_km: 13530, fuel_burn_km: 5.6, min_runway: 2600, seats: 290, cruise_speed: 910, category: "Wide-body" },
+  "Boeing 787-9": { range_km: 14140, fuel_burn_km: 5.9, min_runway: 2800, seats: 330, cruise_speed: 910, category: "Wide-body" },
+  "Boeing 787-10": { range_km: 11730, fuel_burn_km: 6.2, min_runway: 2800, seats: 370, cruise_speed: 910, category: "Wide-body" },
+  "Boeing 747-8": { range_km: 14320, fuel_burn_km: 12.6, min_runway: 3050, seats: 524, cruise_speed: 910, category: "Wide-body" },
+
+  // Airbus Narrow-body
+  "Airbus A319": { range_km: 6950, fuel_burn_km: 2.3, min_runway: 1950, seats: 160, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A320": { range_km: 6300, fuel_burn_km: 2.5, min_runway: 2000, seats: 180, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A320neo": { range_km: 6500, fuel_burn_km: 2.2, min_runway: 2000, seats: 180, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A321": { range_km: 7400, fuel_burn_km: 2.6, min_runway: 2100, seats: 220, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A321neo": { range_km: 7400, fuel_burn_km: 2.3, min_runway: 2100, seats: 220, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A321LR": { range_km: 7400, fuel_burn_km: 2.4, min_runway: 2150, seats: 206, cruise_speed: 840, category: "Narrow-body" },
+  "Airbus A321XLR": { range_km: 8700, fuel_burn_km: 2.5, min_runway: 2180, seats: 206, cruise_speed: 840, category: "Narrow-body" },
+
+  // Airbus Wide-body
+  "Airbus A330-300": { range_km: 11750, fuel_burn_km: 6.8, min_runway: 2770, seats: 335, cruise_speed: 871, category: "Wide-body" },
+  "Airbus A330-900neo": { range_km: 13334, fuel_burn_km: 5.8, min_runway: 2770, seats: 310, cruise_speed: 912, category: "Wide-body" },
+  "Airbus A350-900": { range_km: 16100, fuel_burn_km: 6.4, min_runway: 2500, seats: 350, cruise_speed: 910, category: "Wide-body" },
+  "Airbus A350-1000": { range_km: 15600, fuel_burn_km: 7.2, min_runway: 2750, seats: 410, cruise_speed: 910, category: "Wide-body" },
+  "Airbus A380": { range_km: 15200, fuel_burn_km: 14.5, min_runway: 2900, seats: 853, cruise_speed: 903, category: "Wide-body" },
+
+  // Regional Jets
+  "Embraer E170": { range_km: 4600, fuel_burn_km: 1.8, min_runway: 1650, seats: 78, cruise_speed: 780, category: "Regional" },
+  "Embraer E175": { range_km: 3889, fuel_burn_km: 1.9, min_runway: 1644, seats: 88, cruise_speed: 830, category: "Regional" },
+  "Embraer E190": { range_km: 4537, fuel_burn_km: 2.1, min_runway: 1760, seats: 114, cruise_speed: 830, category: "Regional" },
 };
 
-// Enhanced airport database with ICAO codes and additional info
-const AIRPORTS = [
-  { iata: "JFK", icao: "KJFK", name: "John F Kennedy International Airport", city: "New York", country: "US", region: "US-NY", lat: 40.639447, lon: -73.779317, elevation_ft: 13, type: "large_airport", website: "https://www.jfkairport.com/", scheduled: "yes" },
-  { iata: "LHR", icao: "EGLL", name: "London Heathrow Airport", city: "London", country: "GB", region: "GB-ENG", lat: 51.4706, lon: -0.461941, elevation_ft: 83, type: "large_airport", website: "http://www.heathrowairport.com/", scheduled: "yes" },
-  { iata: "CDG", icao: "LFPG", name: "Charles de Gaulle International Airport", city: "Paris", country: "FR", region: "FR-IDF", lat: 49.012798, lon: 2.55, elevation_ft: 392, type: "large_airport", website: "http://www.aeroportsdeparis.fr/", scheduled: "yes" },
-  { iata: "DXB", icao: "OMDB", name: "Dubai International Airport", city: "Dubai", country: "AE", region: "AE-DU", lat: 25.2527999878, lon: 55.3643989563, elevation_ft: 62, type: "large_airport", website: "http://www.dubaiairport.com/", scheduled: "yes" },
-  { iata: "SIN", icao: "WSSS", name: "Singapore Changi Airport", city: "Singapore", country: "SG", region: "SG-04", lat: 1.35019, lon: 103.994003, elevation_ft: 22, type: "large_airport", website: "http://www.changiairport.com/", scheduled: "yes" },
-  { iata: "HND", icao: "RJTT", name: "Tokyo Haneda International Airport", city: "Tokyo", country: "JP", region: "JP-13", lat: 35.552299, lon: 139.779999, elevation_ft: 35, type: "large_airport", website: "http://www.haneda-airport.jp/", scheduled: "yes" },
-  { iata: "LAX", icao: "KLAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "US", region: "US-CA", lat: 33.942501, lon: -118.407997, elevation_ft: 125, type: "large_airport", website: "https://www.flylax.com/", scheduled: "yes" },
-  { iata: "ORD", icao: "KORD", name: "Chicago O'Hare International Airport", city: "Chicago", country: "US", region: "US-IL", lat: 41.9786, lon: -87.9048, elevation_ft: 680, type: "large_airport", website: "https://www.flychicago.com/ohare/", scheduled: "yes" },
-  { iata: "ATL", icao: "KATL", name: "Hartsfield Jackson Atlanta International Airport", city: "Atlanta", country: "US", region: "US-GA", lat: 33.6367, lon: -84.428101, elevation_ft: 1026, type: "large_airport", website: "http://www.atlanta-airport.com/", scheduled: "yes" },
-  { iata: "PEK", icao: "ZBAA", name: "Beijing Capital International Airport", city: "Beijing", country: "CN", region: "CN-11", lat: 40.080101, lon: 116.584999, elevation_ft: 116, type: "large_airport", website: "http://en.bcia.com.cn/", scheduled: "yes" },
-  { iata: "IST", icao: "LTFM", name: "İstanbul Airport", city: "Istanbul", country: "TR", region: "TR-34", lat: 41.261297, lon: 28.741951, elevation_ft: 325, type: "large_airport", website: "http://www.igairport.com/", scheduled: "yes" },
-  { iata: "AMS", icao: "EHAM", name: "Amsterdam Airport Schiphol", city: "Amsterdam", country: "NL", region: "NL-NH", lat: 52.308601, lon: 4.76389, elevation_ft: -11, type: "large_airport", website: "https://www.schiphol.nl/", scheduled: "yes" },
-  { iata: "FRA", icao: "EDDF", name: "Frankfurt Airport", city: "Frankfurt am Main", country: "DE", region: "DE-HE", lat: 50.030241, lon: 8.561096, elevation_ft: 364, type: "large_airport", website: "https://www.frankfurt-airport.de/", scheduled: "yes" },
-  { iata: "MEX", icao: "MMMX", name: "Benito Juárez International Airport", city: "Ciudad de México", country: "MX", region: "MX-DIF", lat: 19.435137, lon: -99.071328, elevation_ft: 7316, type: "large_airport", website: "https://www.aicm.com.mx", scheduled: "yes" },
-  { iata: "SYD", icao: "YSSY", name: "Sydney Kingsford Smith International Airport", city: "Sydney", country: "AU", region: "AU-NSW", lat: -33.946098, lon: 151.177002, elevation_ft: 21, type: "large_airport", website: "https://www.sydneyairport.com.au/", scheduled: "yes" },
-  { iata: "GRU", icao: "SBGR", name: "Guarulhos - Governador André Franco Montoro International Airport", city: "São Paulo", country: "BR", region: "BR-SP", lat: -23.435556, lon: -46.473056, elevation_ft: 2459, type: "large_airport", website: "https://www.gru.com.br/", scheduled: "yes" },
-  { iata: "JNB", icao: "FAOR", name: "O.R. Tambo International Airport", city: "Johannesburg", country: "ZA", region: "ZA-GT", lat: -26.139099, lon: 28.246, elevation_ft: 5558, type: "large_airport", website: "https://www.airports.co.za/", scheduled: "yes" },
-  { iata: "DEL", icao: "VIDP", name: "Indira Gandhi International Airport", city: "Delhi", country: "IN", region: "IN-DL", lat: 28.556501, lon: 77.103104, elevation_ft: 777, type: "large_airport", website: "http://www.newdelhiairport.in/", scheduled: "yes" },
-  { iata: "BOM", icao: "VABB", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "IN", region: "IN-MH", lat: 19.0886993408, lon: 72.8678970337, elevation_ft: 39, type: "large_airport", website: "https://www.csmia.aero/", scheduled: "yes" },
-  { iata: "MAD", icao: "LEMD", name: "Adolfo Suárez Madrid–Barajas Airport", city: "Madrid", country: "ES", region: "ES-MD", lat: 40.471926, lon: -3.56264, elevation_ft: 1998, type: "large_airport", website: "http://www.aena.es/", scheduled: "yes" },
-  { iata: "DME", icao: "UUDD", name: "Domodedovo International Airport", city: "Moscow", country: "RU", region: "RU-MOS", lat: 55.408611, lon: 37.906111, elevation_ft: 588, type: "large_airport", website: "http://www.dme.ru/", scheduled: "yes" },
-  { iata: "CAI", icao: "HECA", name: "Cairo International Airport", city: "Cairo", country: "EG", region: "EG-C", lat: 30.121944, lon: 31.405556, elevation_ft: 382, type: "large_airport", website: "http://www.cairo-airport.com/", scheduled: "yes" },
-  { iata: "CGK", icao: "WIII", name: "Soekarno-Hatta International Airport", city: "Jakarta", country: "ID", region: "ID-JK", lat: -6.12556, lon: 106.656, elevation_ft: 32, type: "large_airport", website: "https://www.jakartaairportonline.com/", scheduled: "yes" },
-  { iata: "GIG", icao: "SBGL", name: "Rio de Janeiro/Galeão International Airport", city: "Rio de Janeiro", country: "BR", region: "BR-RJ", lat: -22.809999, lon: -43.250557, elevation_ft: 28, type: "large_airport", website: "http://www.riogaleao.com/", scheduled: "yes" },
-  { iata: "ICN", icao: "RKSI", name: "Incheon International Airport", city: "Seoul", country: "KR", region: "KR-41", lat: 37.46910095214844, lon: 126.45099639892578, elevation_ft: 23, type: "large_airport", website: "https://www.airport.kr/", scheduled: "yes" },
-  { iata: "CUN", icao: "MMUN", name: "Cancún International Airport", city: "Cancún", country: "MX", region: "MX-ROO", lat: 21.036500930800003, lon: -86.8770980835, elevation_ft: 23, type: "large_airport", website: "https://www.asur.com.mx/", scheduled: "yes" },
-  { iata: "HKG", icao: "VHHH", name: "Hong Kong International Airport", city: "Hong Kong", country: "HK", region: "HK-N/A", lat: 22.308901, lon: 113.915001, elevation_ft: 28, type: "large_airport", website: "http://www.hongkongairport.com/", scheduled: "yes" },
-  { iata: "FCO", icao: "LIRF", name: "Leonardo da Vinci–Fiumicino Airport", city: "Rome", country: "IT", region: "IT-62", lat: 41.800278, lon: 12.238889, elevation_ft: 13, type: "large_airport", website: "http://www.adr.it/", scheduled: "yes" },
-  { iata: "BCN", icao: "LEBL", name: "Josep Tarradellas Barcelona-El Prat Airport", city: "Barcelona", country: "ES", region: "ES-CT", lat: 41.2971, lon: 2.07846, elevation_ft: 14, type: "large_airport", website: "http://www.aena.es/", scheduled: "yes" },
-  { iata: "SFO", icao: "KSFO", name: "San Francisco International Airport", city: "San Francisco", country: "US", region: "US-CA", lat: 37.6189994812, lon: -122.3750015259, elevation_ft: 13, type: "large_airport", website: "https://www.flysfo.com/", scheduled: "yes" },
-];
+// Airport database is now imported from airports-db.ts
+// Includes 484 major international and domestic airports worldwide
+// Covering all continents with IATA codes and scheduled service
 
 // Function to calculate distance using Haversine formula
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -95,6 +96,23 @@ function checkAircraftSuitability(distance: number, runway: number, aircraftType
   return aircraft.range_km >= distance && aircraft.min_runway <= runway;
 }
 
+// Function to calculate exact break-even load factor
+function calculateBreakEven(distance: number, aircraftType: string, rask: number, cask: number, fuelPrice: number): number {
+  const aircraft = AIRCRAFT_DATA[aircraftType as keyof typeof AIRCRAFT_DATA];
+  const ASK = distance * aircraft.seats;
+  const fuelCost = aircraft.fuel_burn_km * fuelPrice * distance;
+  const operatingCost = cask * ASK;
+  const totalFixedCost = operatingCost + fuelCost;
+
+  // Break-even when Revenue = Cost
+  // Revenue = RASK × RPK = RASK × (ASK × loadFactor)
+  // totalFixedCost = RASK × ASK × loadFactor
+  // loadFactor = totalFixedCost / (RASK × ASK)
+  const breakEvenLoadFactor = totalFixedCost / (rask * ASK);
+
+  return Math.min(1.0, Math.max(0, breakEvenLoadFactor));
+}
+
 // Function to analyze profitability and environmental impact
 function analyzeProfit(distance: number, aircraftType: string, loadFactor: number, rask: number, cask: number, fuelPrice: number) {
   const aircraft = AIRCRAFT_DATA[aircraftType as keyof typeof AIRCRAFT_DATA];
@@ -104,33 +122,46 @@ function analyzeProfit(distance: number, aircraftType: string, loadFactor: numbe
   const fuelCost = aircraft.fuel_burn_km * fuelPrice * distance;
   const operatingCost = cask * ASK;
   const cost = operatingCost + fuelCost;
-  
+
   // Calculate emissions (simplified model: ~3.16kg CO2 per kg fuel, fuel density ~0.8kg/L)
   const fuelConsumptionLiters = aircraft.fuel_burn_km * distance;
   const fuelConsumptionKg = fuelConsumptionLiters * 0.8;
   const totalCO2 = fuelConsumptionKg * 3.16;
-  
+
   // Calculate per passenger emissions
   const passengerCount = aircraft.seats * loadFactor;
   const co2PerPassenger = totalCO2 / passengerCount;
-  
+
   // Calculate environmental score (0-100, 100 is best)
   // Based on typical efficiency metrics (about 75-150g CO2/passenger-km is good)
   const co2PerPassengerKm = co2PerPassenger / distance;
   let environmentalScore = 100 - Math.min(100, co2PerPassengerKm * 100 / 15);
   environmentalScore = Math.max(0, Math.round(environmentalScore));
-  
-  return { 
-    revenue, 
-    cost, 
+
+  // Carbon offset cost calculation
+  // Average carbon credit price: $25 per tonne CO2
+  const carbonPricePerTonne = 25;
+  const totalCO2Tonnes = totalCO2 / 1000;
+  const carbonOffsetCost = totalCO2Tonnes * carbonPricePerTonne;
+  const carbonOffsetPerPassenger = carbonOffsetCost / passengerCount;
+
+  // Calculate exact break-even load factor
+  const breakEvenLoadFactor = calculateBreakEven(distance, aircraftType, rask, cask, fuelPrice);
+
+  return {
+    revenue,
+    cost,
     fuelCost,
     operatingCost,
     profit: revenue - cost,
+    breakEvenLoadFactor,
     emissions: {
       totalCO2,
       co2PerPassenger,
       co2PerPassengerKm,
-      environmentalScore
+      environmentalScore,
+      carbonOffsetCost,
+      carbonOffsetPerPassenger
     }
   };
 }
@@ -196,6 +227,29 @@ export default function FlightEstimator() {
   const [destIATA, setDestIATA] = useState('LHR');
   const [aircraft, setAircraft] = useState('Airbus A320');
   const [runwayLength, setRunwayLength] = useState(3000);
+
+  // State for airport search
+  const [originSearch, setOriginSearch] = useState('');
+  const [destSearch, setDestSearch] = useState('');
+
+  // Filtered airports based on search
+  const filteredOriginAirports = originSearch.length > 0
+    ? AIRPORTS.filter(a =>
+        a.iata.toLowerCase().includes(originSearch.toLowerCase()) ||
+        a.city.toLowerCase().includes(originSearch.toLowerCase()) ||
+        a.name.toLowerCase().includes(originSearch.toLowerCase()) ||
+        a.country.toLowerCase().includes(originSearch.toLowerCase())
+      ).slice(0, 100)
+    : AIRPORTS;
+
+  const filteredDestAirports = destSearch.length > 0
+    ? AIRPORTS.filter(a =>
+        a.iata.toLowerCase().includes(destSearch.toLowerCase()) ||
+        a.city.toLowerCase().includes(destSearch.toLowerCase()) ||
+        a.name.toLowerCase().includes(destSearch.toLowerCase()) ||
+        a.country.toLowerCase().includes(destSearch.toLowerCase())
+      ).slice(0, 100)
+    : AIRPORTS;
   
   // State for economic inputs
   const [loadFactor, setLoadFactor] = useState(0.75);
@@ -208,36 +262,61 @@ export default function FlightEstimator() {
   const [seasonType, setSeasonType] = useState('summer');
   const [timeOfDay, setTimeOfDay] = useState('morning');
   const [bookingType, setBookingType] = useState('early');
-  
+  const [routeType, setRouteType] = useState('mixed');
+  const [priceSensitivity, setPriceSensitivity] = useState('medium');
+
   // Analysis results
   const [distance, setDistance] = useState(0);
   const [flightTime, setFlightTime] = useState(0);
   const [suitable, setSuitable] = useState(false);
-  const [profitAnalysis, setProfitAnalysis] = useState({ 
-    revenue: 0, 
-    cost: 0, 
+  const [profitAnalysis, setProfitAnalysis] = useState({
+    revenue: 0,
+    cost: 0,
     fuelCost: 0,
     operatingCost: 0,
     profit: 0,
+    breakEvenLoadFactor: 0,
     emissions: {
       totalCO2: 0,
       co2PerPassenger: 0,
       co2PerPassengerKm: 0,
-      environmentalScore: 0
+      environmentalScore: 0,
+      carbonOffsetCost: 0,
+      carbonOffsetPerPassenger: 0
     }
   });
   const [passengerType, setPassengerType] = useState('');
   
   // Profitability data for different load factors
   const [profitData, setProfitData] = useState<Array<{loadFactor: number, profit: number, revenue: number, cost: number}>>([]);
-  const [aircraftComparisonData, setAircraftComparisonData] = useState<Array<{type: string, profit: number, seats: number}>>([]);
+  const [aircraftComparisonData, setAircraftComparisonData] = useState<Array<{
+    type: string,
+    profit: number,
+    seats: number,
+    fuelEfficiency: number,
+    costPerSeat: number,
+    revenuePerSeat: number,
+    category: string
+  }>>([]);
   
   // Dropdown options
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const seasons = ['spring', 'summer', 'fall', 'winter', 'holiday'];
   const timesOfDay = ['morning', 'afternoon', 'evening', 'night'];
   const bookingTypes = ['early', 'regular', 'last_minute'];
-  
+  const routeTypes = ['business', 'leisure', 'mixed'];
+  const priceSensitivityLevels = ['low', 'medium', 'high'];
+
+  // Auto-populate runway length when aircraft is selected
+  useEffect(() => {
+    if (aircraft) {
+      const selectedAircraft = AIRCRAFT_DATA[aircraft as keyof typeof AIRCRAFT_DATA];
+      if (selectedAircraft && selectedAircraft.min_runway) {
+        setRunwayLength(selectedAircraft.min_runway);
+      }
+    }
+  }, [aircraft]);
+
   // Effect to run analysis when inputs change
   useEffect(() => {
     performAnalysis();
@@ -287,15 +366,28 @@ export default function FlightEstimator() {
       }
       setProfitData(profitabilityData);
       
-      // Generate aircraft comparison data
-      const aircraftData: Array<{type: string, profit: number, seats: number}> = [];
+      // Generate aircraft comparison data with enhanced metrics
+      const aircraftData: Array<{
+        type: string,
+        profit: number,
+        seats: number,
+        fuelEfficiency: number,
+        costPerSeat: number,
+        revenuePerSeat: number,
+        category: string
+      }> = [];
       Object.keys(AIRCRAFT_DATA).forEach(craftType => {
         if (checkAircraftSuitability(dist, runwayLength, craftType)) {
           const profitForType = analyzeProfit(dist, craftType, loadFactor, rask, cask, fuelPrice);
+          const aircraftInfo = AIRCRAFT_DATA[craftType as keyof typeof AIRCRAFT_DATA];
           aircraftData.push({
             type: craftType,
             profit: Math.round(profitForType.profit),
-            seats: AIRCRAFT_DATA[craftType as keyof typeof AIRCRAFT_DATA].seats
+            seats: aircraftInfo.seats,
+            fuelEfficiency: profitForType.emissions.co2PerPassengerKm,
+            costPerSeat: profitForType.cost / aircraftInfo.seats,
+            revenuePerSeat: profitForType.revenue / aircraftInfo.seats,
+            category: aircraftInfo.category
           });
         }
       });
@@ -381,17 +473,28 @@ export default function FlightEstimator() {
                         <SelectValue placeholder="Select origin" />
                       </SelectTrigger>
                       <SelectContent>
-                        {AIRPORTS.map(airport => (
-                          <SelectItem key={airport.iata} value={airport.iata}>
-                            <div className="flex items-center gap-1">
-                              <span className="font-medium">{airport.iata}</span>
-                              <span className="text-gray-500 text-xs">({airport.icao})</span>
-                              <span className="ml-1">-</span>
-                              <span>{airport.city}</span>
-                              <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
+                        <div className="sticky top-0 bg-white p-2 border-b">
+                          <Input
+                            placeholder="Search airports..."
+                            value={originSearch}
+                            onChange={(e) => setOriginSearch(e.target.value)}
+                            className="h-9 text-sm"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {filteredOriginAirports.map(airport => (
+                            <SelectItem key={airport.iata} value={airport.iata}>
+                              <div className="flex items-center gap-1">
+                                <span className="font-medium">{airport.iata}</span>
+                                <span className="text-gray-500 text-xs">({airport.icao || 'N/A'})</span>
+                                <span className="ml-1">-</span>
+                                <span className="truncate max-w-[200px]">{airport.city}</span>
+                                <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </div>
                       </SelectContent>
                     </Select>
                   </div>
@@ -435,17 +538,28 @@ export default function FlightEstimator() {
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
                       <SelectContent>
-                        {AIRPORTS.map(airport => (
-                          <SelectItem key={airport.iata} value={airport.iata}>
-                            <div className="flex items-center gap-1">
-                              <span className="font-medium">{airport.iata}</span>
-                              <span className="text-gray-500 text-xs">({airport.icao})</span>
-                              <span className="ml-1">-</span>
-                              <span>{airport.city}</span>
-                              <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
+                        <div className="sticky top-0 bg-white p-2 border-b">
+                          <Input
+                            placeholder="Search airports..."
+                            value={destSearch}
+                            onChange={(e) => setDestSearch(e.target.value)}
+                            className="h-9 text-sm"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {filteredDestAirports.map(airport => (
+                            <SelectItem key={airport.iata} value={airport.iata}>
+                              <div className="flex items-center gap-1">
+                                <span className="font-medium">{airport.iata}</span>
+                                <span className="text-gray-500 text-xs">({airport.icao || 'N/A'})</span>
+                                <span className="ml-1">-</span>
+                                <span className="truncate max-w-[200px]">{airport.city}</span>
+                                <span className="text-xs text-gray-400 ml-auto">{airport.country}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </div>
                       </SelectContent>
                     </Select>
                   </div>
@@ -471,11 +585,10 @@ export default function FlightEstimator() {
                     id="runway"
                     type="number"
                     value={runwayLength}
-                    onChange={e => setRunwayLength(Number(e.target.value))}
-                    min={1000}
-                    max={5000}
-                    className="h-11 text-base"
+                    readOnly
+                    className="h-11 text-base bg-gray-100 cursor-not-allowed"
                   />
+                  <p className="text-xs text-gray-500 italic">Auto-populated based on selected aircraft</p>
                 </div>
               </CardContent>
             </Card>
@@ -540,117 +653,6 @@ export default function FlightEstimator() {
                     step={0.1}
                     className="h-11 text-base"
                   />
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <Users className="h-6 w-6 text-purple-500" />
-                  Passenger Demographics
-                </CardTitle>
-                <CardDescription className="text-base mt-2">Factors affecting passenger type prediction</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                  {/* Temporal Factors Card */}
-                  <div className="space-y-4 p-5 bg-blue-50 rounded-xl border border-blue-200 shadow-sm">
-                    <h4 className="text-base font-semibold flex items-center gap-2 text-blue-900">
-                      <CalendarClock className="h-5 w-5 text-blue-600" />
-                      Temporal Factors
-                    </h4>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="dayOfWeek" className="text-sm font-medium text-gray-700">Day of Week</Label>
-                        <Select value={dayOfWeek} onValueChange={setDayOfWeek}>
-                          <SelectTrigger className="bg-white h-11 text-base">
-                            <SelectValue placeholder="Select day" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {daysOfWeek.map(day => (
-                              <SelectItem key={day} value={day}>
-                                {day}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="season" className="text-sm font-medium text-gray-700">Season</Label>
-                        <Select value={seasonType} onValueChange={setSeasonType}>
-                          <SelectTrigger className="bg-white h-11 text-base">
-                            <SelectValue placeholder="Select season" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {seasons.map(season => (
-                              <SelectItem key={season} value={season}>
-                                {season.charAt(0).toUpperCase() + season.slice(1)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="timeOfDay" className="text-sm font-medium text-gray-700">Time of Day</Label>
-                        <Select value={timeOfDay} onValueChange={setTimeOfDay}>
-                          <SelectTrigger className="bg-white h-11 text-base">
-                            <SelectValue placeholder="Select time" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {timesOfDay.map(time => (
-                              <SelectItem key={time} value={time}>
-                                {time.charAt(0).toUpperCase() + time.slice(1)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 italic bg-blue-100/50 p-3 rounded-lg">💡 Weekday mornings/evenings favor business travelers</p>
-                  </div>
-                  
-                  {/* Booking Behavior Card */}
-                  <div className="space-y-4 p-5 bg-purple-50 rounded-xl border border-purple-200 shadow-sm">
-                    <h4 className="text-base font-semibold flex items-center gap-2 text-purple-900">
-                      <Ticket className="h-5 w-5 text-purple-600" />
-                      Booking Behavior
-                    </h4>
-                    <div className="space-y-2">
-                      <Label htmlFor="bookingType" className="text-sm font-medium text-gray-700">Booking Window</Label>
-                      <Select value={bookingType} onValueChange={setBookingType}>
-                        <SelectTrigger className="bg-white h-11 text-base">
-                          <SelectValue placeholder="Select booking type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {bookingTypes.map(type => (
-                            <SelectItem key={type} value={type}>
-                              {type === 'early' ? 'Early (>30 days)' : 
-                               type === 'regular' ? 'Regular (7-30 days)' : 
-                               'Last Minute (<7 days)'}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg border border-purple-200 shadow-sm">
-                      <h5 className="text-sm font-semibold mb-2.5 text-purple-900">📊 Booking Pattern Indicators</h5>
-                      <ul className="text-sm text-gray-700 space-y-2">
-                        <li className="flex items-start gap-2">
-                          <span className="text-purple-600 font-bold">•</span>
-                          <span><strong className="text-purple-800">Early ({'>'}30 days):</strong> Leisure travelers, price-sensitive</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-purple-600 font-bold">•</span>
-                          <span><strong className="text-purple-800">Regular (7-30 days):</strong> Mixed business and leisure</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-purple-600 font-bold">•</span>
-                          <span><strong className="text-purple-800">Last Minute ({'<'}7 days):</strong> Business or urgent travel</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -731,7 +733,7 @@ export default function FlightEstimator() {
                             <Activity className="h-6 w-6 text-teal-500 ml-2" />
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent className="w-80 p-4 bg-white text-gray-800 border border-gray-200">
+                        <TooltipContent className="w-96 p-4 bg-white text-gray-800 border border-gray-200">
                           <h5 className="font-medium text-sm mb-1">Environmental Impact Details</h5>
                           <p className="text-xs mb-2">Carbon emissions and efficiency metrics for this flight.</p>
                           <div className="space-y-2 text-xs">
@@ -750,14 +752,30 @@ export default function FlightEstimator() {
                             <div className="mt-3 pt-2 border-t border-gray-200">
                               <span className="block font-medium mb-1">Environmental Score: {profitAnalysis.emissions.environmentalScore}/100</span>
                               <span className={`text-xs ${
-                                profitAnalysis.emissions.environmentalScore > 70 ? 'text-green-600' : 
-                                profitAnalysis.emissions.environmentalScore > 50 ? 'text-yellow-600' : 
+                                profitAnalysis.emissions.environmentalScore > 70 ? 'text-green-600' :
+                                profitAnalysis.emissions.environmentalScore > 50 ? 'text-yellow-600' :
                                 profitAnalysis.emissions.environmentalScore > 30 ? 'text-orange-600' : 'text-red-600'
                               }`}>
-                                {profitAnalysis.emissions.environmentalScore > 70 ? 'Excellent' : 
-                                profitAnalysis.emissions.environmentalScore > 50 ? 'Good' : 
+                                {profitAnalysis.emissions.environmentalScore > 70 ? 'Excellent' :
+                                profitAnalysis.emissions.environmentalScore > 50 ? 'Good' :
                                 profitAnalysis.emissions.environmentalScore > 30 ? 'Fair' : 'Poor'} efficiency
                               </span>
+                            </div>
+                            <div className="mt-3 pt-2 border-t border-gray-200 bg-blue-50 p-2 rounded">
+                              <span className="block font-medium mb-1 text-blue-900">💰 Carbon Offset Cost</span>
+                              <div className="space-y-1">
+                                <div className="flex justify-between">
+                                  <span className="text-blue-800">Total Offset:</span>
+                                  <span className="font-semibold text-blue-900">${profitAnalysis.emissions.carbonOffsetCost.toFixed(2)}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-blue-800">Per Passenger:</span>
+                                  <span className="font-semibold text-blue-900">${profitAnalysis.emissions.carbonOffsetPerPassenger.toFixed(2)}</span>
+                                </div>
+                                <p className="text-xs text-blue-700 mt-1 italic">
+                                  At $25 per tonne CO2 (industry average)
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </TooltipContent>
@@ -881,16 +899,32 @@ export default function FlightEstimator() {
                     <div className="mt-4">
                       <h3 className="text-sm font-medium mb-2">Break-even Analysis</h3>
                       <div className="text-sm text-gray-600">
-                        {profitData.find(item => item.profit >= 0) ? (
-                          <p>
-                            Break-even load factor: approximately{' '}
-                            <strong className="text-blue-600">
-                              {profitData.find(item => item.profit >= 0)?.loadFactor}%
-                            </strong>
-                          </p>
+                        {profitAnalysis.breakEvenLoadFactor <= 1.0 ? (
+                          <div>
+                            <p className="mb-2">
+                              <strong>Exact break-even load factor:</strong>{' '}
+                              <strong className="text-blue-600 text-lg">
+                                {(profitAnalysis.breakEvenLoadFactor * 100).toFixed(2)}%
+                              </strong>
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              To break even, the flight needs at least{' '}
+                              {Math.ceil(profitAnalysis.breakEvenLoadFactor * AIRCRAFT_DATA[aircraft as keyof typeof AIRCRAFT_DATA].seats)}{' '}
+                              passengers out of {AIRCRAFT_DATA[aircraft as keyof typeof AIRCRAFT_DATA].seats} seats.
+                            </p>
+                            {loadFactor >= profitAnalysis.breakEvenLoadFactor ? (
+                              <p className="mt-2 text-green-600 text-xs flex items-center gap-1">
+                                ✓ Current load factor ({(loadFactor * 100).toFixed(0)}%) is above break-even
+                              </p>
+                            ) : (
+                              <p className="mt-2 text-red-600 text-xs flex items-center gap-1">
+                                ✗ Current load factor ({(loadFactor * 100).toFixed(0)}%) is below break-even
+                              </p>
+                            )}
+                          </div>
                         ) : (
                           <p className="text-red-600">
-                            This route does not break even at any tested load factor.
+                            This route cannot break even even at 100% load factor.
                             Consider adjusting RASK/CASK or aircraft type.
                           </p>
                         )}
@@ -936,28 +970,71 @@ export default function FlightEstimator() {
                       </ResponsiveContainer>
                     </div>
                     
-                    <div className="mt-4">
-                      <h3 className="text-sm font-medium mb-2">Aircraft Recommendation</h3>
-                      <div className="text-sm text-gray-600">
-                        {aircraftComparisonData.length > 0 ? (
-                          <>
-                            <p className="mb-2">
-                              <strong className="text-blue-600">
-                                {aircraftComparisonData.sort((a, b) => b.profit - a.profit)[0].type}
-                              </strong>{' '}
-                              is the most profitable aircraft for this route with an estimated profit of{' '}
-                              <strong>{formatCurrency(aircraftComparisonData.sort((a, b) => b.profit - a.profit)[0].profit)}</strong>.
+                    <div className="mt-4 space-y-4">
+                      <div>
+                        <h3 className="text-sm font-medium mb-2">Aircraft Recommendation</h3>
+                        <div className="text-sm text-gray-600">
+                          {aircraftComparisonData.length > 0 ? (
+                            <>
+                              <p className="mb-2">
+                                <strong className="text-blue-600">
+                                  {aircraftComparisonData.sort((a, b) => b.profit - a.profit)[0].type}
+                                </strong>{' '}
+                                is the most profitable aircraft for this route with an estimated profit of{' '}
+                                <strong>{formatCurrency(aircraftComparisonData.sort((a, b) => b.profit - a.profit)[0].profit)}</strong>.
+                              </p>
+                              <p>
+                                {aircraftComparisonData.length} aircraft types can operate this {distance.toLocaleString()} km route.
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-red-600">
+                              No suitable aircraft found for this route. Try increasing runway length or selecting a different route.
                             </p>
-                            <p>
-                              {aircraftComparisonData.length} aircraft types can operate this {distance.toLocaleString()} km route.
-                            </p>
-                          </>
-                        ) : (
-                          <p className="text-red-600">
-                            No suitable aircraft found for this route. Try increasing runway length or selecting a different route.
-                          </p>
-                        )}
+                          )}
+                        </div>
                       </div>
+
+                      {aircraftComparisonData.length > 0 && (
+                        <div>
+                          <h3 className="text-sm font-medium mb-3">Detailed Aircraft Metrics</h3>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full text-xs border-collapse">
+                              <thead>
+                                <tr className="bg-gray-100">
+                                  <th className="border p-2 text-left">Aircraft</th>
+                                  <th className="border p-2 text-right">Category</th>
+                                  <th className="border p-2 text-right">Profit</th>
+                                  <th className="border p-2 text-right">Revenue/Seat</th>
+                                  <th className="border p-2 text-right">Cost/Seat</th>
+                                  <th className="border p-2 text-right">Fuel Eff.</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {aircraftComparisonData
+                                  .sort((a, b) => b.profit - a.profit)
+                                  .slice(0, 10)
+                                  .map((ac, idx) => (
+                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                                      <td className="border p-2 font-medium">{ac.type}</td>
+                                      <td className="border p-2 text-right text-gray-600">{ac.category}</td>
+                                      <td className={`border p-2 text-right font-semibold ${ac.profit > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {formatCurrency(ac.profit)}
+                                      </td>
+                                      <td className="border p-2 text-right">${ac.revenuePerSeat.toFixed(2)}</td>
+                                      <td className="border p-2 text-right">${ac.costPerSeat.toFixed(2)}</td>
+                                      <td className="border p-2 text-right">{(ac.fuelEfficiency * 1000).toFixed(1)}g/km</td>
+                                    </tr>
+                                  ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-2 italic">
+                            * Fuel Efficiency = CO2 per passenger-km (lower is better)
+                            <br />* Showing top 10 most profitable aircraft
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

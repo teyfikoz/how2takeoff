@@ -8,7 +8,8 @@ export const mockAircraftData = [
     maxRange: 15327,
     cruiseSpeed: 470,
     fuelEfficiency: 0.0239,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2500
   },
   {
     id: 2,
@@ -18,7 +19,8 @@ export const mockAircraftData = [
     maxRange: 14010,
     cruiseSpeed: 488,
     fuelEfficiency: 0.023,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2800
   },
   {
     id: 3,
@@ -28,7 +30,8 @@ export const mockAircraftData = [
     maxRange: 6297,
     cruiseSpeed: 447,
     fuelEfficiency: 0.021,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1630
   },
   {
     id: 4,
@@ -38,7 +41,8 @@ export const mockAircraftData = [
     maxRange: 6570,
     cruiseSpeed: 449,
     fuelEfficiency: 0.022,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2200
   },
   {
     id: 5,
@@ -48,7 +52,8 @@ export const mockAircraftData = [
     maxRange: 7400,
     cruiseSpeed: 470,
     fuelEfficiency: 0.022,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2100
   },
   {
     id: 6,
@@ -58,7 +63,8 @@ export const mockAircraftData = [
     maxRange: 15700,
     cruiseSpeed: 490,
     fuelEfficiency: 0.035,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2900
   },
   {
     id: 7,
@@ -68,7 +74,8 @@ export const mockAircraftData = [
     maxRange: 4260,
     cruiseSpeed: 447,
     fuelEfficiency: 0.025,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1600
   },
   {
     id: 8,
@@ -78,7 +85,8 @@ export const mockAircraftData = [
     maxRange: 4010,
     cruiseSpeed: 451,
     fuelEfficiency: 0.03,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1100
   },
   {
     id: 9,
@@ -88,7 +96,8 @@ export const mockAircraftData = [
     maxRange: 7130,
     cruiseSpeed: 470,
     fuelEfficiency: 0.0225,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1980
   },
   {
     id: 10,
@@ -98,7 +107,8 @@ export const mockAircraftData = [
     maxRange: 5700,
     cruiseSpeed: 470,
     fuelEfficiency: 0.024,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1780
   },
   {
     id: 11,
@@ -108,7 +118,8 @@ export const mockAircraftData = [
     maxRange: 6850,
     cruiseSpeed: 470,
     fuelEfficiency: 0.0235,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1950
   },
   {
     id: 12,
@@ -118,7 +129,8 @@ export const mockAircraftData = [
     maxRange: 6150,
     cruiseSpeed: 470,
     fuelEfficiency: 0.023,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2000
   },
   {
     id: 13,
@@ -128,7 +140,8 @@ export const mockAircraftData = [
     maxRange: 5765,
     cruiseSpeed: 470,
     fuelEfficiency: 0.024,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1800
   },
   {
     id: 14,
@@ -138,7 +151,8 @@ export const mockAircraftData = [
     maxRange: 4000,
     cruiseSpeed: 470,
     fuelEfficiency: 0.03,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2400
   },
   {
     id: 15,
@@ -148,7 +162,8 @@ export const mockAircraftData = [
     maxRange: 4600,
     cruiseSpeed: 470,
     fuelEfficiency: 0.028,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2100
   },
   {
     id: 16,
@@ -158,7 +173,8 @@ export const mockAircraftData = [
     maxRange: 7222,
     cruiseSpeed: 470,
     fuelEfficiency: 0.025,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1920
   },
   {
     id: 17,
@@ -168,7 +184,8 @@ export const mockAircraftData = [
     maxRange: 11070,
     cruiseSpeed: 470,
     fuelEfficiency: 0.026,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2900
   },
   {
     id: 18,
@@ -178,7 +195,8 @@ export const mockAircraftData = [
     maxRange: 13650,
     cruiseSpeed: 470,
     fuelEfficiency: 0.027,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 3050
   },
   {
     id: 19,
@@ -188,7 +206,8 @@ export const mockAircraftData = [
     maxRange: 13530,
     cruiseSpeed: 470,
     fuelEfficiency: 0.023,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2600
   },
   {
     id: 20,
@@ -198,7 +217,8 @@ export const mockAircraftData = [
     maxRange: 11750,
     cruiseSpeed: 470,
     fuelEfficiency: 0.026,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 2770
   },
   {
     id: 21,
@@ -208,7 +228,8 @@ export const mockAircraftData = [
     maxRange: 14450,
     cruiseSpeed: 470,
     fuelEfficiency: 0.028,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 3000
   },
   {
     id: 22,
@@ -218,7 +239,8 @@ export const mockAircraftData = [
     maxRange: 4537,
     cruiseSpeed: 447,
     fuelEfficiency: 0.025,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1760
   },
   {
     id: 23,
@@ -228,7 +250,8 @@ export const mockAircraftData = [
     maxRange: 2956,
     cruiseSpeed: 447,
     fuelEfficiency: 0.024,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1700
   },
   {
     id: 24,
@@ -238,7 +261,8 @@ export const mockAircraftData = [
     maxRange: 2522,
     cruiseSpeed: 360,
     fuelEfficiency: 0.022,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1425
   },
   {
     id: 25,
@@ -248,6 +272,337 @@ export const mockAircraftData = [
     maxRange: 1665,
     cruiseSpeed: 275,
     fuelEfficiency: 0.021,
-    co2Factor: 3.15
+    co2Factor: 3.15,
+    minRunway: 1333
+  },
+  {
+    id: 26,
+    name: "Boeing 737-700",
+    maxPassengers: 149,
+    cargoCapacity: 19300,
+    maxRange: 6390,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.0235,
+    co2Factor: 3.15,
+    minRunway: 1830
+  },
+  {
+    id: 27,
+    name: "Boeing 737-900ER",
+    maxPassengers: 220,
+    cargoCapacity: 23200,
+    maxRange: 5925,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.0245,
+    co2Factor: 3.15,
+    minRunway: 2200
+  },
+  {
+    id: 28,
+    name: "Boeing 737 MAX 9",
+    maxPassengers: 220,
+    cargoCapacity: 22000,
+    maxRange: 6570,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.0225,
+    co2Factor: 3.15,
+    minRunway: 2300
+  },
+  {
+    id: 29,
+    name: "Boeing 737 MAX 10",
+    maxPassengers: 230,
+    cargoCapacity: 23500,
+    maxRange: 6110,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.023,
+    co2Factor: 3.15,
+    minRunway: 2500
+  },
+  {
+    id: 30,
+    name: "Boeing 747-8",
+    maxPassengers: 524,
+    cargoCapacity: 161000,
+    maxRange: 14320,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.034,
+    co2Factor: 3.15,
+    minRunway: 3050
+  },
+  {
+    id: 31,
+    name: "Boeing 777-200ER",
+    maxPassengers: 396,
+    cargoCapacity: 55000,
+    maxRange: 14800,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.027,
+    co2Factor: 3.15,
+    minRunway: 2440
+  },
+  {
+    id: 32,
+    name: "Boeing 777-9",
+    maxPassengers: 426,
+    cargoCapacity: 58000,
+    maxRange: 13500,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.026,
+    co2Factor: 3.15,
+    minRunway: 3050
+  },
+  {
+    id: 33,
+    name: "Boeing 787-10",
+    maxPassengers: 370,
+    cargoCapacity: 45000,
+    maxRange: 11730,
+    cruiseSpeed: 488,
+    fuelEfficiency: 0.024,
+    co2Factor: 3.15,
+    minRunway: 2800
+  },
+  {
+    id: 34,
+    name: "Airbus A320neo",
+    maxPassengers: 180,
+    cargoCapacity: 21000,
+    maxRange: 6500,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.021,
+    co2Factor: 3.15,
+    minRunway: 2000
+  },
+  {
+    id: 35,
+    name: "Airbus A321LR",
+    maxPassengers: 206,
+    cargoCapacity: 23800,
+    maxRange: 7400,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.022,
+    co2Factor: 3.15,
+    minRunway: 2150
+  },
+  {
+    id: 36,
+    name: "Airbus A321XLR",
+    maxPassengers: 206,
+    cargoCapacity: 23800,
+    maxRange: 8700,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.022,
+    co2Factor: 3.15,
+    minRunway: 2180
+  },
+  {
+    id: 37,
+    name: "Airbus A330-900neo",
+    maxPassengers: 310,
+    cargoCapacity: 45000,
+    maxRange: 13334,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.024,
+    co2Factor: 3.15,
+    minRunway: 2770
+  },
+  {
+    id: 38,
+    name: "Airbus A350-1000",
+    maxPassengers: 410,
+    cargoCapacity: 56000,
+    maxRange: 15600,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.025,
+    co2Factor: 3.15,
+    minRunway: 2750
+  },
+  {
+    id: 39,
+    name: "Airbus A220-100",
+    maxPassengers: 135,
+    cargoCapacity: 15000,
+    maxRange: 6390,
+    cruiseSpeed: 447,
+    fuelEfficiency: 0.020,
+    co2Factor: 3.15,
+    minRunway: 1463
+  },
+  {
+    id: 40,
+    name: "Embraer E170",
+    maxPassengers: 78,
+    cargoCapacity: 10000,
+    maxRange: 4600,
+    cruiseSpeed: 420,
+    fuelEfficiency: 0.024,
+    co2Factor: 3.15,
+    minRunway: 1650
+  },
+  {
+    id: 41,
+    name: "Embraer E175",
+    maxPassengers: 88,
+    cargoCapacity: 11500,
+    maxRange: 3889,
+    cruiseSpeed: 447,
+    fuelEfficiency: 0.024,
+    co2Factor: 3.15,
+    minRunway: 1644
+  },
+  {
+    id: 42,
+    name: "Bombardier CRJ-700",
+    maxPassengers: 78,
+    cargoCapacity: 7000,
+    maxRange: 3348,
+    cruiseSpeed: 447,
+    fuelEfficiency: 0.023,
+    co2Factor: 3.15,
+    minRunway: 1700
+  },
+  {
+    id: 43,
+    name: "Bombardier CRJ-1000",
+    maxPassengers: 104,
+    cargoCapacity: 9000,
+    maxRange: 2761,
+    cruiseSpeed: 447,
+    fuelEfficiency: 0.025,
+    co2Factor: 3.15,
+    minRunway: 1800
+  },
+  {
+    id: 44,
+    name: "ATR 42-600",
+    maxPassengers: 50,
+    cargoCapacity: 5500,
+    maxRange: 1330,
+    cruiseSpeed: 270,
+    fuelEfficiency: 0.019,
+    co2Factor: 3.15,
+    minRunway: 1165
+  },
+  {
+    id: 45,
+    name: "De Havilland Dash 8-400",
+    maxPassengers: 78,
+    cargoCapacity: 8000,
+    maxRange: 2040,
+    cruiseSpeed: 360,
+    fuelEfficiency: 0.022,
+    co2Factor: 3.15,
+    minRunway: 1425
+  },
+  {
+    id: 46,
+    name: "Boeing 767-400ER",
+    maxPassengers: 304,
+    cargoCapacity: 45000,
+    maxRange: 10415,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.027,
+    co2Factor: 3.15,
+    minRunway: 2900
+  },
+  {
+    id: 47,
+    name: "Boeing 777-200",
+    maxPassengers: 368,
+    cargoCapacity: 53000,
+    maxRange: 9700,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.028,
+    co2Factor: 3.15,
+    minRunway: 2530
+  },
+  {
+    id: 48,
+    name: "Boeing 777-300",
+    maxPassengers: 396,
+    cargoCapacity: 54000,
+    maxRange: 11020,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.028,
+    co2Factor: 3.15,
+    minRunway: 3200
+  },
+  {
+    id: 49,
+    name: "Airbus A330-200",
+    maxPassengers: 253,
+    cargoCapacity: 40000,
+    maxRange: 13450,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.025,
+    co2Factor: 3.15,
+    minRunway: 2220
+  },
+  {
+    id: 50,
+    name: "Airbus A340-300",
+    maxPassengers: 295,
+    cargoCapacity: 51000,
+    maxRange: 13500,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.029,
+    co2Factor: 3.15,
+    minRunway: 2990
+  },
+  {
+    id: 51,
+    name: "Airbus A340-500",
+    maxPassengers: 313,
+    cargoCapacity: 53000,
+    maxRange: 16670,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.030,
+    co2Factor: 3.15,
+    minRunway: 3050
+  },
+  {
+    id: 52,
+    name: "Boeing 747-400",
+    maxPassengers: 524,
+    cargoCapacity: 150000,
+    maxRange: 13450,
+    cruiseSpeed: 490,
+    fuelEfficiency: 0.036,
+    co2Factor: 3.15,
+    minRunway: 3018
+  },
+  {
+    id: 53,
+    name: "Boeing 757-300",
+    maxPassengers: 289,
+    cargoCapacity: 30000,
+    maxRange: 6421,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.026,
+    co2Factor: 3.15,
+    minRunway: 2500
+  },
+  {
+    id: 54,
+    name: "McDonnell Douglas MD-11",
+    maxPassengers: 323,
+    cargoCapacity: 91000,
+    maxRange: 12670,
+    cruiseSpeed: 470,
+    fuelEfficiency: 0.032,
+    co2Factor: 3.15,
+    minRunway: 2850
+  },
+  {
+    id: 55,
+    name: "Embraer E195-E2",
+    maxPassengers: 146,
+    cargoCapacity: 15000,
+    maxRange: 5278,
+    cruiseSpeed: 447,
+    fuelEfficiency: 0.021,
+    co2Factor: 3.15,
+    minRunway: 1580
   }
 ];

@@ -10,7 +10,8 @@ export const aircraftTypes = pgTable("aircraft_types", {
   maxRange: integer("max_range").notNull(),
   cruiseSpeed: real("cruise_speed").notNull(),
   fuelEfficiency: real("fuel_efficiency").notNull(),
-  co2Factor: real("co2_factor").notNull().default(2.5)
+  co2Factor: real("co2_factor").notNull().default(2.5),
+  minRunway: integer("min_runway")
 });
 
 export const insertAircraftSchema = createInsertSchema(aircraftTypes);
