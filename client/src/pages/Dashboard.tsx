@@ -147,8 +147,6 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <InContentAd />
-
             <Card>
               <CardHeader>
                 <CardTitle>Performance Analysis</CardTitle>
@@ -157,6 +155,8 @@ export default function Dashboard() {
                 <ComparisonCharts aircraftData={filteredAircraft} />
               </CardContent>
             </Card>
+
+            <InContentAd />
           </>
         ) : filterCriteria && (
           <Card>

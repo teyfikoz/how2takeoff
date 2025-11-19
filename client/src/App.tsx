@@ -3,21 +3,32 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
-import NotFound from "@/pages/not-found";
-import Dashboard from "@/pages/Dashboard";
-import AircraftDatabase from "@/pages/AircraftDatabase";
-import BasicAviationPassenger from "@/pages/BasicAviationPassenger";
-import BasicAviationCargo from "@/pages/BasicAviationCargo";
-import RevenueManagement from "@/pages/RevenueManagement";
-import CarrierTypes from "@/pages/CarrierTypes";
-import TicketingDistribution from "@/pages/TicketingDistribution";
-import AirlineCRM from "@/pages/AirlineCRM";
-import AboutMe from "@/pages/AboutMe";
-import Articles from "@/pages/Articles";
-import FlightEstimator from "@/pages/FlightEstimator";
 import DonationBanner from "@/components/DonationBanner";
 import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText, Calculator } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
+
+// Lazy load page components for better performance
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const FlightEstimator = lazy(() => import("@/pages/FlightEstimator"));
+const AircraftDatabase = lazy(() => import("@/pages/AircraftDatabase"));
+const BasicAviationPassenger = lazy(() => import("@/pages/BasicAviationPassenger"));
+const BasicAviationCargo = lazy(() => import("@/pages/BasicAviationCargo"));
+const RevenueManagement = lazy(() => import("@/pages/RevenueManagement"));
+const CarrierTypes = lazy(() => import("@/pages/CarrierTypes"));
+const TicketingDistribution = lazy(() => import("@/pages/TicketingDistribution"));
+const AirlineCRM = lazy(() => import("@/pages/AirlineCRM"));
+const AboutMe = lazy(() => import("@/pages/AboutMe"));
+const Articles = lazy(() => import("@/pages/Articles"));
+const NotFound = lazy(() => import("@/pages/not-found"));
+
+// Loading component for Suspense fallback
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  );
+}
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -166,21 +177,23 @@ function Router() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 my-4">
           <DonationBanner />
         </div>
-        <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/flight-estimator" component={FlightEstimator} />
-        <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
-        <Route path="/revenue-management" component={RevenueManagement} />
-        <Route path="/ticketing-distribution" component={TicketingDistribution} />
-        <Route path="/airline-crm" component={AirlineCRM} />
-        <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
-        <Route path="/carrier-types" component={CarrierTypes} />
-        <Route path="/database" component={AircraftDatabase} />
-        <Route path="/articles" component={Articles} />
-        <Route path="/about" component={AboutMe} />
-        <Route component={NotFound} />
-      </Switch>
-    </div>
+        <Suspense fallback={<PageLoader />}>
+          <Switch>
+            <Route path="/" component={Dashboard} />
+            <Route path="/flight-estimator" component={FlightEstimator} />
+            <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
+            <Route path="/revenue-management" component={RevenueManagement} />
+            <Route path="/ticketing-distribution" component={TicketingDistribution} />
+            <Route path="/airline-crm" component={AirlineCRM} />
+            <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
+            <Route path="/carrier-types" component={CarrierTypes} />
+            <Route path="/database" component={AircraftDatabase} />
+            <Route path="/articles" component={Articles} />
+            <Route path="/about" component={AboutMe} />
+            <Route component={NotFound} />
+          </Switch>
+        </Suspense>
+      </div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import pgSession from "connect-pg-simple";
-import { pool } from "./db";
+import { pool, isDatabaseAvailable } from "./db";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { authenticate } from "./middleware/auth";
@@ -11,22 +11,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Session configuration
-const PostgresqlStore = pgSession(session);
-app.use(
-  session({
-    store: new PostgresqlStore({
-      pool,
-      tableName: 'session'
-    }),
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-  })
-);
+const sessionConfig: any = {
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+};
+
+// Use PostgreSQL session store only if database is available
+if (isDatabaseAvailable) {
+  const PostgresqlStore = pgSession(session);
+  sessionConfig.store = new PostgresqlStore({
+    pool,
+    tableName: 'session'
+  });
+} else {
+  // Use memory store for mock mode (WARNING: sessions will not persist across restarts)
+  log("⚠️  Using memory-based session store in mock mode");
+}
+
+app.use(session(sessionConfig));
 
 // Authentication middleware
 app.use(authenticate);
@@ -82,10 +89,10 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
+  // Serve the app on configurable port (default 5000, or 3001 in local dev)
   // this serves both the API and the client
-  const PORT = 5000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT) : (isDatabaseAvailable ? 5000 : 3001);
   server.listen(PORT, "0.0.0.0", () => {
-    log(`serving on port ${PORT}`);
+    log(`🚀 Server running on http://localhost:${PORT}`);
   });
 })();

@@ -1,4 +1,4 @@
-import { 
+import {
   type Aircraft, type InsertAircraft,
   type User, type InsertUser,
   type Analytics, type InsertAnalytics,
@@ -6,7 +6,7 @@ import {
   aircraftTypes, users, userAnalytics, flightCalculations,
   type ProfileClick, type InsertProfileClick, profileClicks
 } from "@shared/schema";
-import { db } from "./db";
+import { db, isDatabaseAvailable } from "./db";
 import { eq } from "drizzle-orm";
 
 export interface IStorage {
@@ -329,8 +329,395 @@ const initialAircraftData: InsertAircraft[] = [
     capacity: { min: 76, max: 90 },
     cargoCapacity: 10319,
     speed: 780
+  },
+  {
+    name: "Boeing 737 MAX 9",
+    emptyWeight: 45600,
+    maxTakeoffWeight: 88300,
+    maxPayload: 21000,
+    fuelCapacity: 26020,
+    baseFuelFlow: 2450,
+    cruiseSpeed: 453,
+    maxAltitude: 41000,
+    maxRange: 6515,
+    fuelEfficiency: 0.029,
+    capacity: { min: 178, max: 220 },
+    cargoCapacity: 21000,
+    speed: 842
+  },
+  {
+    name: "Boeing 737 MAX 10",
+    emptyWeight: 46900,
+    maxTakeoffWeight: 88900,
+    maxPayload: 22000,
+    fuelCapacity: 26020,
+    baseFuelFlow: 2500,
+    cruiseSpeed: 453,
+    maxAltitude: 41000,
+    maxRange: 6110,
+    fuelEfficiency: 0.030,
+    capacity: { min: 188, max: 230 },
+    cargoCapacity: 22000,
+    speed: 839
+  },
+  {
+    name: "Boeing 777-300ER",
+    emptyWeight: 167800,
+    maxTakeoffWeight: 351534,
+    maxPayload: 68900,
+    fuelCapacity: 181280,
+    baseFuelFlow: 8900,
+    cruiseSpeed: 490,
+    maxAltitude: 43100,
+    maxRange: 13649,
+    fuelEfficiency: 0.026,
+    capacity: { min: 365, max: 451 },
+    cargoCapacity: 68900,
+    speed: 905
+  },
+  {
+    name: "Boeing 777-9",
+    emptyWeight: 184615,
+    maxTakeoffWeight: 351534,
+    maxPayload: 69680,
+    fuelCapacity: 197978,
+    baseFuelFlow: 9200,
+    cruiseSpeed: 490,
+    maxAltitude: 43100,
+    maxRange: 13940,
+    fuelEfficiency: 0.023,
+    capacity: { min: 384, max: 426 },
+    cargoCapacity: 69680,
+    speed: 910
+  },
+  {
+    name: "Airbus A321neo",
+    emptyWeight: 49700,
+    maxTakeoffWeight: 97000,
+    maxPayload: 24100,
+    fuelCapacity: 32940,
+    baseFuelFlow: 2300,
+    cruiseSpeed: 470,
+    maxAltitude: 39800,
+    maxRange: 7400,
+    fuelEfficiency: 0.024,
+    capacity: { min: 180, max: 244 },
+    cargoCapacity: 24100,
+    speed: 871
+  },
+  {
+    name: "Airbus A321XLR",
+    emptyWeight: 52100,
+    maxTakeoffWeight: 101000,
+    maxPayload: 23800,
+    fuelCapacity: 38900,
+    baseFuelFlow: 2400,
+    cruiseSpeed: 470,
+    maxAltitude: 39800,
+    maxRange: 8700,
+    fuelEfficiency: 0.024,
+    capacity: { min: 180, max: 244 },
+    cargoCapacity: 23800,
+    speed: 871
+  },
+  {
+    name: "Airbus A330-200",
+    emptyWeight: 120500,
+    maxTakeoffWeight: 242000,
+    maxPayload: 51900,
+    fuelCapacity: 139090,
+    baseFuelFlow: 6800,
+    cruiseSpeed: 470,
+    maxAltitude: 41450,
+    maxRange: 13450,
+    fuelEfficiency: 0.027,
+    capacity: { min: 247, max: 406 },
+    cargoCapacity: 51900,
+    speed: 871
+  },
+  {
+    name: "Airbus A330-300",
+    emptyWeight: 124500,
+    maxTakeoffWeight: 242000,
+    maxPayload: 52400,
+    fuelCapacity: 139090,
+    baseFuelFlow: 7000,
+    cruiseSpeed: 470,
+    maxAltitude: 41450,
+    maxRange: 11750,
+    fuelEfficiency: 0.028,
+    capacity: { min: 277, max: 440 },
+    cargoCapacity: 52400,
+    speed: 871
+  },
+  {
+    name: "Airbus A330-900neo",
+    emptyWeight: 131000,
+    maxTakeoffWeight: 251000,
+    maxPayload: 51800,
+    fuelCapacity: 139090,
+    baseFuelFlow: 6500,
+    cruiseSpeed: 470,
+    maxAltitude: 41450,
+    maxRange: 13334,
+    fuelEfficiency: 0.025,
+    capacity: { min: 287, max: 460 },
+    cargoCapacity: 51800,
+    speed: 871
+  },
+  {
+    name: "Boeing 757-200",
+    emptyWeight: 57970,
+    maxTakeoffWeight: 115680,
+    maxPayload: 22680,
+    fuelCapacity: 43490,
+    baseFuelFlow: 3200,
+    cruiseSpeed: 454,
+    maxAltitude: 42000,
+    maxRange: 7222,
+    fuelEfficiency: 0.029,
+    capacity: { min: 200, max: 239 },
+    cargoCapacity: 22680,
+    speed: 842
+  },
+  {
+    name: "Boeing 767-200ER",
+    emptyWeight: 80130,
+    maxTakeoffWeight: 175540,
+    maxPayload: 38620,
+    fuelCapacity: 91380,
+    baseFuelFlow: 5200,
+    cruiseSpeed: 459,
+    maxAltitude: 43100,
+    maxRange: 12200,
+    fuelEfficiency: 0.027,
+    capacity: { min: 181, max: 255 },
+    cargoCapacity: 38620,
+    speed: 850
+  },
+  {
+    name: "Airbus A340-300",
+    emptyWeight: 129000,
+    maxTakeoffWeight: 276500,
+    maxPayload: 51900,
+    fuelCapacity: 147850,
+    baseFuelFlow: 8500,
+    cruiseSpeed: 470,
+    maxAltitude: 41450,
+    maxRange: 13500,
+    fuelEfficiency: 0.031,
+    capacity: { min: 277, max: 440 },
+    cargoCapacity: 51900,
+    speed: 871
+  },
+  {
+    name: "ATR 72-600",
+    emptyWeight: 12950,
+    maxTakeoffWeight: 23000,
+    maxPayload: 7500,
+    fuelCapacity: 5000,
+    baseFuelFlow: 900,
+    cruiseSpeed: 276,
+    maxAltitude: 25000,
+    maxRange: 1528,
+    fuelEfficiency: 0.022,
+    capacity: { min: 68, max: 78 },
+    cargoCapacity: 7500,
+    speed: 511
+  },
+  {
+    name: "Bombardier Q400",
+    emptyWeight: 17185,
+    maxTakeoffWeight: 29257,
+    maxPayload: 8340,
+    fuelCapacity: 6526,
+    baseFuelFlow: 1050,
+    cruiseSpeed: 360,
+    maxAltitude: 27000,
+    maxRange: 2522,
+    fuelEfficiency: 0.024,
+    capacity: { min: 70, max: 86 },
+    cargoCapacity: 8340,
+    speed: 667
+  },
+  {
+    name: "Embraer E175",
+    emptyWeight: 21890,
+    maxTakeoffWeight: 40370,
+    maxPayload: 9800,
+    fuelCapacity: 13530,
+    baseFuelFlow: 1650,
+    cruiseSpeed: 448,
+    maxAltitude: 41000,
+    maxRange: 3889,
+    fuelEfficiency: 0.026,
+    capacity: { min: 76, max: 88 },
+    cargoCapacity: 9800,
+    speed: 830
+  },
+  {
+    name: "Embraer E190-E2",
+    emptyWeight: 28900,
+    maxTakeoffWeight: 56000,
+    maxPayload: 13500,
+    fuelCapacity: 13300,
+    baseFuelFlow: 1700,
+    cruiseSpeed: 470,
+    maxAltitude: 41000,
+    maxRange: 5278,
+    fuelEfficiency: 0.024,
+    capacity: { min: 97, max: 114 },
+    cargoCapacity: 13500,
+    speed: 870
+  },
+  {
+    name: "Embraer E195-E2",
+    emptyWeight: 30300,
+    maxTakeoffWeight: 61500,
+    maxPayload: 14200,
+    fuelCapacity: 13800,
+    baseFuelFlow: 1850,
+    cruiseSpeed: 470,
+    maxAltitude: 41000,
+    maxRange: 4815,
+    fuelEfficiency: 0.025,
+    capacity: { min: 120, max: 146 },
+    cargoCapacity: 14200,
+    speed: 870
+  },
+  {
+    name: "Bombardier CRJ700",
+    emptyWeight: 19730,
+    maxTakeoffWeight: 33000,
+    maxPayload: 8880,
+    fuelCapacity: 12785,
+    baseFuelFlow: 1450,
+    cruiseSpeed: 430,
+    maxAltitude: 41000,
+    maxRange: 3620,
+    fuelEfficiency: 0.027,
+    capacity: { min: 66, max: 78 },
+    cargoCapacity: 8880,
+    speed: 786
+  },
+  {
+    name: "Boeing 777F",
+    emptyWeight: 145150,
+    maxTakeoffWeight: 347815,
+    maxPayload: 102010,
+    fuelCapacity: 181280,
+    baseFuelFlow: 8500,
+    cruiseSpeed: 490,
+    maxAltitude: 43100,
+    maxRange: 9070,
+    fuelEfficiency: 0.028,
+    capacity: { min: 0, max: 0 },
+    cargoCapacity: 102010,
+    speed: 905
+  },
+  {
+    name: "Airbus A220-300",
+    emptyWeight: 37200,
+    maxTakeoffWeight: 69850,
+    maxPayload: 13500,
+    fuelCapacity: 21935,
+    baseFuelFlow: 1900,
+    cruiseSpeed: 447,
+    maxAltitude: 41000,
+    maxRange: 6390,
+    fuelEfficiency: 0.023,
+    capacity: { min: 120, max: 160 },
+    cargoCapacity: 13500,
+    speed: 828
   }
 ];
+
+// Mock in-memory storage for development without database
+export class MockStorage implements IStorage {
+  private aircraft: Aircraft[] = [];
+  private calculations: Calculation[] = [];
+  private analyticsData: Analytics[] = [];
+  private profileClicksData: ProfileClick[] = [];
+  private nextAircraftId = 1;
+  private nextCalculationId = 1;
+  private nextAnalyticsId = 1;
+  private nextProfileClickId = 1;
+
+  constructor() {
+    // Initialize with mock aircraft data
+    this.aircraft = initialAircraftData.map((data, index) => ({
+      id: index + 1,
+      ...data,
+      maxPassengers: data.capacity?.max || 0,
+      maxRange: data.maxRange,
+      co2Factor: 3.15
+    }));
+    this.nextAircraftId = this.aircraft.length + 1;
+  }
+
+  async getAllAircraft(): Promise<Aircraft[]> {
+    return this.aircraft;
+  }
+
+  async createAircraft(insertAircraft: InsertAircraft): Promise<Aircraft> {
+    const aircraft: Aircraft = {
+      id: this.nextAircraftId++,
+      ...insertAircraft,
+      maxPassengers: insertAircraft.capacity?.max || 0,
+      co2Factor: 3.15
+    };
+    this.aircraft.push(aircraft);
+    return aircraft;
+  }
+
+  async saveCalculation(insertCalculation: InsertCalculation): Promise<Calculation> {
+    const calculation: Calculation = {
+      id: this.nextCalculationId++,
+      ...insertCalculation,
+      timestamp: new Date()
+    };
+    this.calculations.push(calculation);
+    return calculation;
+  }
+
+  async getUser(_id: number): Promise<User | undefined> {
+    return undefined; // No users in mock mode
+  }
+
+  async getUserByEmail(_email: string): Promise<User | undefined> {
+    return undefined; // No users in mock mode
+  }
+
+  async updateUserLoginStats(_userId: number, _stats: { lastLogin: Date; visitCount: number }): Promise<void> {
+    // No-op in mock mode
+  }
+
+  async saveAnalytics(analytics: InsertAnalytics): Promise<void> {
+    const analyticsRecord: Analytics = {
+      id: this.nextAnalyticsId++,
+      ...analytics,
+      timestamp: new Date()
+    };
+    this.analyticsData.push(analyticsRecord);
+  }
+
+  async getAnalytics(): Promise<Analytics[]> {
+    return this.analyticsData;
+  }
+
+  async saveProfileClick(click: InsertProfileClick): Promise<void> {
+    const profileClick: ProfileClick = {
+      id: this.nextProfileClickId++,
+      ...click,
+      timestamp: new Date()
+    };
+    this.profileClicksData.push(profileClick);
+  }
+
+  async getProfileClicks(): Promise<ProfileClick[]> {
+    return this.profileClicksData;
+  }
+}
 
 export class DatabaseStorage implements IStorage {
   // Existing aircraft methods
@@ -417,4 +804,7 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// Export appropriate storage based on database availability
+export const storage: IStorage = isDatabaseAvailable
+  ? new DatabaseStorage()
+  : new MockStorage();
