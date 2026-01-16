@@ -4,11 +4,10 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { Aircraft } from '@shared/schema';
-import { ArrowRight, RotateCcw, RotateCw } from 'lucide-react';
-import { mockAircraftData } from '@/data/mockAircraftData';
+import { ArrowRight, RotateCcw, RotateCw, Wind } from 'lucide-react';
 
 interface Props {
-  aircraftData: any[]; // Daha geniş tip desteği için any kullanıyoruz
+  aircraftData: any[];
 }
 
 const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
@@ -16,9 +15,9 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
   const [windDirection, setWindDirection] = useState<number>(0);
   
   const calculateImpact = (baseRange: number, windSpeed: number, efficiency: number) => {
-    const windFactor = (windSpeed / 100) * 0.05; // 5% impact per 100 knots
+    const windFactor = (windSpeed / 100) * 0.05;
     const effectiveRange = baseRange * (1 + (windFactor * efficiency));
-    const fuelConsumption = efficiency * (1 - (windFactor * efficiency)); // Base fuel consumption adjusted by wind
+    const fuelConsumption = efficiency * (1 - (windFactor * efficiency));
     return { effectiveRange, fuelConsumption };
   };
 
@@ -28,20 +27,18 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
 
       aircraftData.forEach(aircraft => {
         const impact = calculateImpact(aircraft.maxRange, speed, aircraft.fuelEfficiency);
-        dataPoint[`${aircraft.name}_range`] = impact.effectiveRange;
-        dataPoint[`${aircraft.name}_fuel`] = impact.fuelConsumption;
+        dataPoint[`${aircraft.name}_range`] = +impact.effectiveRange.toFixed(0);
+        dataPoint[`${aircraft.name}_fuel`] = +(impact.fuelConsumption * 100).toFixed(2);
       });
 
       return dataPoint;
     });
   }, [aircraftData]);
 
-  // Specific colors for better differentiation
-  const rangeColors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'];
-  const fuelColors = ['#17becf', '#bcbd22', '#7f7f7f', '#e377c2', '#aec7e8', '#ffbb78'];
+  const rangeColors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+  const fuelColors = ['#60a5fa', '#f87171', '#34d399', '#fbbf24', '#a78bfa', '#f472b6'];
 
   const getWindArrowStyles = () => {
-    // Animation for the arrow
     return {
       animation: 'pulse 2s infinite',
       transform: `rotate(${windDirection}deg)`,
@@ -50,74 +47,96 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
     };
   };
 
-  return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h3 className="text-xl font-bold mb-2">Wind Impact Analysis</h3>
-          <p className="text-gray-600">Effect of Wind on Range & Fuel Consumption Across Aircraft</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center bg-gray-100 rounded-lg p-1">
-            <button 
-              onClick={() => setWindDirection((prev) => (prev - 45) % 360)}
-              className="p-1 hover:bg-gray-200 rounded-md transition"
-              title="Rotate wind counterclockwise"
-            >
-              <RotateCcw className="h-5 w-5 text-gray-700" />
-            </button>
-            <div className="mx-2 flex items-center space-x-2">
-              <ArrowRight 
-                className="h-6 w-6 text-blue-500" 
-                style={getWindArrowStyles()} 
-              />
-              <span className="text-sm text-gray-600">{windDirection}°</span>
-            </div>
-            <button 
-              onClick={() => setWindDirection((prev) => (prev + 45) % 360)}
-              className="p-1 hover:bg-gray-200 rounded-md transition"
-              title="Rotate wind clockwise"
-            >
-              <RotateCw className="h-5 w-5 text-gray-700" />
-            </button>
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-4 border-2 border-blue-300 rounded-lg shadow-lg max-w-xs">
+          <p className="font-bold text-gray-800 mb-2">Wind Speed: {label} kt</p>
+          <div className="space-y-1">
+            {payload.map((entry: any, index: number) => (
+              <p key={index} style={{ color: entry.color }} className="text-sm font-medium">
+                {entry.name}: {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
+                {entry.name.includes('Fuel') ? '%' : ' km'}
+              </p>
+            ))}
           </div>
         </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="bg-gradient-to-br from-white to-cyan-50 p-8 rounded-xl shadow-lg border-2 border-cyan-200">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
+        <div>
+          <h3 className="text-2xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+            <Wind className="h-7 w-7 text-cyan-600" />
+            Wind Impact Analysis
+          </h3>
+          <p className="text-gray-600 text-base">Effect of Wind on Range & Fuel Consumption</p>
+        </div>
+        <div className="flex items-center bg-white rounded-xl p-2 shadow-md border-2 border-cyan-200">
+          <button 
+            onClick={() => setWindDirection((prev) => (prev - 45 + 360) % 360)}
+            className="p-2 hover:bg-cyan-100 rounded-lg transition-all duration-200"
+            title="Rotate wind counterclockwise"
+          >
+            <RotateCcw className="h-6 w-6 text-cyan-700" />
+          </button>
+          <div className="mx-4 flex items-center space-x-3">
+            <ArrowRight 
+              className="h-8 w-8 text-cyan-600" 
+              style={getWindArrowStyles()} 
+            />
+            <span className="text-lg font-bold text-gray-700 min-w-[60px]">{windDirection}°</span>
+          </div>
+          <button 
+            onClick={() => setWindDirection((prev) => (prev + 45) % 360)}
+            className="p-2 hover:bg-cyan-100 rounded-lg transition-all duration-200"
+            title="Rotate wind clockwise"
+          >
+            <RotateCw className="h-6 w-6 text-cyan-700" />
+          </button>
+        </div>
       </div>
       
-      <div className="mb-6">
-        <p className="text-sm text-gray-500 mb-2">
+      <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <p className="text-sm text-gray-700 mb-3 leading-relaxed">
           This chart shows how different wind speeds affect both aircraft range (solid lines) and fuel consumption (dashed lines).
-          Positive wind speeds represent tailwinds, negative speeds represent headwinds.
+          <strong className="text-blue-700"> Positive wind speeds</strong> represent tailwinds, 
+          <strong className="text-red-700"> negative speeds</strong> represent headwinds.
         </p>
-        <div className="flex flex-wrap items-center gap-4 mt-2">
-          <span className="flex items-center text-sm">
-            <span className="inline-block w-3 h-3 mr-1 rounded-full bg-blue-500"></span>
-            Range (increased with tailwind)
+        <div className="flex flex-wrap items-center gap-6 mt-2">
+          <span className="flex items-center text-sm font-medium">
+            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
+            Solid Lines = Range (km)
           </span>
-          <span className="flex items-center text-sm">
-            <span className="inline-block w-3 h-3 mr-1 rounded-full bg-green-500"></span>
-            Fuel Efficiency (improved with tailwind)
+          <span className="flex items-center text-sm font-medium">
+            <span className="inline-block w-4 h-4 mr-2 rounded-full bg-green-500"></span>
+            Dashed Lines = Fuel Efficiency (%)
           </span>
         </div>
       </div>
       
-      <ResponsiveContainer width="100%" height={500}>
+      <ResponsiveContainer width="100%" height={550}>
         <LineChart
           data={chartData}
-          margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
+          margin={{ top: 20, right: 60, left: 20, bottom: 60 }}
         >
-          <CartesianGrid strokeDasharray="3 3" opacity={0.6} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" opacity={0.7} />
           <XAxis
             dataKey="windSpeed"
             label={{
-              value: 'Wind Speed (kt)',
+              value: 'Wind Speed (knots)',
               position: 'bottom',
-              offset: 0,
-              style: { fontSize: 12 }
+              offset: 10,
+              style: { fontSize: 15, fontWeight: 600, fill: '#374151' }
             }}
             type="number"
             domain={[-50, 50]}
             ticks={windSpeeds}
+            tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
           />
           <YAxis
             yAxisId="range"
@@ -125,40 +144,35 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
               value: 'Effective Range (km)',
               angle: -90,
               position: 'insideLeft',
-              offset: -5,
-              style: { fontSize: 12 }
+              offset: 10,
+              style: { fontSize: 15, fontWeight: 600, fill: '#3b82f6' }
             }}
-            tick={{ fontSize: 12 }}
-            stroke="#3498db"
+            tick={{ fontSize: 14, fontWeight: 500, fill: '#3b82f6' }}
+            stroke="#3b82f6"
+            strokeWidth={2}
           />
           <YAxis
             yAxisId="fuel"
             orientation="right"
             label={{
-              value: 'Fuel Efficiency',
+              value: 'Fuel Efficiency (%)',
               angle: 90,
               position: 'insideRight',
-              offset: 5,
-              style: { fontSize: 12 }
+              offset: 10,
+              style: { fontSize: 15, fontWeight: 600, fill: '#10b981' }
             }}
-            tick={{ fontSize: 12 }}
-            stroke="#2ecc71"
+            tick={{ fontSize: 14, fontWeight: 500, fill: '#10b981' }}
+            stroke="#10b981"
+            strokeWidth={2}
           />
-          <Tooltip
-            formatter={(value: number, name: string) => {
-              if (name.includes('range')) {
-                return [`${value.toLocaleString()} km`, `Range (${name.split('_')[0]})`];
-              }
-              return [`${(value * 100).toFixed(2)}%`, `Fuel Efficiency (${name.split('_')[0]})`];
-            }}
-            labelFormatter={(label: number) => `Wind Speed: ${label} kt`}
-            contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.9)', border: '1px solid #ddd' }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend 
-            wrapperStyle={{ fontSize: 12, paddingTop: '20px' }} 
+            wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '25px' }} 
             layout="horizontal"
             verticalAlign="bottom"
             align="center"
+            iconType="line"
+            iconSize={24}
           />
 
           {aircraftData.map((aircraft, index) => (
@@ -169,9 +183,9 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
                 dataKey={`${aircraft.name}_range`}
                 stroke={rangeColors[index % rangeColors.length]}
                 name={`${aircraft.name} Range`}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 6 }}
+                strokeWidth={3}
+                dot={{ r: 4, strokeWidth: 2 }}
+                activeDot={{ r: 8, strokeWidth: 2 }}
               />
               <Line
                 yAxisId="fuel"
@@ -179,10 +193,10 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
                 dataKey={`${aircraft.name}_fuel`}
                 stroke={fuelColors[index % fuelColors.length]}
                 name={`${aircraft.name} Fuel`}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 6 }}
-                strokeDasharray="5 5"
+                strokeWidth={3}
+                dot={{ r: 4, strokeWidth: 2 }}
+                activeDot={{ r: 8, strokeWidth: 2 }}
+                strokeDasharray="8 4"
               />
             </React.Fragment>
           ))}
@@ -191,9 +205,9 @@ const WindImpactChart: React.FC<Props> = ({ aircraftData }) => {
       
       <style>{`
         @keyframes pulse {
-          0% { opacity: 0.7; }
+          0% { opacity: 0.6; }
           50% { opacity: 1; }
-          100% { opacity: 0.7; }
+          100% { opacity: 0.6; }
         }
       `}</style>
     </div>

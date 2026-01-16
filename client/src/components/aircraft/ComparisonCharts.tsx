@@ -12,13 +12,14 @@ interface Props {
 const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Fuel efficiency comparison
   const fuelEfficiencyData = aircraftData.map(aircraft => ({
-    name: aircraft.name,
-    'Efficiency Score': aircraft.fuelEfficiency,
-    'Fuel per NM': aircraft.co2Factor / aircraft.cruiseSpeed
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    fullName: aircraft.name,
+    'Efficiency Score': +(aircraft.fuelEfficiency * 100).toFixed(2),
+    'Fuel per NM': +((aircraft.co2Factor / aircraft.cruiseSpeed) * 100).toFixed(2)
   }));
 
   // Payload efficiency impact analysis with fixed intervals
-  const payloadEfficiencyData = [];
+  const payloadEfficiencyData: any[] = [];
   const loadFactors = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   aircraftData.forEach(aircraft => {
@@ -26,79 +27,126 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       payloadEfficiencyData.push({
         name: aircraft.name,
         loadFactor,
-        fuelEfficiency: aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1))
+        fuelEfficiency: +(aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1)) * 100).toFixed(2)
       });
     });
   });
 
   // Range and payload comparison
   const rangeComparisonData = aircraftData.map(aircraft => ({
-    name: aircraft.name,
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    fullName: aircraft.name,
     'Max Range': aircraft.maxRange,
-    'Max Payload': aircraft.cargoCapacity / 1000 // Convert to tons
+    'Max Payload': +(aircraft.cargoCapacity / 1000).toFixed(2) // Convert to tons
   }));
 
   // Emissions data
   const emissionsData = aircraftData.map(aircraft => ({
-    name: aircraft.name,
-    'CO2': aircraft.co2Factor * aircraft.fuelEfficiency,
-    'NOx': (aircraft.co2Factor * aircraft.fuelEfficiency) * 0.004 // NOx factor
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    fullName: aircraft.name,
+    'CO2': +(aircraft.co2Factor * aircraft.fuelEfficiency).toFixed(3),
+    'NOx': +((aircraft.co2Factor * aircraft.fuelEfficiency) * 0.004).toFixed(4)
   }));
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const fullName = payload[0]?.payload?.fullName || label;
+      return (
+        <div className="bg-white p-4 border-2 border-blue-300 rounded-lg shadow-lg">
+          <p className="font-bold text-gray-800 mb-2">{fullName}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} style={{ color: entry.color }} className="text-sm font-medium">
+              {entry.name}: {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Fuel Efficiency Comparison</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={fuelEfficiencyData}>
-            <CartesianGrid strokeDasharray="3 3" />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="bg-gradient-to-br from-white to-blue-50 p-6 rounded-xl shadow-lg border-2 border-blue-200">
+        <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+          <span className="text-blue-600">📊</span>
+          Fuel Efficiency Comparison
+        </h3>
+        <ResponsiveContainer width="100%" height={450}>
+          <BarChart 
+            data={fuelEfficiencyData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 90 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis 
               dataKey="name" 
               angle={-45}
               textAnchor="end"
-              height={80}
+              height={100}
               interval={0}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
             />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend wrapperStyle={{ fontSize: 12, marginTop: '10px' }}/>
-            <Bar dataKey="Efficiency Score" fill="#8884d8" />
-            <Bar dataKey="Fuel per NM" fill="#82ca9d" />
+            <YAxis 
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              label={{ 
+                value: 'Efficiency %', 
+                angle: -90, 
+                position: 'insideLeft',
+                style: { fontSize: 14, fontWeight: 600 }
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              iconType="rect"
+              iconSize={18}
+            />
+            <Bar dataKey="Efficiency Score" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+            <Bar dataKey="Fuel per NM" fill="#10b981" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Payload Factor Impact</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={payloadEfficiencyData}>
-            <CartesianGrid strokeDasharray="3 3" />
+      <div className="bg-gradient-to-br from-white to-green-50 p-6 rounded-xl shadow-lg border-2 border-green-200">
+        <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+          <span className="text-green-600">📈</span>
+          Payload Factor Impact
+        </h3>
+        <ResponsiveContainer width="100%" height={450}>
+          <LineChart 
+            data={payloadEfficiencyData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis 
               dataKey="loadFactor" 
               label={{ 
                 value: 'Load Factor (%)', 
                 position: 'bottom',
-                offset: 0,
-                style: { fontSize: 12 }
+                offset: 10,
+                style: { fontSize: 14, fontWeight: 600 }
               }}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
               type="number"
               domain={[0, 100]}
               ticks={loadFactors}
             />
             <YAxis 
               label={{ 
-                value: 'Fuel Efficiency', 
+                value: 'Fuel Efficiency %', 
                 angle: -90, 
                 position: 'insideLeft',
-                offset: -5,
-                style: { fontSize: 12 }
+                offset: 10,
+                style: { fontSize: 14, fontWeight: 600 }
               }}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
             />
-            <Tooltip />
-            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              iconType="line"
+              iconSize={18}
+            />
             {aircraftData.map((aircraft, index) => (
               <Line
                 key={aircraft.id}
@@ -107,62 +155,128 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
                 data={payloadEfficiencyData.filter(d => d.name === aircraft.name)}
                 name={aircraft.name}
                 stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
+                strokeWidth={3}
+                dot={{ r: 5, strokeWidth: 2 }}
+                activeDot={{ r: 8 }}
               />
             ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Range and Payload Comparison</h3>
-        <ResponsiveContainer width="100%" height={400}>
+      <div className="bg-gradient-to-br from-white to-purple-50 p-6 rounded-xl shadow-lg border-2 border-purple-200">
+        <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+          <span className="text-purple-600">✈️</span>
+          Range and Payload Comparison
+        </h3>
+        <ResponsiveContainer width="100%" height={450}>
           <BarChart 
             data={rangeComparisonData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+            margin={{ top: 20, right: 60, left: 20, bottom: 90 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis 
               dataKey="name" 
               angle={-45}
               textAnchor="end"
-              height={60}
+              height={100}
               interval={0}
-              tick={{fontSize: 12}}
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
             />
-            <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{fontSize: 12}} />
-            <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" tick={{fontSize: 12}} />
-            <Tooltip />
-            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
-            <Bar yAxisId="left" dataKey="Max Range" fill="#8884d8" name="Max Range (km)" />
-            <Bar yAxisId="right" dataKey="Max Payload" fill="#82ca9d" name="Max Payload (tons)" />
+            <YAxis 
+              yAxisId="left" 
+              orientation="left" 
+              stroke="#8b5cf6" 
+              tick={{ fontSize: 14, fontWeight: 500 }}
+              label={{ 
+                value: 'Range (km)', 
+                angle: -90, 
+                position: 'insideLeft',
+                style: { fontSize: 14, fontWeight: 600 }
+              }}
+            />
+            <YAxis 
+              yAxisId="right" 
+              orientation="right" 
+              stroke="#10b981" 
+              tick={{ fontSize: 14, fontWeight: 500 }}
+              label={{ 
+                value: 'Payload (tons)', 
+                angle: 90, 
+                position: 'insideRight',
+                style: { fontSize: 14, fontWeight: 600 }
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              iconType="rect"
+              iconSize={18}
+            />
+            <Bar 
+              yAxisId="left" 
+              dataKey="Max Range" 
+              fill="#8b5cf6" 
+              name="Max Range (km)"
+              radius={[8, 8, 0, 0]}
+            />
+            <Bar 
+              yAxisId="right" 
+              dataKey="Max Payload" 
+              fill="#10b981" 
+              name="Max Payload (tons)"
+              radius={[8, 8, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-xl font-bold mb-4">Emissions Comparison</h3>
-        <ResponsiveContainer width="100%" height={400}>
+      <div className="bg-gradient-to-br from-white to-orange-50 p-6 rounded-xl shadow-lg border-2 border-orange-200">
+        <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+          <span className="text-orange-600">🌍</span>
+          Emissions Comparison
+        </h3>
+        <ResponsiveContainer width="100%" height={450}>
           <BarChart 
             data={emissionsData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+            margin={{ top: 20, right: 30, left: 20, bottom: 90 }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis 
               dataKey="name" 
               angle={-45}
               textAnchor="end"
-              height={60}
+              height={100}
               interval={0}
-              tick={{fontSize: 12}}
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
             />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend wrapperStyle={{ fontSize: 12, paddingTop: '20px' }}/>
-            <Bar dataKey="CO2" fill="#ff7300" name="CO2 Emissions" />
-            <Bar dataKey="NOx" fill="#387908" name="NOx Emissions" />
+            <YAxis 
+              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              label={{ 
+                value: 'Emissions', 
+                angle: -90, 
+                position: 'insideLeft',
+                style: { fontSize: 14, fontWeight: 600 }
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              iconType="rect"
+              iconSize={18}
+            />
+            <Bar 
+              dataKey="CO2" 
+              fill="#f97316" 
+              name="CO2 Emissions"
+              radius={[8, 8, 0, 0]}
+            />
+            <Bar 
+              dataKey="NOx" 
+              fill="#22c55e" 
+              name="NOx Emissions"
+              radius={[8, 8, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

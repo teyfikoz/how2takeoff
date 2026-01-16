@@ -24,8 +24,11 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 // Loading component for Suspense fallback
 function PageLoader() {
   return (
-    <div className="flex items-center justify-center min-h-[50vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="flex items-center justify-center min-h-[50vh] page-transition">
+      <div className="flex flex-col items-center gap-4">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
+        <p className="text-gray-600 font-medium">Loading...</p>
+      </div>
     </div>
   );
 }
@@ -76,12 +79,12 @@ function Navbar() {
   const menuRow2 = menuItems.slice(5);
 
   return (
-    <nav className="bg-white shadow-sm border-b" ref={navRef}>
+    <nav className="bg-white shadow-sm border-b sticky top-0 z-50" ref={navRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between md:min-h-[120px]">
           {/* Logo/Brand section */}
           <div className="flex items-center justify-between h-16 md:h-auto md:pt-4">
-            <Link href="/" className="flex items-center px-2 text-gray-900 font-bold hover:text-blue-600">
+            <Link href="/" className="flex items-center px-2 text-gray-900 font-bold hover:text-blue-600 transition-colors">
               <Plane className="h-6 w-6 mr-2 text-blue-600" />
               <span className="text-lg">How2Takeoff</span>
             </Link>
@@ -90,7 +93,7 @@ function Navbar() {
             <div className="flex items-center md:hidden">
               <button
                 onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-all"
                 aria-expanded={isOpen}
               >
                 <span className="sr-only">Open main menu</span>
@@ -111,9 +114,9 @@ function Navbar() {
                 <Link 
                   key={item.path}
                   href={item.path} 
-                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
                     location === item.path 
-                      ? "text-blue-600 bg-blue-50" 
+                      ? "text-blue-600 bg-blue-50 shadow-sm" 
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                 >
@@ -129,9 +132,9 @@ function Navbar() {
                 <Link 
                   key={item.path}
                   href={item.path} 
-                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                  className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap ${
                     location === item.path 
-                      ? "text-blue-600 bg-blue-50" 
+                      ? "text-blue-600 bg-blue-50 shadow-sm" 
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                 >
@@ -145,15 +148,19 @@ function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
+      <div 
+        className={`md:hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               href={item.path}
-              className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
+              className={`flex items-center px-3 py-2 rounded-md text-base font-medium transition-all duration-200 ${
                 location === item.path
-                  ? "text-blue-600 bg-blue-50"
+                  ? "text-blue-600 bg-blue-50 shadow-sm"
                   : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
               }`}
             >
@@ -164,6 +171,32 @@ function Navbar() {
         </div>
       </div>
     </nav>
+  );
+}
+
+function PageTransition({ children }: { children: React.ReactNode }) {
+  const [location] = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransitionStage] = useState("fadeIn");
+
+  useEffect(() => {
+    if (location !== displayLocation) {
+      setTransitionStage("fadeOut");
+    }
+  }, [location, displayLocation]);
+
+  return (
+    <div
+      className={`page-transition ${transitionStage}`}
+      onAnimationEnd={() => {
+        if (transitionStage === "fadeOut") {
+          setTransitionStage("fadeIn");
+          setDisplayLocation(location);
+        }
+      }}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -178,22 +211,61 @@ function Router() {
           <DonationBanner />
         </div>
         <Suspense fallback={<PageLoader />}>
-          <Switch>
-            <Route path="/" component={Dashboard} />
-            <Route path="/flight-estimator" component={FlightEstimator} />
-            <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
-            <Route path="/revenue-management" component={RevenueManagement} />
-            <Route path="/ticketing-distribution" component={TicketingDistribution} />
-            <Route path="/airline-crm" component={AirlineCRM} />
-            <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
-            <Route path="/carrier-types" component={CarrierTypes} />
-            <Route path="/database" component={AircraftDatabase} />
-            <Route path="/articles" component={Articles} />
-            <Route path="/about" component={AboutMe} />
-            <Route component={NotFound} />
-          </Switch>
+          <PageTransition>
+            <Switch>
+              <Route path="/" component={Dashboard} />
+              <Route path="/flight-estimator" component={FlightEstimator} />
+              <Route path="/basic-aviation-passenger" component={BasicAviationPassenger} />
+              <Route path="/revenue-management" component={RevenueManagement} />
+              <Route path="/ticketing-distribution" component={TicketingDistribution} />
+              <Route path="/airline-crm" component={AirlineCRM} />
+              <Route path="/basic-aviation-cargo" component={BasicAviationCargo} />
+              <Route path="/carrier-types" component={CarrierTypes} />
+              <Route path="/database" component={AircraftDatabase} />
+              <Route path="/articles" component={Articles} />
+              <Route path="/about" component={AboutMe} />
+              <Route component={NotFound} />
+            </Switch>
+          </PageTransition>
         </Suspense>
       </div>
+      
+      <style>{`
+        .page-transition {
+          animation-duration: 0.3s;
+          animation-fill-mode: both;
+        }
+        
+        .page-transition.fadeIn {
+          animation-name: fadeIn;
+        }
+        
+        .page-transition.fadeOut {
+          animation-name: fadeOut;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+        }
+      `}</style>
     </>
   );
 }
