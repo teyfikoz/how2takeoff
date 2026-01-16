@@ -27,27 +27,27 @@ export default function AboutMe() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 py-6 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 py-4 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <HeaderAd />
         
-        <Card className="mt-6 shadow-2xl border-2 border-blue-200">
-          <CardHeader className="pb-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <Card className="mt-4 shadow-2xl border-2 border-blue-200">
+          <CardHeader className="pb-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
             <CardTitle className="text-3xl sm:text-4xl font-bold flex items-center gap-3">
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center text-blue-600 text-xl sm:text-2xl font-bold shadow-lg">
                 TÖ
               </div>
               About Me
             </CardTitle>
-            <p className="text-blue-100 mt-3 text-base sm:text-lg">
+            <p className="text-blue-100 mt-2 text-base sm:text-lg">
               Aviation Expert | Data Analytics Professional | Travel Enthusiast
             </p>
           </CardHeader>
           
-          <CardContent className="space-y-8 pt-8 px-4 sm:px-6">
+          <CardContent className="space-y-6 pt-6 px-4 sm:px-6 pb-6">
             {/* Profile Summary Card */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 sm:p-8 rounded-xl border-2 border-blue-200 shadow-md">
-              <h3 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-5 sm:p-6 rounded-xl border-2 border-blue-200 shadow-md">
+              <h3 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-3 flex items-center gap-2">
                 <span className="text-3xl sm:text-4xl">👋</span>
                 Welcome!
               </h3>
@@ -58,7 +58,7 @@ export default function AboutMe() {
             </div>
 
             {/* Main Content */}
-            <div className="prose prose-base sm:prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
+            <div className="text-gray-700 leading-relaxed space-y-4 text-base">
               <p>
                 Hi, I am Teyfik ÖZ. I have experience in Airline Revenue Management, CRM, Data Analytics, Reporting, Sales & Marketing, and Corporate Sales. 
                 Over the years, I have contributed to various projects across different industries, which has helped me develop a broader perspective on business and data-driven decision-making.
@@ -86,91 +86,91 @@ export default function AboutMe() {
             </div>
 
             {/* Experience & Education Highlights */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-xl border-2 border-green-200 shadow-md">
-                <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-5 flex items-center gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="bg-gradient-to-br from-green-50 to-white p-5 sm:p-6 rounded-xl border-2 border-green-200 shadow-md">
+                <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-4 flex items-center gap-2">
                   <span className="text-2xl sm:text-3xl">💼</span>
                   Professional Experience
                 </h3>
-                <ul className="space-y-3 text-gray-700">
+                <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-green-600 mt-1 text-xl">✓</span>
-                    <span className="text-base">Airline Revenue Management</span>
+                    <span>Airline Revenue Management</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-600 mt-1 text-xl">✓</span>
-                    <span className="text-base">Customer Relationship Management (CRM)</span>
+                    <span>Customer Relationship Management (CRM)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-600 mt-1 text-xl">✓</span>
-                    <span className="text-base">Data Analytics & Reporting</span>
+                    <span>Data Analytics & Reporting</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-600 mt-1 text-xl">✓</span>
-                    <span className="text-base">Sales & Marketing Strategy</span>
+                    <span>Sales & Marketing Strategy</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-orange-50 to-white p-6 sm:p-8 rounded-xl border-2 border-orange-200 shadow-md">
-                <h3 className="text-xl sm:text-2xl font-bold text-orange-900 mb-5 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-orange-50 to-white p-5 sm:p-6 rounded-xl border-2 border-orange-200 shadow-md">
+                <h3 className="text-xl sm:text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
                   <span className="text-2xl sm:text-3xl">🎓</span>
                   Education
                 </h3>
-                <ul className="space-y-3 text-gray-700">
+                <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 mt-1">•</span>
-                    <span className="text-base"><strong>MSc</strong> - Energy Science & Technology (ITU)</span>
+                    <span><strong>MSc</strong> - Energy Science & Technology (ITU)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 mt-1">•</span>
-                    <span className="text-base"><strong>BSc</strong> - Physics (Istanbul Kültür University)</span>
+                    <span><strong>BSc</strong> - Physics (Istanbul Kültür University)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 mt-1">•</span>
-                    <span className="text-base"><strong>Exchange</strong> - KTH Royal Institute (Sweden)</span>
+                    <span><strong>Exchange</strong> - KTH Royal Institute (Sweden)</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             {/* Personal Interests */}
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 sm:p-8 rounded-xl border-2 border-purple-200 shadow-md">
-              <h3 className="text-xl sm:text-2xl font-bold text-purple-900 mb-5 flex items-center gap-2">
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-5 sm:p-6 rounded-xl border-2 border-purple-200 shadow-md">
+              <h3 className="text-xl sm:text-2xl font-bold text-purple-900 mb-4 flex items-center gap-2">
                 <span className="text-2xl sm:text-3xl">🌟</span>
                 Beyond Work
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-gray-700">
-                <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <span className="text-3xl sm:text-4xl">✈️</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-gray-700">
+                <div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm">
+                  <span className="text-3xl">✈️</span>
                   <span className="font-medium">Travel Enthusiast</span>
                 </div>
-                <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <span className="text-3xl sm:text-4xl">🤿</span>
+                <div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm">
+                  <span className="text-3xl">🤿</span>
                   <span className="font-medium">Scuba Diving</span>
                 </div>
-                <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm">
-                  <span className="text-3xl sm:text-4xl">🍽️</span>
+                <div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm">
+                  <span className="text-3xl">🍽️</span>
                   <span className="font-medium">Good Food, Good Mood</span>
                 </div>
               </div>
             </div>
 
             {/* Contact Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 sm:p-10 rounded-xl shadow-xl text-white">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-5 sm:p-8 rounded-xl shadow-xl text-white">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
                 <span className="text-3xl sm:text-4xl">📬</span>
                 Let&apos;s Connect!
               </h3>
-              <p className="text-blue-100 mb-6 text-base sm:text-lg leading-relaxed">
+              <p className="text-blue-100 mb-5 text-base sm:text-lg leading-relaxed">
                 I am always open to discussing aviation, data analytics, or new opportunities.
                 Feel free to reach out!
               </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="flex items-center justify-center gap-2 bg-white text-blue-600 hover:bg-blue-50 shadow-lg text-base sm:text-lg py-6"
+                  className="flex items-center justify-center gap-2 bg-white text-blue-600 hover:bg-blue-50 shadow-lg text-base sm:text-lg py-5"
                   onClick={() => {
                     window.open("https://www.linkedin.com/in/teyfik-%C3%B6-a3953935/", "_blank");
                     trackProfileClick("linkedin");
@@ -182,7 +182,7 @@ export default function AboutMe() {
                 <Button
                   variant="secondary"
                   size="lg"
-                  className="flex items-center justify-center gap-2 bg-white text-purple-600 hover:bg-purple-50 shadow-lg text-base sm:text-lg py-6"
+                  className="flex items-center justify-center gap-2 bg-white text-purple-600 hover:bg-purple-50 shadow-lg text-base sm:text-lg py-5"
                   onClick={() => {
                     window.location.href = "mailto:teyfikoz@yahoo.com";
                     trackProfileClick("email");
