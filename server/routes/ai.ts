@@ -1,6 +1,6 @@
 // AI Routes for aircraft recommendations
 import { Router } from "express";
-import { DecisionEngine } from "./ai/decision-engine";
+import { DecisionEngine } from "../ai/decision-engine";
 
 const router = Router();
 

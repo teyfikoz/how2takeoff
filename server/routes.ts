@@ -4,8 +4,12 @@ import { storage } from "./storage";
 import { insertAircraftSchema, insertCalculationSchema, insertUserSchema } from "@shared/schema";
 import { requireAdmin } from "./middleware/auth";
 import bcrypt from "bcryptjs";
+import aiRoutes from "./routes/ai";
 
 export function registerRoutes(app: Express) {
+  // AI Routes
+  app.use("/api/ai", aiRoutes);
+
   app.get('/api/aircraft', async (_req, res) => {
     const aircraft = await storage.getAllAircraft();
     res.json(aircraft);

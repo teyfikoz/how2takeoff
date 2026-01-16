@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, BarChart, Bar
-} from 'recharts';
-import { Aircraft } from '@shared/schema';
+  ResponsiveContainer, BarChart, Bar, AreaChart, Area
+} from "recharts";
+import { Aircraft } from "@shared/schema";
 
 interface Props {
   aircraftData: Aircraft[];
@@ -12,40 +12,40 @@ interface Props {
 const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
   // Fuel efficiency comparison
   const fuelEfficiencyData = aircraftData.map(aircraft => ({
-    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + "..." : aircraft.name,
     fullName: aircraft.name,
-    'Efficiency Score': +(aircraft.fuelEfficiency * 100).toFixed(2),
-    'Fuel per NM': +((aircraft.co2Factor / aircraft.cruiseSpeed) * 100).toFixed(2)
+    "Efficiency Score": +(aircraft.fuelEfficiency * 100).toFixed(2),
+    "Fuel per NM": +((aircraft.co2Factor / aircraft.cruiseSpeed) * 100).toFixed(2)
   }));
 
-  // Payload efficiency impact analysis with fixed intervals
+  // Payload efficiency impact analysis - IMPROVED with area chart
   const payloadEfficiencyData: any[] = [];
-  const loadFactors = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const loadFactors = [0, 20, 40, 60, 80, 100];
 
   aircraftData.forEach(aircraft => {
     loadFactors.forEach(loadFactor => {
       payloadEfficiencyData.push({
-        name: aircraft.name,
+        aircraft: aircraft.name,
         loadFactor,
-        fuelEfficiency: +(aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1)) * 100).toFixed(2)
+        efficiency: +(aircraft.fuelEfficiency * (1 - (loadFactor/100 * 0.1)) * 100).toFixed(2)
       });
     });
   });
 
   // Range and payload comparison
   const rangeComparisonData = aircraftData.map(aircraft => ({
-    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + "..." : aircraft.name,
     fullName: aircraft.name,
-    'Max Range': aircraft.maxRange,
-    'Max Payload': +(aircraft.cargoCapacity / 1000).toFixed(2) // Convert to tons
+    "Max Range": aircraft.maxRange,
+    "Max Payload": +(aircraft.cargoCapacity / 1000).toFixed(2)
   }));
 
   // Emissions data
   const emissionsData = aircraftData.map(aircraft => ({
-    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + '...' : aircraft.name,
+    name: aircraft.name.length > 15 ? aircraft.name.substring(0, 12) + "..." : aircraft.name,
     fullName: aircraft.name,
-    'CO2': +(aircraft.co2Factor * aircraft.fuelEfficiency).toFixed(3),
-    'NOx': +((aircraft.co2Factor * aircraft.fuelEfficiency) * 0.004).toFixed(4)
+    "CO2": +(aircraft.co2Factor * aircraft.fuelEfficiency).toFixed(3),
+    "NOx": +((aircraft.co2Factor * aircraft.fuelEfficiency) * 0.004).toFixed(4)
   }));
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -56,7 +56,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
           <p className="font-bold text-gray-800 mb-2">{fullName}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }} className="text-sm font-medium">
-              {entry.name}: {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
+              {entry.name}: {typeof entry.value === "number" ? entry.value.toLocaleString() : entry.value}
             </p>
           ))}
         </div>
@@ -64,6 +64,8 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
     }
     return null;
   };
+
+  const areaColors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -84,20 +86,20 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               textAnchor="end"
               height={100}
               interval={0}
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
             />
             <YAxis 
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
               label={{ 
-                value: 'Efficiency %', 
+                value: "Efficiency %", 
                 angle: -90, 
-                position: 'insideLeft',
+                position: "insideLeft",
                 style: { fontSize: 14, fontWeight: 600 }
               }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: "20px" }}
               iconType="rect"
               iconSize={18}
             />
@@ -110,57 +112,65 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
       <div className="bg-gradient-to-br from-white to-green-50 p-6 rounded-xl shadow-lg border-2 border-green-200">
         <h3 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
           <span className="text-green-600">📈</span>
-          Payload Factor Impact
+          Payload Factor Impact (Area Chart)
         </h3>
         <ResponsiveContainer width="100%" height={450}>
-          <LineChart 
+          <AreaChart 
             data={payloadEfficiencyData}
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
+            <defs>
+              {aircraftData.map((aircraft, index) => (
+                <linearGradient key={aircraft.id} id={`color${index}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={areaColors[index % areaColors.length]} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={areaColors[index % areaColors.length]} stopOpacity={0.1}/>
+                </linearGradient>
+              ))}
+            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis 
               dataKey="loadFactor" 
               label={{ 
-                value: 'Load Factor (%)', 
-                position: 'bottom',
+                value: "Load Factor (%)", 
+                position: "bottom",
                 offset: 10,
                 style: { fontSize: 14, fontWeight: 600 }
               }}
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
               type="number"
               domain={[0, 100]}
               ticks={loadFactors}
             />
             <YAxis 
               label={{ 
-                value: 'Fuel Efficiency %', 
+                value: "Fuel Efficiency %", 
                 angle: -90, 
-                position: 'insideLeft',
+                position: "insideLeft",
                 offset: 10,
                 style: { fontSize: 14, fontWeight: 600 }
               }}
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
-              iconType="line"
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: "20px" }}
+              iconType="rect"
               iconSize={18}
             />
             {aircraftData.map((aircraft, index) => (
-              <Line
+              <Area
                 key={aircraft.id}
                 type="monotone"
-                dataKey="fuelEfficiency"
-                data={payloadEfficiencyData.filter(d => d.name === aircraft.name)}
+                dataKey="efficiency"
+                data={payloadEfficiencyData.filter(d => d.aircraft === aircraft.name)}
                 name={aircraft.name}
-                stroke={`hsl(${index * 360 / aircraftData.length}, 70%, 50%)`}
+                stroke={areaColors[index % areaColors.length]}
                 strokeWidth={3}
-                dot={{ r: 5, strokeWidth: 2 }}
+                fill={`url(#color${index})`}
                 activeDot={{ r: 8 }}
               />
             ))}
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
 
@@ -181,7 +191,7 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               textAnchor="end"
               height={100}
               interval={0}
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
             />
             <YAxis 
               yAxisId="left" 
@@ -189,9 +199,9 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               stroke="#8b5cf6" 
               tick={{ fontSize: 14, fontWeight: 500 }}
               label={{ 
-                value: 'Range (km)', 
+                value: "Range (km)", 
                 angle: -90, 
-                position: 'insideLeft',
+                position: "insideLeft",
                 style: { fontSize: 14, fontWeight: 600 }
               }}
             />
@@ -201,15 +211,15 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               stroke="#10b981" 
               tick={{ fontSize: 14, fontWeight: 500 }}
               label={{ 
-                value: 'Payload (tons)', 
+                value: "Payload (tons)", 
                 angle: 90, 
-                position: 'insideRight',
+                position: "insideRight",
                 style: { fontSize: 14, fontWeight: 600 }
               }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: "20px" }}
               iconType="rect"
               iconSize={18}
             />
@@ -248,20 +258,20 @@ const ComparisonCharts: React.FC<Props> = ({ aircraftData }) => {
               textAnchor="end"
               height={100}
               interval={0}
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
             />
             <YAxis 
-              tick={{ fontSize: 14, fontWeight: 500, fill: '#374151' }}
+              tick={{ fontSize: 14, fontWeight: 500, fill: "#374151" }}
               label={{ 
-                value: 'Emissions', 
+                value: "Emissions", 
                 angle: -90, 
-                position: 'insideLeft',
+                position: "insideLeft",
                 style: { fontSize: 14, fontWeight: 600 }
               }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: '20px' }}
+              wrapperStyle={{ fontSize: 14, fontWeight: 600, paddingTop: "20px" }}
               iconType="rect"
               iconSize={18}
             />
