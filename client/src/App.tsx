@@ -4,7 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import DonationBanner from "@/components/DonationBanner";
-import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText, Calculator, Sparkles } from "lucide-react";
+import { Database, Home, BookOpen, TrendingUp, Plane, Globe, Users, User, Menu, X, BookText, Calculator } from "lucide-react";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 
 // Lazy load page components for better performance
@@ -19,7 +19,6 @@ const TicketingDistribution = lazy(() => import("@/pages/TicketingDistribution")
 const AirlineCRM = lazy(() => import("@/pages/AirlineCRM"));
 const AboutMe = lazy(() => import("@/pages/AboutMe"));
 const Articles = lazy(() => import("@/pages/Articles"));
-const AircraftRecommendation = lazy(() => import("@/pages/AircraftRecommendation"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 // Loading component for Suspense fallback
@@ -73,7 +72,6 @@ function Navbar() {
     { path: "/carrier-types", icon: <Plane className="h-5 w-5 mr-2" />, label: "Carrier Types" },
     { path: "/database", icon: <Database className="h-5 w-5 mr-2" />, label: "Aircraft Database" },
     { path: "/articles", icon: <BookText className="h-5 w-5 mr-2" />, label: "Articles" },
-    { path: "/aircraft-recommendation", icon: <Sparkles className="h-5 w-5 mr-2" />, label: "AI Recommendation" },
     { path: "/about", icon: <User className="h-5 w-5 mr-2" />, label: "About Me" },
   ];
 
@@ -225,7 +223,6 @@ function Router() {
               <Route path="/carrier-types" component={CarrierTypes} />
               <Route path="/database" component={AircraftDatabase} />
               <Route path="/articles" component={Articles} />
-              <Route path="/aircraft-recommendation" component={AircraftRecommendation} />
               <Route path="/about" component={AboutMe} />
               <Route component={NotFound} />
             </Switch>
