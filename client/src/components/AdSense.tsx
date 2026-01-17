@@ -1,46 +1,37 @@
 /**
  * Google AdSense Integration Component
- * 
- * IMPORTANT: Before deploying to production, you MUST replace the placeholder values:
- * 
- * 1. In client/index.html (line ~80):
- *    Replace: ca-pub-XXXXXXXXXXXXXXXX
- *    With: Your actual Google AdSense Publisher ID
- * 
- * 2. In this file (line 26):
- *    Replace: ca-pub-XXXXXXXXXXXXXXXX
- *    With: Your actual Google AdSense Publisher ID
- * 
- * 3. Update ad slot IDs in each component below:
- *    - HeaderAd slot="1234567890" → Your actual Header Ad Slot ID
- *    - SidebarAd slot="0987654321" → Your actual Sidebar Ad Slot ID
- *    - InContentAd slot="1122334455" → Your actual In-Content Ad Slot ID
- *    - FooterAd slot="5544332211" → Your actual Footer Ad Slot ID
- * 
+ *
+ * Publisher ID: ca-pub-1281503375146617
+ * Ad Slot ID: 5782684334
+ *
  * Get your AdSense IDs from: https://adsense.google.com/
  */
 import { Adsense } from '@ctrl/react-adsense';
 import type { CSSProperties } from 'react';
 
+// AdSense Configuration
+const ADSENSE_CLIENT = "ca-pub-1281503375146617";
+const ADSENSE_SLOT = "5782684334";
+
 interface AdUnitProps {
-  slot: string;
+  slot?: string;
   format?: 'auto' | 'fluid' | 'rectangle' | '';
   layout?: 'in-article' | 'in-feed';
   style?: CSSProperties;
   className?: string;
 }
 
-export function AdUnit({ 
-  slot, 
-  format = 'auto', 
-  layout, 
+export function AdUnit({
+  slot = ADSENSE_SLOT,
+  format = 'auto',
+  layout,
   style = {},
   className = ''
 }: AdUnitProps) {
   return (
     <div className={`my-4 text-center ${className}`} style={{ minHeight: '90px', ...style }}>
       <Adsense
-        client="ca-pub-XXXXXXXXXXXXXXXX"
+        client={ADSENSE_CLIENT}
         slot={slot}
         style={{ display: 'block' }}
         format={format}
@@ -54,8 +45,7 @@ export function AdUnit({
 
 export function HeaderAd() {
   return (
-    <AdUnit 
-      slot="1234567890" 
+    <AdUnit
       format="auto"
       className="max-w-7xl mx-auto"
       style={{ minHeight: '90px' }}
@@ -65,8 +55,7 @@ export function HeaderAd() {
 
 export function SidebarAd() {
   return (
-    <AdUnit 
-      slot="0987654321" 
+    <AdUnit
       format="rectangle"
       className="sticky top-4"
       style={{ minHeight: '250px' }}
@@ -76,8 +65,7 @@ export function SidebarAd() {
 
 export function InContentAd() {
   return (
-    <AdUnit 
-      slot="1122334455" 
+    <AdUnit
       format="fluid"
       layout="in-article"
       style={{ minHeight: '100px' }}
@@ -87,8 +75,7 @@ export function InContentAd() {
 
 export function FooterAd() {
   return (
-    <AdUnit 
-      slot="5544332211" 
+    <AdUnit
       format="auto"
       className="max-w-7xl mx-auto"
       style={{ minHeight: '90px' }}

@@ -79,7 +79,7 @@ export function registerRoutes(app: Express) {
     res.json(calculation);
   });
 
-  // Analytics routes
+  // Analytics routes - fail gracefully to avoid 5xx errors
   app.post('/api/analytics/pageview', async (req, res) => {
     const userId = req.session.userId;
     if (!userId) {
@@ -97,11 +97,11 @@ export function registerRoutes(app: Express) {
         browser,
         isAuthenticated: true
       });
-      res.json({ success: true });
     } catch (error) {
-      console.error("Analytics error:", error);
-      res.status(500).json({ error: "Internal server error" });
+      // Log but don't fail - analytics is non-critical
+      console.warn("Analytics save failed (non-critical):", error instanceof Error ? error.message : error);
     }
+    res.json({ success: true });
   });
 
   app.post('/api/analytics/profile-click', async (req, res) => {
@@ -119,11 +119,11 @@ export function registerRoutes(app: Express) {
         clickType: type,
         isAuthenticated: !!userId
       });
-      res.json({ success: true });
     } catch (error) {
-      console.error("Profile click tracking error:", error);
-      res.status(500).json({ error: "Internal server error" });
+      // Log but don't fail - analytics is non-critical
+      console.warn("Profile click save failed (non-critical):", error instanceof Error ? error.message : error);
     }
+    res.json({ success: true });
   });
 
   app.get('/api/admin/analytics', requireAdmin, async (_req, res) => {

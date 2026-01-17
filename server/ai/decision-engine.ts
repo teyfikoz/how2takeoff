@@ -62,6 +62,12 @@ export class DecisionEngine {
       prioritizeCost?: boolean;
       prioritizeEnvironment?: boolean;
       prioritizeSpeed?: boolean;
+    },
+    economicParams?: {
+      rask?: number;     // Revenue per Available Seat Kilometer (default: 0.12)
+      cask?: number;     // Cost per Available Seat Kilometer (default: 0.08)
+      loadFactor?: number; // Expected load factor (default: 0.80)
+      fuelPrice?: number;  // Fuel price per liter (default: 0.75)
     }
   ): Promise<AircraftScore[]> {
 
@@ -94,7 +100,7 @@ export class DecisionEngine {
 
     // Step 4: Calculate scores for each aircraft
     const scored = suitable.map(aircraft => {
-      return this.calculateScore(aircraft, distance, passengers, cargo_kg, preferences);
+      return this.calculateScore(aircraft, distance, passengers, cargo_kg, preferences, economicParams);
     });
 
     // Step 5: Sort by score (descending)
@@ -111,24 +117,33 @@ export class DecisionEngine {
     distance: number,
     passengers: number,
     cargo_kg: number,
-    preferences?: any
+    preferences?: any,
+    economicParams?: {
+      rask?: number;
+      cask?: number;
+      loadFactor?: number;
+      fuelPrice?: number;
+    }
   ): AircraftScore {
 
     const reasoning: string[] = [];
 
+    // Economic parameters with defaults
+    const RASK = economicParams?.rask ?? 0.12;      // Revenue per ASK (typical: $0.10-$0.15)
+    const CASK = economicParams?.cask ?? 0.08;      // Cost per ASK (typical: $0.06-$0.12)
+    const loadFactor = economicParams?.loadFactor ?? 0.80; // Load factor (typical: 0.75-0.85)
+    const fuelPrice = economicParams?.fuelPrice ?? 0.75;   // Fuel price per liter
+
     // Calculate fuel consumption
     const fuelConsumption = aircraft.fuelEfficiency * distance;
-    const fuelCost = fuelConsumption * 0.75; // $0.75 per liter (avg jet fuel price)
+    const fuelCost = fuelConsumption * fuelPrice;
 
     // Calculate operating cost (CASK model)
     const ASK = distance * aircraft.maxPassengers; // Available Seat Kilometers
-    const CASK = 0.08; // Cost per ASK (typical: $0.06-$0.12)
     const operatingCost = CASK * ASK + fuelCost;
 
     // Calculate revenue (RASK model)
-    const loadFactor = 0.80; // Assume 80% load factor
     const RPK = ASK * loadFactor; // Revenue Passenger Kilometers
-    const RASK = 0.12; // Revenue per ASK (typical: $0.10-$0.15)
     const revenue = RASK * RPK;
 
     // Calculate profit

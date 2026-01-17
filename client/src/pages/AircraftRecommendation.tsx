@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sparkles, Loader2, TrendingUp, Fuel, DollarSign, Users, Plane, Package, Scale, Box, Info } from 'lucide-react';
+import { Sparkles, Loader2, TrendingUp, Fuel, DollarSign, Users, Plane, Package, Scale, Box, Info, Settings2, ChevronDown, ChevronUp, Percent } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Tooltip as UITooltip,
@@ -43,6 +43,14 @@ export default function AircraftRecommendation() {
   const [passengers, setPassengers] = useState('180');
   const [cargo, setCargo] = useState('0');
   const [cargoUnit, setCargoUnit] = useState<'kg' | 'm3'>('kg');
+
+  // Economic parameters
+  const [rask, setRask] = useState('0.12');
+  const [cask, setCask] = useState('0.08');
+  const [loadFactor, setLoadFactor] = useState('0.80');
+  const [fuelPrice, setFuelPrice] = useState('0.75');
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
@@ -120,6 +128,10 @@ export default function AircraftRecommendation() {
           destination,
           passengers: parseInt(passengers),
           cargo: getCargoInKg(),
+          rask: parseFloat(rask),
+          cask: parseFloat(cask),
+          loadFactor: parseFloat(loadFactor),
+          fuelPrice: parseFloat(fuelPrice),
         }),
       });
 
@@ -297,6 +309,140 @@ export default function AircraftRecommendation() {
                     <p className="text-xs text-gray-500 italic">
                       {getCargoConversionInfo()}
                     </p>
+                  )}
+                </div>
+
+                {/* Advanced Economic Parameters Toggle */}
+                <div className="border-t pt-4 mt-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setShowAdvanced(!showAdvanced)}
+                    className="w-full flex items-center justify-between text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Settings2 className="h-4 w-4" />
+                      Economic Parameters
+                    </span>
+                    {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  </Button>
+
+                  {showAdvanced && (
+                    <div className="mt-4 space-y-4 p-3 bg-gray-50 rounded-lg border">
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* RASK */}
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium flex items-center gap-1">
+                            <DollarSign className="h-3 w-3 text-green-600" />
+                            RASK
+                            <TooltipProvider>
+                              <UITooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-3 w-3 text-gray-400 cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                  <p className="text-xs">Revenue per Available Seat Kilometer. Typical range: $0.10-$0.15</p>
+                                </TooltipContent>
+                              </UITooltip>
+                            </TooltipProvider>
+                          </Label>
+                          <Input
+                            type="number"
+                            value={rask}
+                            onChange={(e) => setRask(e.target.value)}
+                            min="0.01"
+                            max="0.50"
+                            step="0.01"
+                            className="h-9 text-sm"
+                          />
+                        </div>
+
+                        {/* CASK */}
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium flex items-center gap-1">
+                            <DollarSign className="h-3 w-3 text-red-600" />
+                            CASK
+                            <TooltipProvider>
+                              <UITooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-3 w-3 text-gray-400 cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                  <p className="text-xs">Cost per Available Seat Kilometer. Typical range: $0.06-$0.12</p>
+                                </TooltipContent>
+                              </UITooltip>
+                            </TooltipProvider>
+                          </Label>
+                          <Input
+                            type="number"
+                            value={cask}
+                            onChange={(e) => setCask(e.target.value)}
+                            min="0.01"
+                            max="0.30"
+                            step="0.01"
+                            className="h-9 text-sm"
+                          />
+                        </div>
+
+                        {/* Load Factor */}
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium flex items-center gap-1">
+                            <Percent className="h-3 w-3 text-blue-600" />
+                            Load Factor
+                            <TooltipProvider>
+                              <UITooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-3 w-3 text-gray-400 cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                  <p className="text-xs">Expected passenger load factor. Industry average: 80-85%</p>
+                                </TooltipContent>
+                              </UITooltip>
+                            </TooltipProvider>
+                          </Label>
+                          <Input
+                            type="number"
+                            value={loadFactor}
+                            onChange={(e) => setLoadFactor(e.target.value)}
+                            min="0.30"
+                            max="1.00"
+                            step="0.05"
+                            className="h-9 text-sm"
+                          />
+                        </div>
+
+                        {/* Fuel Price */}
+                        <div className="space-y-1">
+                          <Label className="text-xs font-medium flex items-center gap-1">
+                            <Fuel className="h-3 w-3 text-orange-600" />
+                            Fuel ($/L)
+                            <TooltipProvider>
+                              <UITooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-3 w-3 text-gray-400 cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                  <p className="text-xs">Jet fuel price per liter. Current avg: $0.70-$0.90</p>
+                                </TooltipContent>
+                              </UITooltip>
+                            </TooltipProvider>
+                          </Label>
+                          <Input
+                            type="number"
+                            value={fuelPrice}
+                            onChange={(e) => setFuelPrice(e.target.value)}
+                            min="0.30"
+                            max="2.00"
+                            step="0.05"
+                            className="h-9 text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-gray-500 italic">
+                        Profit = (RASK × ASK × LF) - (CASK × ASK) - Fuel Cost
+                      </p>
+                    </div>
                   )}
                 </div>
 
