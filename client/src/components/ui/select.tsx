@@ -4,7 +4,13 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-const Select = SelectPrimitive.Root
+const Select = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>
+>(({ ...props }, ref) => (
+  <SelectPrimitive.Root {...props} />
+))
+Select.displayName = "Select"
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -68,7 +74,13 @@ SelectScrollDownButton.displayName =
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", onCloseAutoFocus, ...props }, ref) => (
+>(({ className, children, position = "popper", ...props }, ref) => {
+  const handleCloseAutoFocus = React.useCallback((e: Event) => {
+    // Always prevent default focus behavior to avoid null focus errors
+    e.preventDefault();
+  }, []);
+
+  return (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
@@ -79,14 +91,7 @@ const SelectContent = React.forwardRef<
         className
       )}
       position={position}
-      onCloseAutoFocus={(e) => {
-        // Prevent focus errors when component unmounts during close
-        if (onCloseAutoFocus) {
-          onCloseAutoFocus(e);
-        } else {
-          e.preventDefault();
-        }
-      }}
+      onCloseAutoFocus={handleCloseAutoFocus}
       {...props}
     >
       <SelectScrollUpButton />
@@ -102,7 +107,8 @@ const SelectContent = React.forwardRef<
       <SelectScrollDownButton />
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
-))
+  );
+})
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
 const SelectLabel = React.forwardRef<
