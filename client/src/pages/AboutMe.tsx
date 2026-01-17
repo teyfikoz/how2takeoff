@@ -6,7 +6,6 @@ import { Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useSEO } from "@/hooks/useSEO";
-import { HeaderAd } from "@/components/AdSense";
 
 export default function AboutMe() {
   const { toast } = useToast();
@@ -27,11 +26,9 @@ export default function AboutMe() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 py-4">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <HeaderAd />
-        
-        <Card className="mt-2 shadow-2xl border-2 border-blue-200">
+        <Card className="shadow-2xl border-2 border-blue-200">
           <CardHeader className="pb-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
             <CardTitle className="text-3xl sm:text-4xl font-bold flex items-center gap-3">
               <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center text-blue-600 text-xl sm:text-2xl font-bold shadow-lg">

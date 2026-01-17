@@ -15,7 +15,6 @@ import DonationBanner from '@/components/DonationBanner';
 import { InContentAd, FooterAd, SidebarAd } from '@/components/AdSense';
 import { useSEO } from '@/hooks/useSEO';
 import { mockAircraftData } from '@/data/mockAircraftData';
-import AIRecommendation from '@/components/AIRecommendation';
 
 interface FilterCriteria {
   passengers: number;
@@ -89,8 +88,6 @@ export default function Dashboard() {
           {/* Main Content */}
           <div className="flex-1 space-y-8">
             <FilterForm onFilter={handleFilter} />
-
-            <AIRecommendation />
 
             {filteredAircraft.length > 0 ? (
               <>
