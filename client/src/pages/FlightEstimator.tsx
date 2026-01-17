@@ -844,7 +844,7 @@ export default function FlightEstimator() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="origin" className="text-sm font-medium">Origin</Label>
+                      <span id="origin-label" className="text-sm font-medium">Origin</span>
                       <TooltipProvider>
                         <UITooltip>
                           <TooltipTrigger asChild>
@@ -878,17 +878,20 @@ export default function FlightEstimator() {
                       </TooltipProvider>
                     </div>
                     <Select value={originIATA} onValueChange={setOriginIATA}>
-                      <SelectTrigger className="h-11 text-base">
+                      <SelectTrigger className="h-11 text-base" aria-labelledby="origin-label">
                         <SelectValue placeholder="Select origin" />
                       </SelectTrigger>
                       <SelectContent>
                         <div className="sticky top-0 bg-white p-2 border-b">
                           <Input
+                            id="origin-search"
+                            name="origin-search"
                             placeholder="Search airports..."
                             value={originSearch}
                             onChange={(e) => setOriginSearch(e.target.value)}
                             className="h-9 text-sm"
                             onClick={(e) => e.stopPropagation()}
+                            aria-label="Search origin airports"
                           />
                         </div>
                         <div className="max-h-[300px] overflow-y-auto">
@@ -909,7 +912,7 @@ export default function FlightEstimator() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="destination" className="text-sm font-medium">Destination</Label>
+                      <span id="destination-label" className="text-sm font-medium">Destination</span>
                       <TooltipProvider>
                         <UITooltip>
                           <TooltipTrigger asChild>
@@ -943,17 +946,20 @@ export default function FlightEstimator() {
                       </TooltipProvider>
                     </div>
                     <Select value={destIATA} onValueChange={setDestIATA}>
-                      <SelectTrigger className="h-11 text-base">
+                      <SelectTrigger className="h-11 text-base" aria-labelledby="destination-label">
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
                       <SelectContent>
                         <div className="sticky top-0 bg-white p-2 border-b">
                           <Input
+                            id="destination-search"
+                            name="destination-search"
                             placeholder="Search airports..."
                             value={destSearch}
                             onChange={(e) => setDestSearch(e.target.value)}
                             className="h-9 text-sm"
                             onClick={(e) => e.stopPropagation()}
+                            aria-label="Search destination airports"
                           />
                         </div>
                         <div className="max-h-[300px] overflow-y-auto">
@@ -1013,21 +1019,23 @@ export default function FlightEstimator() {
               <CardContent className="space-y-5">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <Label htmlFor="loadFactor" className="text-sm font-medium">Load Factor ({Math.round(loadFactor * 100)}%)</Label>
+                    <span id="loadFactor-label" className="text-sm font-medium">Load Factor ({Math.round(loadFactor * 100)}%)</span>
                   </div>
                   <Slider
-                    id="loadFactor"
                     min={0.3}
                     max={1}
                     step={0.01}
                     value={[loadFactor]}
                     onValueChange={(value) => setLoadFactor(value[0])}
+                    aria-labelledby="loadFactor-label"
+                    name="loadFactor"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="rask" className="text-sm font-medium">RASK (Revenue per Available Seat-Kilometer)</Label>
                   <Input
                     id="rask"
+                    name="rask"
                     type="number"
                     value={rask}
                     onChange={e => setRASK(Number(e.target.value))}
@@ -1041,6 +1049,7 @@ export default function FlightEstimator() {
                   <Label htmlFor="cask" className="text-sm font-medium">CASK (Cost per Available Seat-Kilometer)</Label>
                   <Input
                     id="cask"
+                    name="cask"
                     type="number"
                     value={cask}
                     onChange={e => setCASK(Number(e.target.value))}
@@ -1054,6 +1063,7 @@ export default function FlightEstimator() {
                   <Label htmlFor="fuelPrice" className="text-sm font-medium">Fuel Price ($ per liter)</Label>
                   <Input
                     id="fuelPrice"
+                    name="fuelPrice"
                     type="number"
                     value={fuelPrice}
                     onChange={e => setFuelPrice(Number(e.target.value))}

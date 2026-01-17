@@ -153,21 +153,23 @@ export default function FilterForm({ onFilter }: Props) {
                 name="windSpeed"
                 render={({ field }) => (
                   <FormItem className="space-y-4">
-                    <FormLabel>Wind Speed (kt): {field.value}</FormLabel>
+                    <span id="windSpeed-label" className="text-sm font-medium leading-none">
+                      Wind Speed (kt): {field.value}
+                    </span>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500">0</span>
-                      <FormControl>
-                        <Slider
-                          defaultValue={[field.value]}
-                          min={0}
-                          max={100}
-                          step={1}
-                          onValueChange={(values) => {
-                            field.onChange(values[0]);
-                          }}
-                          className="w-full"
-                        />
-                      </FormControl>
+                      <Slider
+                        defaultValue={[field.value]}
+                        min={0}
+                        max={100}
+                        step={1}
+                        onValueChange={(values) => {
+                          field.onChange(values[0]);
+                        }}
+                        className="w-full"
+                        aria-labelledby="windSpeed-label"
+                        name="windSpeed"
+                      />
                       <span className="text-xs text-gray-500">100</span>
                     </div>
                     <FormMessage />
@@ -180,27 +182,29 @@ export default function FilterForm({ onFilter }: Props) {
                 name="windDirection"
                 render={({ field }) => (
                   <FormItem className="space-y-4">
-                    <FormLabel>Wind Direction (degrees): {field.value}°</FormLabel>
+                    <span id="windDirection-label" className="text-sm font-medium leading-none">
+                      Wind Direction (degrees): {field.value}°
+                    </span>
                     <div className="flex items-center gap-2">
-                      <ArrowRight 
-                        className="h-5 w-5 text-blue-500" 
-                        style={{ 
+                      <ArrowRight
+                        className="h-5 w-5 text-blue-500"
+                        style={{
                           transform: `rotate(${field.value}deg)`,
-                          transition: 'transform 0.3s ease-in-out' 
-                        }} 
+                          transition: 'transform 0.3s ease-in-out'
+                        }}
                       />
-                      <FormControl>
-                        <Slider
-                          defaultValue={[field.value]}
-                          min={0}
-                          max={359}
-                          step={1}
-                          onValueChange={(values) => {
-                            field.onChange(values[0]);
-                          }}
-                          className="w-full"
-                        />
-                      </FormControl>
+                      <Slider
+                        defaultValue={[field.value]}
+                        min={0}
+                        max={359}
+                        step={1}
+                        onValueChange={(values) => {
+                          field.onChange(values[0]);
+                        }}
+                        className="w-full"
+                        aria-labelledby="windDirection-label"
+                        name="windDirection"
+                      />
                     </div>
                     <FormMessage />
                   </FormItem>
