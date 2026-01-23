@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -35,6 +35,8 @@ import {
   type FlightCategory,
   type PassengerManifest,
 } from "@/lib/weight-utils";
+import { useAIPricing, type PricingAIResult } from "@/services/pricing-ai.service";
+import { getSeasonIndex, getPricingRecommendation, calculateUrgencyScore } from "@/domain/pricing";
 
 export default function BasicAviationCargo() {
   useSEO({
@@ -60,12 +62,14 @@ export default function BasicAviationCargo() {
   // Dynamic Pricing State
   const [capacityUtil, setCapacityUtil] = useState<number>(65);
   const [daysUntilDep, setDaysUntilDep] = useState<number>(14);
-  const [historicalDemand, setHistoricalDemand] = useState<number>(70);
 
   // Weight Calculator State
   const [passengerCount, setPassengerCount] = useState<number>(150);
   const [flightCat, setFlightCat] = useState<FlightCategory>("mediumHaul");
   const [checkedBagRatio, setCheckedBagRatio] = useState<number>(1.0);
+
+  // AI Pricing Hook
+  const { loading: aiLoading, result: aiResult, fetchPricing } = useAIPricing();
 
   // Calculate results
   const chargeableResult = calculateChargeableWeight({
@@ -85,13 +89,14 @@ export default function BasicAviationCargo() {
     handlingFee: 25,
   });
 
+  // Fallback to rule-based if AI not available
   const dynamicResult = calculateDynamicPrice(
     BASE_RATES[routeType].typical,
     {
       capacityUtilization: capacityUtil,
       daysUntilDeparture: daysUntilDep,
       competitorPriceIndex: 1.0,
-      historicalDemand,
+      historicalDemand: 70, // Fixed value for rule-based
     }
   );
 
@@ -100,6 +105,26 @@ export default function BasicAviationCargo() {
     flightCat,
     checkedBagRatio
   );
+
+  // Fetch AI pricing when parameters change
+  const handleFetchAIPricing = useCallback(() => {
+    const seasonIndex = getSeasonIndex(season);
+    fetchPricing({
+      routeType,
+      capacityUtilization: capacityUtil,
+      seasonIndex,
+      daysUntilDeparture: daysUntilDep,
+      basePrice: BASE_RATES[routeType].typical,
+    });
+  }, [routeType, capacityUtil, season, daysUntilDep, fetchPricing]);
+
+  // Use AI result if available, otherwise fallback
+  const aiMultiplier = aiResult?.success && aiResult.data ? aiResult.data.aiMultiplier : dynamicResult.priceMultiplier;
+  const aiConfidence = aiResult?.success && aiResult.data ? aiResult.data.confidence : null;
+  const aiReasoning = aiResult?.success && aiResult.data ? aiResult.data.reasoning : null;
+  const aiRecommendation = getPricingRecommendation(aiMultiplier);
+  const urgencyScore = calculateUrgencyScore(daysUntilDep);
+  const aiRecommendedRate = BASE_RATES[routeType].typical * aiMultiplier;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-orange-50 p-6">
@@ -704,15 +729,15 @@ export default function BasicAviationCargo() {
                 </CardContent>
               </Card>
 
-              {/* Dynamic Pricing Section */}
+              {/* AI Dynamic Pricing Section */}
               <Card className="border-orange-200 shadow-lg">
                 <CardHeader className="bg-gradient-to-r from-orange-600 to-red-600 text-white">
                   <CardTitle className="text-2xl flex items-center gap-2">
                     <TrendingUp className="h-6 w-6" />
-                    Dynamic Pricing Model
+                    AI-Powered Dynamic Pricing
                   </CardTitle>
                   <p className="text-orange-100 mt-2">
-                    Demand-based pricing optimization
+                    Intelligent demand-based pricing optimization
                   </p>
                 </CardHeader>
                 <CardContent className="pt-6">
@@ -742,51 +767,80 @@ export default function BasicAviationCargo() {
                         />
                       </div>
                       <div>
-                        <Label>Historical Demand: {historicalDemand}%</Label>
-                        <input
-                          type="range"
-                          min={0}
-                          max={100}
-                          value={historicalDemand}
-                          onChange={(e) => setHistoricalDemand(Number(e.target.value))}
-                          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        />
+                        <Label>Season: {season}</Label>
+                        <Select value={season} onValueChange={(v) => setSeason(v as SeasonType)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="low">Low Season (0.85x)</SelectItem>
+                            <SelectItem value="shoulder">Shoulder (1.00x)</SelectItem>
+                            <SelectItem value="peak">Peak Season (1.30x)</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
+                      <Button
+                        onClick={handleFetchAIPricing}
+                        disabled={aiLoading}
+                        className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                      >
+                        {aiLoading ? "Calculating..." : "🤖 Get AI Pricing"}
+                      </Button>
                     </div>
                     <div className="space-y-4">
-                      <h3 className="text-lg font-bold text-gray-800">Pricing Recommendation</h3>
+                      <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        Pricing Recommendation
+                        {aiResult?.success && (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                            AI Powered
+                          </span>
+                        )}
+                        {!aiResult?.success && aiResult && (
+                          <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                            Fallback
+                          </span>
+                        )}
+                      </h3>
                       <Card className={`border-2 ${
-                        dynamicResult.recommendation === 'surge' ? 'bg-red-50 border-red-400' :
-                        dynamicResult.recommendation === 'premium' ? 'bg-orange-50 border-orange-400' :
-                        dynamicResult.recommendation === 'discount' ? 'bg-green-50 border-green-400' :
+                        aiRecommendation === 'surge' ? 'bg-red-50 border-red-400' :
+                        aiRecommendation === 'premium' ? 'bg-orange-50 border-orange-400' :
+                        aiRecommendation === 'discount' ? 'bg-green-50 border-green-400' :
                         'bg-blue-50 border-blue-400'
                       }`}>
                         <CardContent className="p-5">
                           <div className="flex items-center justify-between mb-4">
                             <span className={`px-3 py-1 rounded-full text-sm font-bold uppercase ${
-                              dynamicResult.recommendation === 'surge' ? 'bg-red-200 text-red-800' :
-                              dynamicResult.recommendation === 'premium' ? 'bg-orange-200 text-orange-800' :
-                              dynamicResult.recommendation === 'discount' ? 'bg-green-200 text-green-800' :
+                              aiRecommendation === 'surge' ? 'bg-red-200 text-red-800' :
+                              aiRecommendation === 'premium' ? 'bg-orange-200 text-orange-800' :
+                              aiRecommendation === 'discount' ? 'bg-green-200 text-green-800' :
                               'bg-blue-200 text-blue-800'
                             }`}>
-                              {dynamicResult.recommendation}
+                              {aiRecommendation}
                             </span>
-                            <span className="text-2xl font-bold">{dynamicResult.priceMultiplier}x</span>
+                            <span className="text-2xl font-bold">{aiMultiplier}x</span>
                           </div>
                           <div className="text-center">
                             <p className="text-sm text-gray-600">Recommended Rate</p>
-                            <p className="text-3xl font-bold">${dynamicResult.recommendedRate}/kg</p>
+                            <p className="text-3xl font-bold">${aiRecommendedRate.toFixed(2)}/kg</p>
                           </div>
                           <div className="grid grid-cols-2 gap-4 mt-4">
-                            <div className="text-center p-2 bg-white rounded">
-                              <p className="text-xs text-gray-500">Demand Score</p>
-                              <p className="font-bold">{dynamicResult.demandScore}%</p>
-                            </div>
+                            {aiConfidence !== null && (
+                              <div className="text-center p-2 bg-white rounded">
+                                <p className="text-xs text-gray-500">AI Confidence</p>
+                                <p className="font-bold text-green-600">{(aiConfidence * 100).toFixed(0)}%</p>
+                              </div>
+                            )}
                             <div className="text-center p-2 bg-white rounded">
                               <p className="text-xs text-gray-500">Urgency Score</p>
-                              <p className="font-bold">{dynamicResult.urgencyScore}%</p>
+                              <p className="font-bold">{urgencyScore}%</p>
                             </div>
                           </div>
+                          {aiReasoning && (
+                            <div className="mt-4 p-3 bg-white rounded-lg border border-gray-200">
+                              <p className="text-xs text-gray-500 mb-1">AI Reasoning</p>
+                              <p className="text-sm text-gray-700">{aiReasoning}</p>
+                            </div>
+                          )}
                         </CardContent>
                       </Card>
                     </div>
