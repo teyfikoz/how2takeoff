@@ -100,7 +100,7 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
 
   try {
     const response = await fetch(
-      `https://api-inference.huggingface.co/models/${AI_CONFIG.HF_MODEL}`,
+      `https://router.huggingface.co/hf-inference/models/${AI_CONFIG.HF_MODEL}`,
       {
         method: "POST",
         headers: {
