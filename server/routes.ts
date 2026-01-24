@@ -5,7 +5,22 @@ import { insertAircraftSchema, insertCalculationSchema, insertUserSchema } from 
 import { requireAdmin } from "./middleware/auth";
 import bcrypt from "bcryptjs";
 
-// ============ AI PRICING TYPES & LOGIC ============
+// ============ AI PRICING CONFIGURATION ============
+
+const AI_CONFIG = {
+  // Production-safe bounds
+  MULTIPLIER_FLOOR: 0.85,
+  MULTIPLIER_CAP: 1.50,
+  // HuggingFace settings
+  HF_MODEL: "mistralai/Mistral-7B-Instruct-v0.2",
+  HF_TIMEOUT_MS: 8000,
+  HF_MAX_RETRIES: 1,
+  // Feature flag
+  USE_HF: process.env.USE_HF === "true",
+  HF_API_TOKEN: process.env.HF_API_TOKEN,
+};
+
+// ============ AI PRICING TYPES ============
 
 interface AIPricingInput {
   routeType: string;
@@ -19,13 +34,163 @@ interface AIPricingResult {
   multiplier: number;
   confidence: number;
   reasoning: string;
+  source: "huggingface" | "rule-based";
+}
+
+interface HFInferenceResponse {
+  generated_text?: string;
+  error?: string;
+}
+
+// ============ HUGGINGFACE INFERENCE ============
+
+/**
+ * Build prompt for HuggingFace model
+ * Structured for deterministic, number-only output
+ */
+function buildHFPrompt(input: AIPricingInput): string {
+  return `<s>[INST] You are an airline cargo pricing assistant. Your task is to calculate a pricing multiplier.
+
+Given market conditions:
+- Route type: ${input.routeType}
+- Capacity utilization: ${input.capacityUtilization}%
+- Season index: ${input.seasonIndex} (0.85=low, 1.0=normal, 1.3=peak)
+- Days until departure: ${input.daysUntilDeparture}
+
+Rules:
+- High capacity (>80%) or short notice (<7 days) = higher multiplier
+- Low capacity (<40%) or advance booking (>30 days) = lower multiplier
+- Peak season increases, low season decreases
+
+Return ONLY a single number between 0.85 and 1.50 representing the pricing multiplier.
+Do not include any explanation, just the number. [/INST]`;
 }
 
 /**
- * Calculate AI-powered pricing multiplier
- * Currently rule-based, will be replaced with HuggingFace inference
+ * Parse HuggingFace response to extract multiplier
  */
-function calculateAIMultiplier(input: AIPricingInput): AIPricingResult {
+function parseHFResponse(response: string): number | null {
+  // Clean the response
+  const cleaned = response.trim();
+
+  // Try to extract a number
+  const numberMatch = cleaned.match(/(\d+\.?\d*)/);
+  if (!numberMatch) return null;
+
+  const value = parseFloat(numberMatch[1]);
+
+  // Validate range
+  if (isNaN(value) || value < 0.5 || value > 2.0) return null;
+
+  return value;
+}
+
+/**
+ * Call HuggingFace Inference API
+ */
+async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult | null> {
+  if (!AI_CONFIG.HF_API_TOKEN) {
+    console.warn("HF_API_TOKEN not configured");
+    return null;
+  }
+
+  const prompt = buildHFPrompt(input);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.HF_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(
+      `https://api-inference.huggingface.co/models/${AI_CONFIG.HF_MODEL}`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${AI_CONFIG.HF_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inputs: prompt,
+          parameters: {
+            max_new_tokens: 10,
+            temperature: 0.1, // Low temperature for deterministic output
+            do_sample: false,
+            return_full_text: false,
+          },
+        }),
+        signal: controller.signal,
+      }
+    );
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("HF API error:", response.status, errorText);
+      return null;
+    }
+
+    const data = await response.json() as HFInferenceResponse[] | HFInferenceResponse;
+
+    // Handle array or single response
+    const result = Array.isArray(data) ? data[0] : data;
+
+    if (result.error) {
+      console.error("HF inference error:", result.error);
+      return null;
+    }
+
+    const generatedText = result.generated_text;
+    if (!generatedText) {
+      console.error("HF: No generated text in response");
+      return null;
+    }
+
+    const multiplier = parseHFResponse(generatedText);
+    if (multiplier === null) {
+      console.warn("HF: Could not parse multiplier from:", generatedText);
+      return null;
+    }
+
+    // Clamp to production-safe bounds
+    const clampedMultiplier = Math.max(
+      AI_CONFIG.MULTIPLIER_FLOOR,
+      Math.min(AI_CONFIG.MULTIPLIER_CAP, multiplier)
+    );
+
+    // Build reasoning based on factors
+    const factors: string[] = [];
+    if (input.capacityUtilization > 80) factors.push(`High capacity (${input.capacityUtilization}%)`);
+    if (input.capacityUtilization < 40) factors.push(`Low capacity (${input.capacityUtilization}%)`);
+    if (input.daysUntilDeparture <= 3) factors.push("Last-minute booking");
+    if (input.daysUntilDeparture > 30) factors.push("Advance booking");
+    if (input.seasonIndex > 1.1) factors.push("Peak season");
+    if (input.seasonIndex < 0.9) factors.push("Low season");
+
+    const reasoning = factors.length > 0
+      ? `AI analysis: ${factors.join(", ")} → ${clampedMultiplier > 1 ? "+" : ""}${((clampedMultiplier - 1) * 100).toFixed(0)}% adjustment`
+      : "AI analysis: Standard market conditions";
+
+    return {
+      multiplier: Math.round(clampedMultiplier * 100) / 100,
+      confidence: 0.90, // Higher confidence for AI
+      reasoning,
+      source: "huggingface",
+    };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === "AbortError") {
+      console.warn("HF request timeout");
+    } else {
+      console.error("HF request failed:", error);
+    }
+    return null;
+  }
+}
+
+/**
+ * Calculate rule-based pricing multiplier (fallback)
+ * Used when HuggingFace is unavailable or disabled
+ */
+function calculateRuleBasedMultiplier(input: AIPricingInput): AIPricingResult {
   const factors: string[] = [];
   let confidence = 0.85; // Base confidence for rule-based
 
@@ -80,14 +245,14 @@ function calculateAIMultiplier(input: AIPricingInput): AIPricingResult {
   // Calculate final multiplier
   const rawMultiplier = capacityMultiplier * urgencyMultiplier * input.seasonIndex * routeMultiplier;
 
-  // Production-safe bounds: [0.85, 1.50]
-  // Higher multipliers risk sales loss in airline pricing
-  const AI_MULTIPLIER_FLOOR = 0.85;
-  const AI_MULTIPLIER_CAP = 1.50;
-  const clampedMultiplier = Math.max(AI_MULTIPLIER_FLOOR, Math.min(AI_MULTIPLIER_CAP, rawMultiplier));
+  // Clamp to production-safe bounds
+  const clampedMultiplier = Math.max(
+    AI_CONFIG.MULTIPLIER_FLOOR,
+    Math.min(AI_CONFIG.MULTIPLIER_CAP, rawMultiplier)
+  );
 
   // Adjust confidence based on how extreme the multiplier is
-  if (clampedMultiplier > 1.5 || clampedMultiplier < 0.8) {
+  if (clampedMultiplier > 1.4 || clampedMultiplier < 0.9) {
     confidence -= 0.10;
   }
 
@@ -99,8 +264,26 @@ function calculateAIMultiplier(input: AIPricingInput): AIPricingResult {
   return {
     multiplier: Math.round(clampedMultiplier * 100) / 100,
     confidence: Math.round(confidence * 100) / 100,
-    reasoning
+    reasoning,
+    source: "rule-based",
   };
+}
+
+/**
+ * Get AI pricing - tries HuggingFace first, falls back to rule-based
+ */
+async function getAIPricing(input: AIPricingInput): Promise<AIPricingResult> {
+  // Try HuggingFace if enabled and configured
+  if (AI_CONFIG.USE_HF && AI_CONFIG.HF_API_TOKEN) {
+    const hfResult = await callHuggingFace(input);
+    if (hfResult) {
+      return hfResult;
+    }
+    console.log("HF failed, falling back to rule-based");
+  }
+
+  // Fallback to rule-based
+  return calculateRuleBasedMultiplier(input);
 }
 
 export function registerRoutes(app: Express) {
@@ -247,9 +430,8 @@ export function registerRoutes(app: Express) {
     }
 
     try {
-      // TODO: Replace with HuggingFace inference
-      // For now, use enhanced rule-based calculation
-      const aiMultiplier = calculateAIMultiplier({
+      // Get AI pricing (HuggingFace if enabled, else rule-based)
+      const result = await getAIPricing({
         routeType,
         capacityUtilization,
         seasonIndex,
@@ -258,10 +440,10 @@ export function registerRoutes(app: Express) {
       });
 
       res.json({
-        aiMultiplier: aiMultiplier.multiplier,
-        confidence: aiMultiplier.confidence,
-        reasoning: aiMultiplier.reasoning,
-        source: "rule-based" // Will change to "huggingface" after integration
+        aiMultiplier: result.multiplier,
+        confidence: result.confidence,
+        reasoning: result.reasoning,
+        source: result.source,
       });
     } catch (error) {
       console.error("AI pricing error:", error);
