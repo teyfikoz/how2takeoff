@@ -23,12 +23,21 @@ const AI_CONFIG = {
 
 // ============ AI PRICING TYPES ============
 
+// Optional forecast signal for pricing bias
+interface ForecastSignal {
+  expectedFinalLoadFactor: number;  // 0-1
+  demandTrend: "up" | "flat" | "down";
+  confidence: number;               // 0-1
+}
+
 interface AIPricingInput {
   routeType: string;
   capacityUtilization: number;
   seasonIndex: number;
   daysUntilDeparture: number;
   basePrice: number;
+  // Optional: forecast signal for demand-based bias
+  forecastSignal?: ForecastSignal;
 }
 
 interface AIPricingResult {
@@ -36,6 +45,9 @@ interface AIPricingResult {
   confidence: number;
   reasoning: string;
   source: "huggingface" | "rule-based";
+  // New: forecast integration info
+  forecastBias?: number;
+  forecastApplied?: boolean;
 }
 
 interface HFChatResponse {
@@ -274,20 +286,95 @@ function calculateRuleBasedMultiplier(input: AIPricingInput): AIPricingResult {
 }
 
 /**
+ * Calculate forecast bias based on demand signal
+ * RULE: Max ±5% bias, only when confidence >= 0.6
+ */
+function calculateForecastBias(signal: ForecastSignal | undefined): { bias: number; applied: boolean; explanation: string } {
+  // No signal = no bias
+  if (!signal) {
+    return { bias: 1.0, applied: false, explanation: "" };
+  }
+
+  // Low confidence = no bias (signal not trustworthy)
+  if (signal.confidence < 0.6) {
+    return {
+      bias: 1.0,
+      applied: false,
+      explanation: `Forecast confidence too low (${(signal.confidence * 100).toFixed(0)}% < 60%)`
+    };
+  }
+
+  // Apply bias based on demand trend
+  // MAX ±5% to prevent forecast from overriding pricing logic
+  const FORECAST_BIAS_MAX = 0.05;
+
+  let bias = 1.0;
+  let explanation = "";
+
+  switch (signal.demandTrend) {
+    case "up":
+      bias = 1.0 + FORECAST_BIAS_MAX; // +5%
+      explanation = `Demand forecast indicates UPWARD pressure (+5%)`;
+      break;
+    case "down":
+      bias = 1.0 - FORECAST_BIAS_MAX; // -5%
+      explanation = `Demand forecast indicates DOWNWARD pressure (-5%)`;
+      break;
+    case "flat":
+      bias = 1.0;
+      explanation = `Demand forecast indicates STABLE conditions (no adjustment)`;
+      break;
+  }
+
+  return { bias, applied: bias !== 1.0, explanation };
+}
+
+/**
  * Get AI pricing - tries HuggingFace first, falls back to rule-based
+ * Applies forecast bias if forecastSignal is provided
  */
 async function getAIPricing(input: AIPricingInput): Promise<AIPricingResult> {
-  // Try HuggingFace if enabled and configured
+  // Step 1: Get base pricing (HF or rule-based)
+  let baseResult: AIPricingResult;
+
   if (AI_CONFIG.USE_HF && AI_CONFIG.HF_API_TOKEN) {
     const hfResult = await callHuggingFace(input);
     if (hfResult) {
-      return hfResult;
+      baseResult = hfResult;
+    } else {
+      console.log("HF failed, falling back to rule-based");
+      baseResult = calculateRuleBasedMultiplier(input);
     }
-    console.log("HF failed, falling back to rule-based");
+  } else {
+    baseResult = calculateRuleBasedMultiplier(input);
   }
 
-  // Fallback to rule-based
-  return calculateRuleBasedMultiplier(input);
+  // Step 2: Calculate forecast bias (if signal provided)
+  const forecastBiasResult = calculateForecastBias(input.forecastSignal);
+
+  // Step 3: Apply bias to multiplier
+  const biasedMultiplier = baseResult.multiplier * forecastBiasResult.bias;
+
+  // Step 4: Re-apply global guards [0.85, 1.50]
+  const finalMultiplier = Math.max(
+    AI_CONFIG.MULTIPLIER_FLOOR,
+    Math.min(AI_CONFIG.MULTIPLIER_CAP, biasedMultiplier)
+  );
+
+  // Step 5: Update reasoning with forecast info
+  let reasoning = baseResult.reasoning;
+  if (forecastBiasResult.explanation) {
+    reasoning += `; ${forecastBiasResult.explanation}`;
+  }
+
+  return {
+    multiplier: Math.round(finalMultiplier * 100) / 100,
+    confidence: baseResult.confidence,
+    reasoning,
+    source: baseResult.source,
+    forecastBias: forecastBiasResult.bias !== 1.0 ? Math.round(forecastBiasResult.bias * 100) / 100 : undefined,
+    forecastApplied: forecastBiasResult.applied,
+  };
 }
 
 // ============ DEMAND FORECASTING TYPES ============
@@ -637,15 +724,24 @@ export function registerRoutes(app: Express) {
 
   // ============ AI PRICING ENDPOINT ============
   // POST /api/pricing/ai - Get AI-powered pricing multiplier
+  // Now supports optional forecastSignal for demand-based bias
   app.post('/api/pricing/ai', async (req, res) => {
-    const { routeType, capacityUtilization, seasonIndex, daysUntilDeparture, basePrice } = req.body;
+    const {
+      routeType,
+      capacityUtilization,
+      seasonIndex,
+      daysUntilDeparture,
+      basePrice,
+      forecastSignal  // Optional: demand forecast signal for bias
+    } = req.body;
 
     // Validate required fields
     if (!routeType || capacityUtilization === undefined || seasonIndex === undefined ||
         daysUntilDeparture === undefined || basePrice === undefined) {
       res.status(400).json({
         error: "Missing required fields",
-        required: ["routeType", "capacityUtilization", "seasonIndex", "daysUntilDeparture", "basePrice"]
+        required: ["routeType", "capacityUtilization", "seasonIndex", "daysUntilDeparture", "basePrice"],
+        optional: ["forecastSignal"]
       });
       return;
     }
@@ -661,22 +757,67 @@ export function registerRoutes(app: Express) {
       return;
     }
 
+    // Validate forecastSignal if provided
+    if (forecastSignal !== undefined) {
+      if (typeof forecastSignal !== "object" || forecastSignal === null) {
+        res.status(400).json({ error: "forecastSignal must be an object" });
+        return;
+      }
+
+      const { expectedFinalLoadFactor, demandTrend, confidence } = forecastSignal;
+
+      if (expectedFinalLoadFactor === undefined || demandTrend === undefined || confidence === undefined) {
+        res.status(400).json({
+          error: "Invalid forecastSignal",
+          required: ["expectedFinalLoadFactor", "demandTrend", "confidence"]
+        });
+        return;
+      }
+
+      if (expectedFinalLoadFactor < 0 || expectedFinalLoadFactor > 1) {
+        res.status(400).json({ error: "forecastSignal.expectedFinalLoadFactor must be 0-1" });
+        return;
+      }
+
+      if (!["up", "flat", "down"].includes(demandTrend)) {
+        res.status(400).json({ error: "forecastSignal.demandTrend must be 'up', 'flat', or 'down'" });
+        return;
+      }
+
+      if (confidence < 0 || confidence > 1) {
+        res.status(400).json({ error: "forecastSignal.confidence must be 0-1" });
+        return;
+      }
+    }
+
     try {
-      // Get AI pricing (HuggingFace if enabled, else rule-based)
+      // Get AI pricing with optional forecast bias
       const result = await getAIPricing({
         routeType,
         capacityUtilization,
         seasonIndex,
         daysUntilDeparture,
-        basePrice
+        basePrice,
+        forecastSignal: forecastSignal as ForecastSignal | undefined,
       });
 
-      res.json({
+      // Build response
+      const response: Record<string, unknown> = {
         aiMultiplier: result.multiplier,
         confidence: result.confidence,
         reasoning: result.reasoning,
         source: result.source,
-      });
+      };
+
+      // Include forecast info if applicable
+      if (result.forecastApplied !== undefined) {
+        response.forecastApplied = result.forecastApplied;
+      }
+      if (result.forecastBias !== undefined) {
+        response.forecastBias = result.forecastBias;
+      }
+
+      res.json(response);
     } catch (error) {
       console.error("AI pricing error:", error);
       res.status(500).json({ error: "AI pricing calculation failed" });
