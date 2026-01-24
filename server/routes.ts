@@ -80,8 +80,11 @@ function calculateAIMultiplier(input: AIPricingInput): AIPricingResult {
   // Calculate final multiplier
   const rawMultiplier = capacityMultiplier * urgencyMultiplier * input.seasonIndex * routeMultiplier;
 
-  // Clamp to reasonable bounds [0.70, 1.80]
-  const clampedMultiplier = Math.max(0.70, Math.min(1.80, rawMultiplier));
+  // Production-safe bounds: [0.85, 1.50]
+  // Higher multipliers risk sales loss in airline pricing
+  const AI_MULTIPLIER_FLOOR = 0.85;
+  const AI_MULTIPLIER_CAP = 1.50;
+  const clampedMultiplier = Math.max(AI_MULTIPLIER_FLOOR, Math.min(AI_MULTIPLIER_CAP, rawMultiplier));
 
   // Adjust confidence based on how extreme the multiplier is
   if (clampedMultiplier > 1.5 || clampedMultiplier < 0.8) {

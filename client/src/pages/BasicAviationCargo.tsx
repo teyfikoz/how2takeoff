@@ -825,9 +825,27 @@ export default function BasicAviationCargo() {
                           </div>
                           <div className="grid grid-cols-2 gap-4 mt-4">
                             {aiConfidence !== null && (
-                              <div className="text-center p-2 bg-white rounded">
+                              <div className={`text-center p-2 rounded ${
+                                aiConfidence < 0.4 ? 'bg-red-50 border border-red-200' :
+                                aiConfidence < 0.6 ? 'bg-yellow-50 border border-yellow-200' :
+                                'bg-white'
+                              }`}>
                                 <p className="text-xs text-gray-500">AI Confidence</p>
-                                <p className="font-bold text-green-600">{(aiConfidence * 100).toFixed(0)}%</p>
+                                <p className={`font-bold ${
+                                  aiConfidence < 0.4 ? 'text-red-600' :
+                                  aiConfidence < 0.6 ? 'text-yellow-600' :
+                                  'text-green-600'
+                                }`}>{(aiConfidence * 100).toFixed(0)}%</p>
+                                {aiConfidence < 0.4 && (
+                                  <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full mt-1 inline-block">
+                                    AI suggestion only
+                                  </span>
+                                )}
+                                {aiConfidence >= 0.4 && aiConfidence < 0.6 && (
+                                  <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full mt-1 inline-block flex items-center gap-1">
+                                    <AlertTriangle className="h-3 w-3" /> Low confidence
+                                  </span>
+                                )}
                               </div>
                             )}
                             <div className="text-center p-2 bg-white rounded">
@@ -836,10 +854,18 @@ export default function BasicAviationCargo() {
                             </div>
                           </div>
                           {aiReasoning && (
-                            <div className="mt-4 p-3 bg-white rounded-lg border border-gray-200">
-                              <p className="text-xs text-gray-500 mb-1">AI Reasoning</p>
-                              <p className="text-sm text-gray-700">{aiReasoning}</p>
-                            </div>
+                            <details className="mt-4 group">
+                              <summary className="cursor-pointer p-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg border border-orange-200 hover:border-orange-300 transition-colors flex items-center justify-between">
+                                <span className="text-sm font-semibold text-orange-800 flex items-center gap-2">
+                                  <Info className="h-4 w-4" />
+                                  Why this price?
+                                </span>
+                                <span className="text-orange-500 group-open:rotate-180 transition-transform">▼</span>
+                              </summary>
+                              <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200">
+                                <p className="text-sm text-gray-700">{aiReasoning}</p>
+                              </div>
+                            </details>
                           )}
                         </CardContent>
                       </Card>

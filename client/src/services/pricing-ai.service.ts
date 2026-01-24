@@ -82,8 +82,11 @@ export async function getAIPricing(
       };
     }
 
-    // Clamp multiplier to reasonable bounds
-    const clampedMultiplier = Math.max(0.5, Math.min(2.0, data.aiMultiplier));
+    // Production-safe bounds: [0.85, 1.50]
+    // Higher multipliers risk sales loss in airline pricing
+    const AI_MULTIPLIER_FLOOR = 0.85;
+    const AI_MULTIPLIER_CAP = 1.50;
+    const clampedMultiplier = Math.max(AI_MULTIPLIER_FLOOR, Math.min(AI_MULTIPLIER_CAP, data.aiMultiplier));
 
     return {
       success: true,
