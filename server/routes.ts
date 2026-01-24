@@ -290,6 +290,234 @@ async function getAIPricing(input: AIPricingInput): Promise<AIPricingResult> {
   return calculateRuleBasedMultiplier(input);
 }
 
+// ============ DEMAND FORECASTING TYPES ============
+// NOTE: This is a SIGNAL generator only. Does NOT calculate prices.
+
+type RouteIdentifier =
+  | { type: "routeType"; value: string }
+  | { type: "origin-destination"; origin: string; destination: string };
+
+interface DemandForecastInput {
+  route: RouteIdentifier;
+  departureDate: string;           // ISO date string
+  currentBookings: number;         // 0-100 (percentage)
+  aircraftCapacity: number;        // total seats
+  dayOfWeek: number;               // 0-6 (Sunday-Saturday)
+  // Optional historical data
+  historicalLoadFactors?: number[]; // normalized LF for same route/type
+}
+
+interface DemandForecastOutput {
+  expectedFinalLoadFactor: number;  // 0-1
+  demandTrend: "up" | "flat" | "down";
+  confidence: number;               // 0-1
+  seasonality: "low" | "shoulder" | "peak";
+  // Debug info (non-pricing)
+  factors: string[];
+}
+
+// ============ DEMAND FORECASTING CONSTANTS ============
+
+// Day-of-week demand multipliers (business + leisure mix)
+const DAY_OF_WEEK_FACTORS: Record<number, number> = {
+  0: 0.95,  // Sunday - moderate
+  1: 1.05,  // Monday - business peak
+  2: 1.00,  // Tuesday - normal
+  3: 1.00,  // Wednesday - normal
+  4: 1.08,  // Thursday - business peak
+  5: 1.12,  // Friday - highest (business + leisure)
+  6: 0.90,  // Saturday - leisure only
+};
+
+// Booking curve: maps (days before departure, current booking %) → expected final LF
+// Based on typical airline booking patterns
+const BOOKING_CURVE_MULTIPLIERS: Record<string, number> = {
+  "early-low": 1.8,      // >30 days, <30% booked → high growth potential
+  "early-medium": 1.4,   // >30 days, 30-60% → good growth
+  "early-high": 1.15,    // >30 days, >60% → limited growth
+  "mid-low": 1.5,        // 14-30 days, <30% → moderate growth
+  "mid-medium": 1.25,    // 14-30 days, 30-60% → normal
+  "mid-high": 1.10,      // 14-30 days, >60% → filling up
+  "late-low": 1.3,       // 7-14 days, <30% → some growth
+  "late-medium": 1.15,   // 7-14 days, 30-60% → moderate
+  "late-high": 1.05,     // 7-14 days, >60% → nearly full
+  "urgent-low": 1.15,    // <7 days, <30% → limited time
+  "urgent-medium": 1.08, // <7 days, 30-60% → slight growth
+  "urgent-high": 1.02,   // <7 days, >60% → almost done
+};
+
+// Peak period dates (simplified - would be more comprehensive in production)
+const PEAK_PERIODS = [
+  { start: "12-20", end: "01-05" }, // Christmas/New Year
+  { start: "06-15", end: "08-31" }, // Summer
+  { start: "04-10", end: "04-20" }, // Easter period
+];
+
+const SHOULDER_PERIODS = [
+  { start: "03-01", end: "04-09" },
+  { start: "09-01", end: "10-31" },
+  { start: "05-01", end: "06-14" },
+];
+
+// ============ DEMAND FORECASTING LOGIC ============
+
+/**
+ * Determine seasonality from date
+ */
+function getSeasonality(dateStr: string): "low" | "shoulder" | "peak" {
+  const date = new Date(dateStr);
+  const monthDay = `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  for (const period of PEAK_PERIODS) {
+    if (isInPeriod(monthDay, period.start, period.end)) {
+      return "peak";
+    }
+  }
+
+  for (const period of SHOULDER_PERIODS) {
+    if (isInPeriod(monthDay, period.start, period.end)) {
+      return "shoulder";
+    }
+  }
+
+  return "low";
+}
+
+function isInPeriod(date: string, start: string, end: string): boolean {
+  // Handle year-wrap (e.g., Dec 20 - Jan 5)
+  if (start > end) {
+    return date >= start || date <= end;
+  }
+  return date >= start && date <= end;
+}
+
+/**
+ * Get booking curve phase
+ */
+function getBookingPhase(daysUntilDeparture: number): string {
+  if (daysUntilDeparture > 30) return "early";
+  if (daysUntilDeparture > 14) return "mid";
+  if (daysUntilDeparture > 7) return "late";
+  return "urgent";
+}
+
+/**
+ * Get booking level category
+ */
+function getBookingLevel(currentBookings: number): string {
+  if (currentBookings < 30) return "low";
+  if (currentBookings < 60) return "medium";
+  return "high";
+}
+
+/**
+ * Calculate demand trend based on historical data or heuristics
+ */
+function calculateDemandTrend(
+  currentBookings: number,
+  daysUntilDeparture: number,
+  seasonality: "low" | "shoulder" | "peak",
+  historicalLFs?: number[]
+): "up" | "flat" | "down" {
+  // If we have historical data, use it
+  if (historicalLFs && historicalLFs.length >= 3) {
+    const recentAvg = historicalLFs.slice(-3).reduce((a, b) => a + b, 0) / 3;
+    const olderAvg = historicalLFs.slice(0, -3).reduce((a, b) => a + b, 0) / Math.max(1, historicalLFs.length - 3);
+
+    if (recentAvg > olderAvg * 1.05) return "up";
+    if (recentAvg < olderAvg * 0.95) return "down";
+    return "flat";
+  }
+
+  // Heuristic-based trend
+  // Peak season + early booking + low current = upward trend
+  if (seasonality === "peak" && daysUntilDeparture > 14 && currentBookings < 50) {
+    return "up";
+  }
+
+  // Low season + late booking + low current = downward trend
+  if (seasonality === "low" && daysUntilDeparture < 14 && currentBookings < 40) {
+    return "down";
+  }
+
+  return "flat";
+}
+
+/**
+ * Calculate expected final load factor
+ * NOTE: This is a SIGNAL only - does NOT determine prices
+ */
+function calculateExpectedLoadFactor(input: DemandForecastInput): DemandForecastOutput {
+  const factors: string[] = [];
+  let confidence = 0.75; // Base confidence for heuristic
+
+  // Get seasonality
+  const seasonality = getSeasonality(input.departureDate);
+  factors.push(`Seasonality: ${seasonality}`);
+
+  // Calculate days until departure
+  const departureDate = new Date(input.departureDate);
+  const today = new Date();
+  const daysUntilDeparture = Math.max(0, Math.ceil((departureDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
+  factors.push(`Days until departure: ${daysUntilDeparture}`);
+
+  // Get booking curve multiplier
+  const phase = getBookingPhase(daysUntilDeparture);
+  const level = getBookingLevel(input.currentBookings);
+  const curveKey = `${phase}-${level}`;
+  const curveMultiplier = BOOKING_CURVE_MULTIPLIERS[curveKey] || 1.0;
+  factors.push(`Booking curve: ${phase}/${level} → ${curveMultiplier}x`);
+
+  // Day of week factor
+  const dowFactor = DAY_OF_WEEK_FACTORS[input.dayOfWeek] || 1.0;
+  factors.push(`Day of week (${input.dayOfWeek}): ${dowFactor}x`);
+
+  // Seasonality factor
+  const seasonFactor = seasonality === "peak" ? 1.15 : seasonality === "shoulder" ? 1.0 : 0.90;
+  factors.push(`Season factor: ${seasonFactor}x`);
+
+  // Base expected LF from current bookings
+  let expectedLF = (input.currentBookings / 100) * curveMultiplier * dowFactor * seasonFactor;
+
+  // Blend with historical if available
+  if (input.historicalLoadFactors && input.historicalLoadFactors.length > 0) {
+    const historicalAvg = input.historicalLoadFactors.reduce((a, b) => a + b, 0) / input.historicalLoadFactors.length;
+    // Blend: 60% heuristic, 40% historical
+    expectedLF = expectedLF * 0.6 + historicalAvg * 0.4;
+    confidence += 0.10; // Higher confidence with historical data
+    factors.push(`Historical blend: avg ${(historicalAvg * 100).toFixed(0)}%`);
+  }
+
+  // Clamp to realistic bounds [0.2, 0.98]
+  expectedLF = Math.max(0.20, Math.min(0.98, expectedLF));
+
+  // Calculate demand trend
+  const demandTrend = calculateDemandTrend(
+    input.currentBookings,
+    daysUntilDeparture,
+    seasonality,
+    input.historicalLoadFactors
+  );
+  factors.push(`Demand trend: ${demandTrend}`);
+
+  // Adjust confidence based on data quality
+  if (daysUntilDeparture < 3) {
+    confidence += 0.10; // More certain close to departure
+  } else if (daysUntilDeparture > 60) {
+    confidence -= 0.15; // Less certain far out
+  }
+
+  confidence = Math.max(0.40, Math.min(0.95, confidence));
+
+  return {
+    expectedFinalLoadFactor: Math.round(expectedLF * 100) / 100,
+    demandTrend,
+    confidence: Math.round(confidence * 100) / 100,
+    seasonality,
+    factors,
+  };
+}
+
 export function registerRoutes(app: Express) {
   app.get('/api/aircraft', async (_req, res) => {
     const aircraft = await storage.getAllAircraft();
@@ -452,6 +680,110 @@ export function registerRoutes(app: Express) {
     } catch (error) {
       console.error("AI pricing error:", error);
       res.status(500).json({ error: "AI pricing calculation failed" });
+    }
+  });
+
+  // ============ DEMAND FORECASTING ENDPOINT ============
+  // POST /api/demand/forecast - Get demand signal (NOT pricing)
+  // NOTE: This endpoint returns a DEMAND SIGNAL only.
+  // It does NOT calculate prices or return pricing multipliers.
+  // Pricing AI will consume this signal separately.
+  app.post('/api/demand/forecast', (req, res) => {
+    const {
+      route,
+      departureDate,
+      currentBookings,
+      aircraftCapacity,
+      dayOfWeek,
+      historicalLoadFactors,
+    } = req.body;
+
+    // Validate required fields
+    if (!route || !departureDate || currentBookings === undefined ||
+        aircraftCapacity === undefined || dayOfWeek === undefined) {
+      res.status(400).json({
+        error: "Missing required fields",
+        required: ["route", "departureDate", "currentBookings", "aircraftCapacity", "dayOfWeek"],
+        optional: ["historicalLoadFactors"]
+      });
+      return;
+    }
+
+    // Validate route format
+    const isRouteType = typeof route === "string" || (route.type === "routeType" && route.value);
+    const isOriginDest = route.type === "origin-destination" && route.origin && route.destination;
+    if (!isRouteType && !isOriginDest) {
+      res.status(400).json({
+        error: "Invalid route format",
+        expected: "string (routeType) OR { type: 'routeType', value: string } OR { type: 'origin-destination', origin: string, destination: string }"
+      });
+      return;
+    }
+
+    // Validate ranges
+    if (currentBookings < 0 || currentBookings > 100) {
+      res.status(400).json({ error: "currentBookings must be 0-100" });
+      return;
+    }
+
+    if (aircraftCapacity < 1) {
+      res.status(400).json({ error: "aircraftCapacity must be positive" });
+      return;
+    }
+
+    if (dayOfWeek < 0 || dayOfWeek > 6) {
+      res.status(400).json({ error: "dayOfWeek must be 0-6 (Sunday-Saturday)" });
+      return;
+    }
+
+    // Validate optional historical data
+    if (historicalLoadFactors !== undefined) {
+      if (!Array.isArray(historicalLoadFactors)) {
+        res.status(400).json({ error: "historicalLoadFactors must be an array of numbers" });
+        return;
+      }
+      if (historicalLoadFactors.some((lf: unknown) => typeof lf !== "number" || lf < 0 || lf > 1)) {
+        res.status(400).json({ error: "historicalLoadFactors values must be numbers between 0 and 1" });
+        return;
+      }
+    }
+
+    // Validate departure date
+    const depDate = new Date(departureDate);
+    if (isNaN(depDate.getTime())) {
+      res.status(400).json({ error: "Invalid departureDate format (expected ISO date string)" });
+      return;
+    }
+
+    try {
+      // Normalize route input
+      const normalizedRoute: RouteIdentifier = typeof route === "string"
+        ? { type: "routeType", value: route }
+        : route;
+
+      const forecast = calculateExpectedLoadFactor({
+        route: normalizedRoute,
+        departureDate,
+        currentBookings,
+        aircraftCapacity,
+        dayOfWeek,
+        historicalLoadFactors,
+      });
+
+      // Return demand signal ONLY (no pricing data)
+      res.json({
+        expectedFinalLoadFactor: forecast.expectedFinalLoadFactor,
+        demandTrend: forecast.demandTrend,
+        confidence: forecast.confidence,
+        seasonality: forecast.seasonality,
+        // Debug info (can be removed in production)
+        _debug: {
+          factors: forecast.factors,
+        },
+      });
+    } catch (error) {
+      console.error("Demand forecast error:", error);
+      res.status(500).json({ error: "Demand forecast calculation failed" });
     }
   });
 
