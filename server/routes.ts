@@ -11,9 +11,9 @@ const AI_CONFIG = {
   // Production-safe bounds
   MULTIPLIER_FLOOR: 0.85,
   MULTIPLIER_CAP: 1.50,
-  // HuggingFace settings
-  HF_MODEL: "mistralai/Mistral-7B-Instruct-v0.2",
-  HF_TIMEOUT_MS: 8000,
+  // HuggingFace settings - using OpenAI-compatible router
+  HF_MODEL: "Qwen/Qwen2.5-72B-Instruct",
+  HF_TIMEOUT_MS: 15000,
   HF_MAX_RETRIES: 1,
   // Feature flag
   USE_HF: process.env.USE_HF === "true",
@@ -37,56 +37,63 @@ interface AIPricingResult {
   source: "huggingface" | "rule-based";
 }
 
-interface HFInferenceResponse {
-  generated_text?: string;
+interface HFChatResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
   error?: string;
 }
 
 // ============ HUGGINGFACE INFERENCE ============
 
 /**
- * Build prompt for HuggingFace model
- * Structured for deterministic, number-only output
+ * Build system prompt for pricing AI
  */
-function buildHFPrompt(input: AIPricingInput): string {
-  return `<s>[INST] You are an airline cargo pricing assistant. Your task is to calculate a pricing multiplier.
-
-Given market conditions:
-- Route type: ${input.routeType}
-- Capacity utilization: ${input.capacityUtilization}%
-- Season index: ${input.seasonIndex} (0.85=low, 1.0=normal, 1.3=peak)
-- Days until departure: ${input.daysUntilDeparture}
+function buildSystemPrompt(): string {
+  return `You are an airline cargo pricing assistant. You calculate pricing multipliers based on market conditions.
 
 Rules:
-- High capacity (>80%) or short notice (<7 days) = higher multiplier
-- Low capacity (<40%) or advance booking (>30 days) = lower multiplier
-- Peak season increases, low season decreases
+- High capacity (>80%) = increase price
+- Low capacity (<40%) = decrease price
+- Short notice (<7 days) = increase price
+- Advance booking (>30 days) = decrease price
+- Peak season (index > 1.1) = increase price
+- Low season (index < 0.9) = decrease price
 
-Return ONLY a single number between 0.85 and 1.50 representing the pricing multiplier.
-Do not include any explanation, just the number. [/INST]`;
+IMPORTANT: Return ONLY a single number between 0.85 and 1.50. No explanation.`;
 }
 
 /**
- * Parse HuggingFace response to extract multiplier
+ * Build user message for pricing request
  */
-function parseHFResponse(response: string): number | null {
-  // Clean the response
-  const cleaned = response.trim();
+function buildUserMessage(input: AIPricingInput): string {
+  return `Calculate multiplier for:
+- Route: ${input.routeType}
+- Capacity: ${input.capacityUtilization}%
+- Season index: ${input.seasonIndex}
+- Days until departure: ${input.daysUntilDeparture}
 
-  // Try to extract a number
+Reply with ONLY the number.`;
+}
+
+/**
+ * Parse response to extract multiplier
+ */
+function parseMultiplierResponse(response: string): number | null {
+  const cleaned = response.trim();
   const numberMatch = cleaned.match(/(\d+\.?\d*)/);
   if (!numberMatch) return null;
 
   const value = parseFloat(numberMatch[1]);
-
-  // Validate range
   if (isNaN(value) || value < 0.5 || value > 2.0) return null;
 
   return value;
 }
 
 /**
- * Call HuggingFace Inference API
+ * Call HuggingFace via OpenAI-compatible router
  */
 async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult | null> {
   if (!AI_CONFIG.HF_API_TOKEN) {
@@ -94,13 +101,12 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
     return null;
   }
 
-  const prompt = buildHFPrompt(input);
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.HF_TIMEOUT_MS);
 
   try {
     const response = await fetch(
-      `https://router.huggingface.co/hf-inference/models/${AI_CONFIG.HF_MODEL}`,
+      "https://router.huggingface.co/hf-inference/v1/chat/completions",
       {
         method: "POST",
         headers: {
@@ -108,13 +114,13 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          inputs: prompt,
-          parameters: {
-            max_new_tokens: 10,
-            temperature: 0.1, // Low temperature for deterministic output
-            do_sample: false,
-            return_full_text: false,
-          },
+          model: AI_CONFIG.HF_MODEL,
+          messages: [
+            { role: "system", content: buildSystemPrompt() },
+            { role: "user", content: buildUserMessage(input) },
+          ],
+          max_tokens: 10,
+          temperature: 0.1,
         }),
         signal: controller.signal,
       }
@@ -128,25 +134,22 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
       return null;
     }
 
-    const data = await response.json() as HFInferenceResponse[] | HFInferenceResponse;
+    const data = await response.json() as HFChatResponse;
 
-    // Handle array or single response
-    const result = Array.isArray(data) ? data[0] : data;
-
-    if (result.error) {
-      console.error("HF inference error:", result.error);
+    if (data.error) {
+      console.error("HF inference error:", data.error);
       return null;
     }
 
-    const generatedText = result.generated_text;
-    if (!generatedText) {
-      console.error("HF: No generated text in response");
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) {
+      console.error("HF: No content in response");
       return null;
     }
 
-    const multiplier = parseHFResponse(generatedText);
+    const multiplier = parseMultiplierResponse(content);
     if (multiplier === null) {
-      console.warn("HF: Could not parse multiplier from:", generatedText);
+      console.warn("HF: Could not parse multiplier from:", content);
       return null;
     }
 
@@ -171,7 +174,7 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
 
     return {
       multiplier: Math.round(clampedMultiplier * 100) / 100,
-      confidence: 0.90, // Higher confidence for AI
+      confidence: 0.92,
       reasoning,
       source: "huggingface",
     };
