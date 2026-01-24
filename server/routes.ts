@@ -11,9 +11,10 @@ const AI_CONFIG = {
   // Production-safe bounds
   MULTIPLIER_FLOOR: 0.85,
   MULTIPLIER_CAP: 1.50,
-  // HuggingFace settings - using OpenAI-compatible router
-  HF_MODEL: "Qwen/Qwen2.5-72B-Instruct",
-  HF_TIMEOUT_MS: 15000,
+  // HuggingFace settings - using Novita provider with Llama
+  HF_PROVIDER: "novita",
+  HF_MODEL: "meta-llama/Llama-3.3-70B-Instruct",
+  HF_TIMEOUT_MS: 20000,
   HF_MAX_RETRIES: 1,
   // Feature flag
   USE_HF: process.env.USE_HF === "true",
@@ -106,7 +107,7 @@ async function callHuggingFace(input: AIPricingInput): Promise<AIPricingResult |
 
   try {
     const response = await fetch(
-      "https://router.huggingface.co/hf-inference/v1/chat/completions",
+      `https://router.huggingface.co/${AI_CONFIG.HF_PROVIDER}/v1/chat/completions`,
       {
         method: "POST",
         headers: {
