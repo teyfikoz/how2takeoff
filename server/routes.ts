@@ -11,9 +11,9 @@ const AI_CONFIG = {
   // Production-safe bounds
   MULTIPLIER_FLOOR: 0.85,
   MULTIPLIER_CAP: 1.50,
-  // HuggingFace settings - using Novita provider with Llama
-  HF_PROVIDER: "novita",
-  HF_MODEL: "meta-llama/Llama-3.3-70B-Instruct",
+  // HuggingFace router settings - using Together AI provider
+  HF_PROVIDER: "together",
+  HF_MODEL: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
   HF_TIMEOUT_MS: 20000,
   HF_MAX_RETRIES: 1,
   // Feature flag
