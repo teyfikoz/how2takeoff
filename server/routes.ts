@@ -2236,11 +2236,20 @@ Reply with ONLY the number.`;
     // Clamp confidence
     confidence = Math.max(0.50, Math.min(0.95, confidence));
 
+    // Format reasoning as structured object for frontend
+    const primaryDriver = reasoning[0] || "Decision matrix applied based on churn risk and customer value";
+    const secondaryFactors = reasoning.slice(1).filter(r => !r.includes("guardrail") && !r.includes("excluded"));
+    const guardrailsApplied = reasoning.filter(r => r.includes("guardrail") || r.includes("excluded") || r.includes("Discount excluded"));
+
     return {
       recommendedOfferType: recommendedOffer,
       offerIntensity: intensity,
       confidence: Math.round(confidence * 100) / 100,
-      reasoning,
+      reasoning: {
+        primaryDriver,
+        secondaryFactors,
+        guardrailsApplied,
+      },
       doNotRecommend,
       alternativeOffer,
       expectedRetentionLift,
@@ -2256,11 +2265,39 @@ Reply with ONLY the number.`;
       riskLevel,
       customerValue,
       loyaltyTier = "none",
-      travelPurposeMix = { business: 0.33, leisure: 0.34, vfr: 0.33 },
+      travelPurposeMix: rawTravelPurposeMix,
       priceSensitivity = "medium",
       lastOfferAccepted,
       daysSinceLastOffer,
+      lastOfferDate,
     } = req.body;
+
+    // Convert travelPurposeMix from string to object if needed
+    let travelPurposeMix: { business: number; leisure: number; vfr: number };
+    if (typeof rawTravelPurposeMix === "string") {
+      // Convert string format to object
+      switch (rawTravelPurposeMix) {
+        case "business":
+          travelPurposeMix = { business: 0.7, leisure: 0.2, vfr: 0.1 };
+          break;
+        case "leisure":
+          travelPurposeMix = { business: 0.2, leisure: 0.7, vfr: 0.1 };
+          break;
+        case "mixed":
+        default:
+          travelPurposeMix = { business: 0.33, leisure: 0.34, vfr: 0.33 };
+      }
+    } else {
+      travelPurposeMix = rawTravelPurposeMix || { business: 0.33, leisure: 0.34, vfr: 0.33 };
+    }
+
+    // Calculate daysSinceLastOffer from lastOfferDate if provided
+    let calculatedDaysSinceLastOffer = daysSinceLastOffer;
+    if (lastOfferDate && !daysSinceLastOffer) {
+      const offerDate = new Date(lastOfferDate);
+      const today = new Date();
+      calculatedDaysSinceLastOffer = Math.floor((today.getTime() - offerDate.getTime()) / (1000 * 60 * 60 * 24));
+    }
 
     // Validate required fields
     if (churnRiskScore === undefined || !riskLevel || !customerValue) {
@@ -2302,7 +2339,7 @@ Reply with ONLY the number.`;
         travelPurposeMix,
         priceSensitivity: priceSensitivity as PriceSensitivityLevel,
         lastOfferAccepted,
-        daysSinceLastOffer,
+        daysSinceLastOffer: calculatedDaysSinceLastOffer,
       });
 
       res.json({
