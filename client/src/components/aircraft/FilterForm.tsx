@@ -52,9 +52,10 @@ export default function FilterForm({ onFilter }: Props) {
   }, []);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Flight Requirements</CardTitle>
+    <Card className="border-2 border-blue-200 shadow-xl bg-gradient-to-br from-white to-blue-50">
+      <CardHeader className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-t-lg">
+        <CardTitle className="text-2xl">Find Aircraft by Mission Requirements</CardTitle>
+        <p className="text-blue-100 mt-1 text-sm">Enter your operational needs to filter compatible aircraft from the database</p>
       </CardHeader>
       <CardContent>
         <Form {...form}>

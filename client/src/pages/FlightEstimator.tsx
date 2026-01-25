@@ -13,7 +13,8 @@ import {
 import {
   Plane, TrendingUp, Calculator, PlaneTakeoff, PlaneLanding,
   Banknote, Users, Activity, Percent, MoveHorizontal, CalendarClock,
-  Info, Globe, Building2, ArrowUpFromLine, Map, Ticket, DollarSign
+  Info, Globe, Building2, ArrowUpFromLine, Map, Ticket, DollarSign,
+  Brain, Loader2, CheckCircle, AlertTriangle, ArrowRight, Shield
 } from 'lucide-react';
 import {
   Tooltip as UITooltip,
@@ -22,7 +23,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useSEO } from '@/hooks/useSEO';
-import { HeaderAd, InContentAd } from '@/components/AdSense';
+// AI Pricing imports
+import { usePassengerDemandPricing } from '@/services/passenger-pricing.service';
+import {
+  type FareClass,
+  type TravelPurpose,
+  FARE_CLASS_LABELS,
+  FARE_CLASS_MULTIPLIERS,
+  TRAVEL_PURPOSE_LABELS,
+  ELASTICITY_LABELS,
+  calculateBaseTicketPrice,
+  formatPrice,
+  getPricingRecommendation,
+} from '@/domain/passenger-pricing';
 // Mock veri kullanımı için import
 import { mockAircraftData } from '@/data/mockAircraftData';
 // Import comprehensive airport database
@@ -681,7 +694,13 @@ export default function FlightEstimator() {
     revenuePerSeat: number,
     category: string
   }>>([]);
-  
+
+  // AI Pricing state
+  const [selectedFareClass, setSelectedFareClass] = useState<FareClass>('economy');
+  const [daysUntilDeparture, setDaysUntilDeparture] = useState(14);
+  const [currentBookings, setCurrentBookings] = useState(45);
+  const { loading: aiPricingLoading, demandResult, pricingResult, fetchAll: fetchAIPricing, reset: resetAIPricing } = usePassengerDemandPricing();
+
   // Dropdown options
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const seasons = ['spring', 'summer', 'fall', 'winter', 'holiday'];
@@ -1222,18 +1241,26 @@ export default function FlightEstimator() {
             </Card>
             
             <Tabs defaultValue="profitability">
-              <TabsList className="grid grid-cols-3 mb-6 h-12">
+              <TabsList className="grid grid-cols-4 mb-6 h-12">
                 <TabsTrigger value="profitability" className="flex items-center gap-2 text-base">
                   <Banknote className="h-5 w-5" />
-                  <span>Load Factor Impact</span>
+                  <span className="hidden sm:inline">Load Factor Impact</span>
+                  <span className="sm:hidden">Profit</span>
                 </TabsTrigger>
                 <TabsTrigger value="aircraft" className="flex items-center gap-2 text-base">
                   <Plane className="h-5 w-5" />
-                  <span>Aircraft Comparison</span>
+                  <span className="hidden sm:inline">Aircraft Comparison</span>
+                  <span className="sm:hidden">Aircraft</span>
+                </TabsTrigger>
+                <TabsTrigger value="ai-pricing" className="flex items-center gap-2 text-base bg-gradient-to-r from-blue-50 to-cyan-50 data-[state=active]:from-blue-100 data-[state=active]:to-cyan-100">
+                  <Brain className="h-5 w-5" />
+                  <span className="hidden sm:inline">AI Ticket Pricing</span>
+                  <span className="sm:hidden">AI Price</span>
                 </TabsTrigger>
                 <TabsTrigger value="passenger" className="flex items-center gap-2 text-base">
                   <Users className="h-5 w-5" />
-                  <span>Passenger Analysis</span>
+                  <span className="hidden sm:inline">Passenger Analysis</span>
+                  <span className="sm:hidden">Passenger</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -1458,7 +1485,391 @@ export default function FlightEstimator() {
                   </CardContent>
                 </Card>
               </TabsContent>
-              
+
+              {/* AI Ticket Pricing Tab */}
+              <TabsContent value="ai-pricing">
+                <Card className="border-2 border-blue-200">
+                  <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Brain className="h-6 w-6 text-blue-600" />
+                      AI-Powered Ticket Pricing
+                    </CardTitle>
+                    <CardDescription className="text-base mt-2">
+                      Get AI-driven price recommendations based on demand forecasting, travel purpose, and market conditions
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {/* Input Section */}
+                      <div className="space-y-6">
+                        <div className="bg-gray-50 p-4 rounded-lg border">
+                          <h3 className="font-semibold mb-4 flex items-center gap-2">
+                            <Calculator className="h-5 w-5 text-gray-600" />
+                            Pricing Parameters
+                          </h3>
+
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="fareClass" className="text-sm font-medium">Fare Class</Label>
+                              <Select value={selectedFareClass} onValueChange={(v) => setSelectedFareClass(v as FareClass)}>
+                                <SelectTrigger className="h-10">
+                                  <SelectValue placeholder="Select fare class" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {(Object.keys(FARE_CLASS_LABELS) as FareClass[]).map(fc => (
+                                    <SelectItem key={fc} value={fc}>
+                                      {FARE_CLASS_LABELS[fc]} ({FARE_CLASS_MULTIPLIERS[fc]}x base)
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <Label className="text-sm font-medium">Days Until Departure: {daysUntilDeparture}</Label>
+                              </div>
+                              <Slider
+                                min={1}
+                                max={90}
+                                step={1}
+                                value={[daysUntilDeparture]}
+                                onValueChange={(v) => setDaysUntilDeparture(v[0])}
+                                className="w-full"
+                              />
+                              <div className="flex justify-between text-xs text-gray-500">
+                                <span>1 day (last minute)</span>
+                                <span>90 days (advance)</span>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <Label className="text-sm font-medium">Current Bookings: {currentBookings}%</Label>
+                              </div>
+                              <Slider
+                                min={0}
+                                max={95}
+                                step={5}
+                                value={[currentBookings]}
+                                onValueChange={(v) => setCurrentBookings(v[0])}
+                                className="w-full"
+                              />
+                              <div className="flex justify-between text-xs text-gray-500">
+                                <span>0% (empty)</span>
+                                <span>95% (nearly full)</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Route Info */}
+                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                          <h4 className="font-semibold mb-3 text-blue-900">Route Information</h4>
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                              <span className="text-gray-600">Route:</span>
+                              <span className="font-medium ml-2">{originIATA} → {destIATA}</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Distance:</span>
+                              <span className="font-medium ml-2">{distance.toLocaleString()} km</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Aircraft:</span>
+                              <span className="font-medium ml-2">{aircraft}</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">Seats:</span>
+                              <span className="font-medium ml-2">{AIRCRAFT_DATA[aircraft as keyof typeof AIRCRAFT_DATA]?.seats || 0}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Get Pricing Button */}
+                        <Button
+                          onClick={() => {
+                            const aircraftData = AIRCRAFT_DATA[aircraft as keyof typeof AIRCRAFT_DATA];
+                            const basePrice = calculateBaseTicketPrice(distance);
+
+                            // Map travel purpose from analysis
+                            let travelPurpose: TravelPurpose = 'mixed';
+                            if (travelPurposeAnalysis) {
+                              if (travelPurposeAnalysis.primaryPurpose === 'Business') travelPurpose = 'business';
+                              else if (travelPurposeAnalysis.primaryPurpose === 'Leisure') travelPurpose = 'leisure';
+                              else if (travelPurposeAnalysis.primaryPurpose === 'VFR') travelPurpose = 'vfr';
+                            }
+
+                            fetchAIPricing(
+                              {
+                                originIATA,
+                                destinationIATA: destIATA,
+                                departureDate: new Date(Date.now() + daysUntilDeparture * 24 * 60 * 60 * 1000).toISOString(),
+                                departureDay: departureDayOfWeek,
+                                departureTime: departureTimeOfDay,
+                                currentBookings,
+                                aircraftCapacity: aircraftData?.seats || 180,
+                              },
+                              {
+                                originIATA,
+                                destinationIATA: destIATA,
+                                distance,
+                                fareClass: selectedFareClass,
+                                travelPurpose,
+                                capacityUtilization: currentBookings,
+                                daysUntilDeparture,
+                                basePrice,
+                              }
+                            );
+                          }}
+                          disabled={aiPricingLoading || distance === 0}
+                          className="w-full h-12 text-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+                        >
+                          {aiPricingLoading ? (
+                            <>
+                              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                              Analyzing...
+                            </>
+                          ) : (
+                            <>
+                              <Brain className="h-5 w-5 mr-2" />
+                              Get AI Pricing Recommendation
+                            </>
+                          )}
+                        </Button>
+                      </div>
+
+                      {/* Results Section */}
+                      <div className="space-y-6">
+                        {demandResult?.success && demandResult.data && (
+                          <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            <h3 className="font-semibold mb-4 flex items-center gap-2 text-purple-900">
+                              <TrendingUp className="h-5 w-5" />
+                              Demand Forecast
+                            </h3>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">Expected Load Factor</div>
+                                <div className="text-2xl font-bold text-purple-600">
+                                  {Math.round(demandResult.data.expectedFinalLoadFactor * 100)}%
+                                </div>
+                              </div>
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">Demand Trend</div>
+                                <div className={`text-2xl font-bold ${
+                                  demandResult.data.demandTrend === 'up' ? 'text-green-600' :
+                                  demandResult.data.demandTrend === 'down' ? 'text-red-600' : 'text-gray-600'
+                                }`}>
+                                  {demandResult.data.demandTrend === 'up' ? '↑ Upward' :
+                                   demandResult.data.demandTrend === 'down' ? '↓ Downward' : '→ Stable'}
+                                </div>
+                              </div>
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">Confidence</div>
+                                <div className="text-2xl font-bold text-blue-600">
+                                  {Math.round(demandResult.data.confidence * 100)}%
+                                </div>
+                              </div>
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">Seasonality</div>
+                                <div className={`text-2xl font-bold ${
+                                  demandResult.data.seasonality === 'peak' ? 'text-red-600' :
+                                  demandResult.data.seasonality === 'low' ? 'text-blue-600' : 'text-yellow-600'
+                                }`}>
+                                  {demandResult.data.seasonality.charAt(0).toUpperCase() + demandResult.data.seasonality.slice(1)}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Travel Purpose Mix */}
+                            <div className="mt-4">
+                              <div className="text-xs text-gray-500 mb-2">Predicted Traveler Mix</div>
+                              <div className="flex gap-2">
+                                <div className="flex-1 bg-blue-100 rounded p-2 text-center">
+                                  <div className="text-lg font-bold text-blue-700">{demandResult.data.travelPurposeMix.business}%</div>
+                                  <div className="text-xs text-blue-600">Business</div>
+                                </div>
+                                <div className="flex-1 bg-green-100 rounded p-2 text-center">
+                                  <div className="text-lg font-bold text-green-700">{demandResult.data.travelPurposeMix.leisure}%</div>
+                                  <div className="text-xs text-green-600">Leisure</div>
+                                </div>
+                                <div className="flex-1 bg-orange-100 rounded p-2 text-center">
+                                  <div className="text-lg font-bold text-orange-700">{demandResult.data.travelPurposeMix.vfr}%</div>
+                                  <div className="text-xs text-orange-600">VFR</div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Price Elasticity */}
+                            <div className="mt-4 bg-white p-3 rounded-lg border">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium">Price Elasticity:</span>
+                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                  demandResult.data.priceElasticity === 'low' ? 'bg-green-100 text-green-800' :
+                                  demandResult.data.priceElasticity === 'high' ? 'bg-red-100 text-red-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {ELASTICITY_LABELS[demandResult.data.priceElasticity].label}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                {ELASTICITY_LABELS[demandResult.data.priceElasticity].description}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {pricingResult?.success && pricingResult.data && (
+                          <div className="bg-green-50 p-4 rounded-lg border-2 border-green-300">
+                            <h3 className="font-semibold mb-4 flex items-center gap-2 text-green-900">
+                              <DollarSign className="h-5 w-5" />
+                              AI Price Recommendation
+                            </h3>
+
+                            {/* Main Price Display */}
+                            <div className="bg-white p-6 rounded-lg border-2 border-green-200 text-center mb-4">
+                              <div className="text-sm text-gray-500 mb-1">Recommended {FARE_CLASS_LABELS[selectedFareClass]} Price</div>
+                              <div className="text-4xl font-bold text-green-600 mb-2">
+                                {formatPrice(pricingResult.data.recommendedPrice)}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                Range: {formatPrice(pricingResult.data.priceRange.min)} - {formatPrice(pricingResult.data.priceRange.max)}
+                              </div>
+                            </div>
+
+                            {/* Multiplier Details */}
+                            <div className="grid grid-cols-2 gap-3 mb-4">
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">AI Multiplier</div>
+                                <div className={`text-xl font-bold ${
+                                  pricingResult.data.aiMultiplier > 1.1 ? 'text-red-600' :
+                                  pricingResult.data.aiMultiplier < 0.95 ? 'text-green-600' : 'text-gray-700'
+                                }`}>
+                                  {pricingResult.data.aiMultiplier.toFixed(2)}x
+                                </div>
+                                <div className={`text-xs mt-1 px-2 py-0.5 rounded inline-block ${
+                                  getPricingRecommendation(pricingResult.data.aiMultiplier) === 'surge' ? 'bg-red-100 text-red-700' :
+                                  getPricingRecommendation(pricingResult.data.aiMultiplier) === 'premium' ? 'bg-orange-100 text-orange-700' :
+                                  getPricingRecommendation(pricingResult.data.aiMultiplier) === 'discount' ? 'bg-green-100 text-green-700' :
+                                  'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {getPricingRecommendation(pricingResult.data.aiMultiplier).toUpperCase()}
+                                </div>
+                              </div>
+                              <div className="bg-white p-3 rounded-lg border">
+                                <div className="text-xs text-gray-500 mb-1">Confidence</div>
+                                <div className="text-xl font-bold text-blue-600">
+                                  {Math.round(pricingResult.data.confidence * 100)}%
+                                </div>
+                                <div className="flex items-center gap-1 mt-1">
+                                  {pricingResult.data.confidence >= 0.7 ? (
+                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                  ) : (
+                                    <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                                  )}
+                                  <span className="text-xs text-gray-600">
+                                    {pricingResult.data.confidence >= 0.7 ? 'High confidence' : 'Moderate confidence'}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Forecast Applied */}
+                            {pricingResult.data.forecastApplied && (
+                              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 mb-4">
+                                <div className="flex items-center gap-2">
+                                  <Shield className="h-4 w-4 text-blue-600" />
+                                  <span className="text-sm font-medium text-blue-900">Demand Forecast Applied</span>
+                                </div>
+                                <p className="text-xs text-blue-700 mt-1">
+                                  Forecast bias: {pricingResult.data.forecastBias ? `${((pricingResult.data.forecastBias - 1) * 100).toFixed(0)}%` : '0%'} adjustment based on demand signal
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Reasoning */}
+                            <div className="bg-gray-100 p-3 rounded-lg">
+                              <div className="text-xs text-gray-500 mb-1">AI Reasoning</div>
+                              <p className="text-sm text-gray-700">{pricingResult.data.reasoning}</p>
+                            </div>
+
+                            {/* Source Badge */}
+                            <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+                              <span>Source: {pricingResult.data.source === 'huggingface' ? 'HuggingFace AI' : 'Rule-based Engine'}</span>
+                              <span>Fare class multiplier: {pricingResult.data.fareClassMultiplier}x</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {!demandResult && !pricingResult && !aiPricingLoading && (
+                          <div className="bg-gray-50 p-8 rounded-lg border-2 border-dashed border-gray-300 text-center">
+                            <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-lg font-semibold text-gray-600 mb-2">Ready for AI Analysis</h3>
+                            <p className="text-sm text-gray-500 max-w-md mx-auto">
+                              Configure the pricing parameters and click the button to get AI-powered demand forecast and ticket price recommendations.
+                            </p>
+                          </div>
+                        )}
+
+                        {(demandResult?.error || pricingResult?.error) && (
+                          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                            <div className="flex items-center gap-2 text-red-800">
+                              <AlertTriangle className="h-5 w-5" />
+                              <span className="font-medium">Error</span>
+                            </div>
+                            <p className="text-sm text-red-700 mt-1">
+                              {demandResult?.error || pricingResult?.error}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* How It Works Section */}
+                    <div className="mt-8 pt-6 border-t">
+                      <h3 className="font-semibold mb-4 flex items-center gap-2">
+                        <Info className="h-5 w-5 text-gray-600" />
+                        How AI Ticket Pricing Works
+                      </h3>
+                      <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center bg-gray-50 p-6 rounded-lg">
+                        <div className="flex-1 p-3">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <TrendingUp className="h-6 w-6 text-blue-600" />
+                          </div>
+                          <h4 className="font-semibold text-sm">Demand Signal</h4>
+                          <p className="text-xs text-gray-600">Route, timing, seasonality</p>
+                        </div>
+                        <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                        <div className="flex-1 p-3">
+                          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <Users className="h-6 w-6 text-purple-600" />
+                          </div>
+                          <h4 className="font-semibold text-sm">Traveler Mix</h4>
+                          <p className="text-xs text-gray-600">Business/leisure detection</p>
+                        </div>
+                        <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                        <div className="flex-1 p-3">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <Shield className="h-6 w-6 text-green-600" />
+                          </div>
+                          <h4 className="font-semibold text-sm">Confidence Check</h4>
+                          <p className="text-xs text-gray-600">≥60% threshold</p>
+                        </div>
+                        <ArrowRight className="h-6 w-6 text-gray-400 hidden md:block" />
+                        <div className="flex-1 p-3">
+                          <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <DollarSign className="h-6 w-6 text-orange-600" />
+                          </div>
+                          <h4 className="font-semibold text-sm">Price Output</h4>
+                          <p className="text-xs text-gray-600">0.80x - 1.60x bounds</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="passenger">
                 <Card>
                   <CardHeader>

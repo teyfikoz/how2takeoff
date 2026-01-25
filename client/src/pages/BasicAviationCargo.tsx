@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CargoCalculator from "@/components/CargoCalculator";
 import { useSEO } from "@/hooks/useSEO";
-import { 
-  Package, Calculator, Scale, DollarSign, Plane, Users, 
-  TrendingUp, AlertTriangle, CheckCircle, Info, Briefcase
+import {
+  Package, Calculator, Scale, DollarSign, Plane, Users,
+  TrendingUp, AlertTriangle, CheckCircle, Info, Briefcase,
+  Brain, ArrowRight, Shield, Target, Lock, Server, LineChart
 } from "lucide-react";
 import {
   calculateChargeableWeight,
@@ -195,7 +196,7 @@ export default function BasicAviationCargo() {
         </div>
 
         <Tabs defaultValue="weight-standards" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 h-auto">
+          <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 h-auto gap-1">
             <TabsTrigger value="weight-standards" className="text-xs sm:text-sm py-2">
               <Scale className="h-4 w-4 mr-1 hidden sm:inline" />
               EASA Weights
@@ -203,6 +204,10 @@ export default function BasicAviationCargo() {
             <TabsTrigger value="chargeable" className="text-xs sm:text-sm py-2">
               <Package className="h-4 w-4 mr-1 hidden sm:inline" />
               Chargeable Wt
+            </TabsTrigger>
+            <TabsTrigger value="ai-pricing" className="text-xs sm:text-sm py-2 bg-gradient-to-r from-blue-50 to-cyan-50 data-[state=active]:from-blue-100 data-[state=active]:to-cyan-100">
+              <Brain className="h-4 w-4 mr-1 hidden sm:inline" />
+              AI Pricing
             </TabsTrigger>
             <TabsTrigger value="pricing" className="text-xs sm:text-sm py-2">
               <DollarSign className="h-4 w-4 mr-1 hidden sm:inline" />
@@ -873,6 +878,285 @@ export default function BasicAviationCargo() {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+          </TabsContent>
+
+          {/* AI Pricing Explainer Tab */}
+          <TabsContent value="ai-pricing">
+            <div className="space-y-8">
+              {/* Hero Section */}
+              <div className="text-center py-8 px-4 bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 rounded-xl border-2 border-blue-200">
+                <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <Brain className="h-4 w-4" />
+                  AI-Powered Aviation Technology
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                  Intelligent Cargo Pricing
+                  <span className="block text-blue-600">with Demand Forecasting</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Learn how AI transforms aviation cargo pricing with demand-aware dynamic pricing,
+                  explainable decisions, and built-in safety guardrails.
+                </p>
+              </div>
+
+              {/* How It Works */}
+              <Card className="border-2 border-blue-200">
+                <CardHeader className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <Brain className="h-6 w-6" />
+                    How AI Pricing Works
+                  </CardTitle>
+                  <p className="text-blue-100 mt-2">A modern approach connecting demand signals directly to pricing decisions</p>
+                </CardHeader>
+                <CardContent className="pt-8">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                    <div className="flex-1 p-4">
+                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <TrendingUp className="h-8 w-8 text-blue-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Demand Signal</h3>
+                      <p className="text-sm text-gray-600">Bookings, calendar, seasonality</p>
+                    </div>
+
+                    <ArrowRight className="h-8 w-8 text-gray-400 hidden md:block" />
+
+                    <div className="flex-1 p-4">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Shield className="h-8 w-8 text-green-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Confidence Check</h3>
+                      <p className="text-sm text-gray-600">Only act when &ge;60% confident</p>
+                    </div>
+
+                    <ArrowRight className="h-8 w-8 text-gray-400 hidden md:block" />
+
+                    <div className="flex-1 p-4">
+                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Target className="h-8 w-8 text-purple-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Price Adjustment</h3>
+                      <p className="text-sm text-gray-600">Max &plusmn;5% controlled bias</p>
+                    </div>
+
+                    <ArrowRight className="h-8 w-8 text-gray-400 hidden md:block" />
+
+                    <div className="flex-1 p-4">
+                      <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Lock className="h-8 w-8 text-orange-600" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900">Safe Output</h3>
+                      <p className="text-sm text-gray-600">Always within 0.85x - 1.50x</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Key Features */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Key Features</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <Card className="border-green-200 hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <CheckCircle className="h-8 w-8 text-green-600 mb-2" />
+                      <CardTitle className="text-lg">Explainable</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Every price has documented reasoning. Full transparency for every decision.</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-blue-200 hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Shield className="h-8 w-8 text-blue-600 mb-2" />
+                      <CardTitle className="text-lg">Safe</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Confidence gating prevents unreliable predictions from affecting prices.</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-purple-200 hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <Target className="h-8 w-8 text-purple-600 mb-2" />
+                      <CardTitle className="text-lg">Controlled</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Maximum &plusmn;5% forecast influence. Global price bounds prevent extremes.</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <TrendingUp className="h-8 w-8 text-orange-600 mb-2" />
+                      <CardTitle className="text-lg">Demand-Aware</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Prices respond to demand signals before market conditions change.</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Technical Architecture */}
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className="border-blue-200">
+                  <CardHeader>
+                    <Server className="h-8 w-8 text-blue-600 mb-2" />
+                    <CardTitle>Technology Stack</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span>AI Engine: Llama 3.3 70B via HuggingFace</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span>Rule-based fallback for reliability</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span>Heuristic demand forecasting</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span>REST API architecture</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-purple-200">
+                  <CardHeader>
+                    <LineChart className="h-8 w-8 text-purple-600 mb-2" />
+                    <CardTitle>API Endpoints</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
+                        <span className="text-green-600">POST</span> /api/demand/forecast
+                        <p className="text-gray-600 text-xs mt-1">Returns demand signal with confidence score</p>
+                      </div>
+                      <div className="bg-gray-100 p-3 rounded-lg font-mono text-sm">
+                        <span className="text-blue-600">POST</span> /api/pricing/ai
+                        <p className="text-gray-600 text-xs mt-1">Returns price multiplier with full reasoning</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Example Scenarios */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Example Scenarios</h3>
+                <p className="text-center text-gray-600 mb-6">See how the system handles different situations</p>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <Card className="border-2 border-green-200">
+                    <CardHeader className="bg-green-50">
+                      <CardTitle className="text-green-800">Scenario 1: High Confidence</CardTitle>
+                      <p className="text-green-600 text-sm">Peak season with strong booking momentum</p>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs overflow-x-auto">
+                        <pre>{`// Forecast Response
+{
+  "expectedFinalLoadFactor": 0.81,
+  "demandTrend": "up",
+  "confidence": 0.75,  // Above 60% threshold
+  "seasonality": "peak"
+}
+
+// Pricing Response
+{
+  "aiMultiplier": 1.47,
+  "forecastBias": 1.05,
+  "forecastApplied": true,
+  "reasoning": "Peak season + upward demand (+5%)"
+}`}</pre>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-3 flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        Forecast applied: confidence is above threshold
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-orange-200">
+                    <CardHeader className="bg-orange-50">
+                      <CardTitle className="text-orange-800">Scenario 2: Low Confidence</CardTitle>
+                      <p className="text-orange-600 text-sm">Uncertain market conditions</p>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <div className="bg-gray-900 text-orange-400 p-4 rounded-lg font-mono text-xs overflow-x-auto">
+                        <pre>{`// Forecast Response
+{
+  "expectedFinalLoadFactor": 0.30,
+  "demandTrend": "up",
+  "confidence": 0.55,  // Below 60% threshold
+  "seasonality": "low"
+}
+
+// Pricing Response
+{
+  "aiMultiplier": 0.92,
+  "forecastApplied": false,  // Safety triggered
+  "reasoning": "Confidence too low (55% < 60%)"
+}`}</pre>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-3 flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 text-orange-600" />
+                        Forecast ignored: confidence below threshold (safety)
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Safety Guardrails */}
+              <div className="py-8 px-6 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold mb-2">Built-in Safety Guardrails</h3>
+                  <p className="text-blue-100">Multiple layers of protection ensure reliable outputs</p>
+                </div>
+
+                <div className="grid md:grid-cols-4 gap-6">
+                  <Card className="bg-white/10 border-white/20 text-white">
+                    <CardContent className="pt-6 text-center">
+                      <div className="text-3xl font-bold mb-2">&plusmn;5%</div>
+                      <p className="text-blue-100 text-sm">Maximum Forecast Bias</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white/10 border-white/20 text-white">
+                    <CardContent className="pt-6 text-center">
+                      <div className="text-3xl font-bold mb-2">&ge;60%</div>
+                      <p className="text-blue-100 text-sm">Confidence Threshold</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white/10 border-white/20 text-white">
+                    <CardContent className="pt-6 text-center">
+                      <div className="text-3xl font-bold mb-2">0.85x</div>
+                      <p className="text-blue-100 text-sm">Minimum Price Floor</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white/10 border-white/20 text-white">
+                    <CardContent className="pt-6 text-center">
+                      <div className="text-3xl font-bold mb-2">1.50x</div>
+                      <p className="text-blue-100 text-sm">Maximum Price Ceiling</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* CTA to Try Calculator */}
+              <div className="text-center py-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border-2 border-orange-200">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Ready to Try It?</h3>
+                <p className="text-gray-600 mb-4">Use the AI-Powered Dynamic Pricing calculator in the Freight Pricing tab</p>
+                <p className="text-sm text-gray-500">Go to <span className="font-semibold text-orange-600">Freight Pricing</span> tab and scroll to "AI-Powered Dynamic Pricing" section</p>
+              </div>
             </div>
           </TabsContent>
 

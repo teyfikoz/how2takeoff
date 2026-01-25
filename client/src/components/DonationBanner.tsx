@@ -1,18 +1,25 @@
 import React from 'react';
+import { Brain, ArrowRight } from 'lucide-react';
+import { Link } from 'wouter';
 
 export default function DonationBanner() {
   return (
-    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <h3 className="text-sm font-medium text-blue-800 mb-2">Support This Project</h3>
-      <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-600">XRP: rPu9SuQBv9ZWXGBaUgaHJ1PauSj98arjbV</span>
-          <a href="https://xaman.app/detect/request:rPu9SuQBv9ZWXGBaUgaHJ1PauSj98arjbV" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-xs">XUMM Wallet</a>
+    <div className="p-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-lg shadow-md">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3 text-white">
+          <Brain className="h-6 w-6" />
+          <div>
+            <h3 className="text-sm font-semibold">Explore AI-Powered Cargo Pricing</h3>
+            <p className="text-xs text-blue-100">See how demand forecasting connects to dynamic pricing</p>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-600">USDT (TRC20): TJoUFBDEFXMPgdZ2yj8yBXCo7TURfiZ3hQ</span>
-          <a href="https://link.trustwallet.com/send?address=TJoUFBDEFXMPgdZ2yj8yBXCo7TURfiZ3hQ&asset=c195_tTR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-xs">Trust Wallet</a>
-        </div>
+        <Link
+          href="/basic-aviation-cargo"
+          className="inline-flex items-center gap-2 bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50 transition-colors"
+        >
+          Learn More
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
     </div>
   );
